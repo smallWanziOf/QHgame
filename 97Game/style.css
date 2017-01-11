@@ -1,0 +1,26 @@
+.bg-shandian{
+	position:fixed;
+	top:0;
+	bottom:0;
+	right:0;
+	left:0;
+	z-index: 1;
+}
+.bg-shandian>img{
+	position:absolute;
+	width:400px;
+}
+.bg-login{
+	text-align: center;
+}
+.bg-form{
+	position:relative;
+	z-index: 2;
+}
+.regist-message{
+	margin-top:50px;
+}
+.selectRole-body{
+	background-image: url("./images/other/selector01.jpg");
+}
+

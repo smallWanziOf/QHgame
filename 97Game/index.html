@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="bg-shandian" id="bg-randomS"></div>
+    <div class="container">
+      <div class="bg-color">
+        <!-- 大蛇图片 -->
+        <div class="bg-login">
+          <img src="images/bg/bglogin.jpg" alt=""> 
+        </div>
+        <!-- 登录组 -->
+        <div class="bg-form">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="inputName" class="col-sm-2 control-label">账号：</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputName" placeholder="请输入账号">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputPassword" class="col-sm-2 control-label">密码：</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword" placeholder="请输入密码">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox"> 记住账号
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-primary" id="bg_login">确认登录</button>
+                <button type="button" class="btn btn-default" id="bg_regist" data-target="#myModal" data-toggle="modal">注册账号</button>
+              </div>
+            </div>
+          </form> 
+        </div>
+        <!-- 登录信息 -->
+        <div id="login_message"></div>
+        <!-- 注册模态框 -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">欢迎注册！</h4>
+              </div>
+              <div class="modal-body">
+                <div class="input-group" style="margin-top: 20px;">
+                  <span class="input-group-addon">账号</span>
+                  <input type="text" class="form-control" placeholder="请输入账号(由6位随机的字母或数字组成)" id="regist_acount">
+                </div>
+
+                <div class="input-group" style="margin-top:20px;margin-bottom: 20px;">
+                  <span class="input-group-addon">密码</span>
+                  <input type="password" class="form-control" placeholder="密码" id="regist_pwd">
+                </div>
+
+                <div class="regist-message"></div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="regist_sure">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="regist_cancle">取消</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> 
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+      var timer=setInterval(function(){
+        var n=Math.floor(Math.random()*6)
+        var left=Math.floor(Math.random()*innerWidth);
+        var height=window.innerHeight;
+        $("#bg-randomS").append(
+          "<img src='images/bg/shan"+n+".png' style='height:"+height+"px;left:"+left+"px'>"
+        )
+        $("#bg-randomS>img").fadeOut(1500,"linear",function(){
+          $("#bg-randomS>img").remove()
+        })
+      },3000);
+
+      //login
+      $("#bg_login").click(function(){
+        var userMessage={"userName":$("#inputName").val(),"userPwd":$("#inputPassword").val()}
+        $.ajax({
+          type:"POST",
+          data:userMessage,
+          url:"login.php",
+          success:function(e){
+            if(e=="success"){
+              $("#login_message").append(
+                "<div class='alert alert-success' role='alert'>登录成功！正在跳转...</div>"
+              )
+              $("#login_message>div").fadeOut(1000,function(){
+                $(this).remove()
+              })
+              setTimeout(function(){
+                window.location.href="http://localhost/97Game/mainApp/selectRole.html";     //在同当前窗口中打开窗口
+              },1000);
+            }else{
+              $("#login_message").append(
+                "<div class='alert alert-danger' role='alert'>用户名或密码错误！</div>"
+              )
+              $("#login_message>div").fadeOut(5000,function(){
+                $(this).remove()
+              })
+            }
+          },
+          error:function(error){
+            alert("登录错误！请关闭重新连接")
+          }
+        })
+      })
+
+      //regist
+      //注册账号
+      $("#regist_acount").change(function(){
+        var reg=/^[0-9a-zA-Z]{0,6}$/;
+        if(!reg.test($(this).val())){
+          $(this).val('');
+          alert("账号格式错误！")
+        }
+      })
+      //注册密码
+      $("#regist_pwd").change(function(){
+        var reg=/^[0-9a-zA-Z]{0,20}$/;
+        if(!reg.test($(this).val())){
+          $(this).val('');
+          alert("密码格式错误！")
+        }
+      })
+      //确定注册
+      $("#regist_sure").click(function(){
+        var acount=$.trim($("#regist_acount").val());
+        var pwd=$.trim($("#regist_pwd").val());
+        if(acount!=''&&pwd!=''){
+          var userMessage={"userName":acount,"userPwd":pwd};
+          $.ajax({
+            type:"POST",
+            data:userMessage,
+            url:"regist.php",
+            success:function(e){
+              if(e=="hasExist"){
+                $(".regist-message").html("用户名已被注册")
+              }else if(e=="success"){
+                $(".regist-message").html("注册成功！")
+                setTimeout(function(){
+                  $("#regist_cancle").click()
+                },1000);
+                $("#inputName").val($("#regist_acount").val());
+                $("#inputPassword").val($("#regist_pwd").val());
+                $("#regist_acount").val('');
+                $("#regist_pwd").val('');
+              }else{
+                $(".regist-message").html("注册失败！请重新注册")
+              }
+            },
+            error:function(){
+              alert("注册失败！请重新登录")
+            }
+          })
+        }else{
+          alert("注册格式有误！请重新填写")
+        } 
+      })
+    </script>
+  </body>
+</html>
