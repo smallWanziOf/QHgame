@@ -23,4 +23,23 @@
 .selectRole-body{
 	background-image: url("./images/other/selector01.jpg");
 }
+.selectRole-mainRole{
+	width:40px;
+	height:200px;
+	border-radius:5px ;
+	background-color:#fff; 
+	position:fixed;
+	left:-5px;
+	top:100px;
+}
+.selectRole-mainRole>span{
+	position:relative;
+	top:10px;
+	left:10px;
+	font-size: 20px;
+	margin-bottom:30px;
+}
+.selectRole-mainRole>span:hover{
+	cursor:pointer;
+}
 
