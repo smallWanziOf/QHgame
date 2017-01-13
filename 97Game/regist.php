@@ -16,7 +16,7 @@ $row = mysqli_fetch_assoc($resultExist);
 if($row){
 	echo "hasExist";
 }else{
-	$sql = "INSERT INTO qhgame_login VALUES (NULL,'$name','$pwd')";
+	$sql = "INSERT INTO qhgame_login VALUES (NULL,'$name','$pwd',NULL,NULL)";
 	$resultSql = mysqli_query($conn, $sql);
 	if($resultSql){
 		echo "success";

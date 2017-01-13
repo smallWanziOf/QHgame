@@ -16,6 +16,76 @@
     <![endif]-->
   </head>
   <body class="selectRole-body">
+    <!-- 我的个人新信息 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_userMessage" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" >
+          <div class="container">
+            <h3>个人信息</h3>
+            <h5>VIP 等级：<span id="sql_V"></span></h5>
+            <h5>队伍人物：<span id="sql_Team"></span></h5>
+           <!--  <h5>碎片数量：<span id="sql_Chip"></span></h5> -->
+            <h5>账户余额：<span id="sql_acount"></span></h5>
+            <h5>获得称号：<span id="sql_title"></span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- 我的队伍 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="all_userTeam" style="text-align: center;"></div>
+      </div>
+    </div>
+
+    <!-- 我的角色碎片 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_userChip" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_showAllChip"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 我的金币 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_userGem" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" >
+          我的金币
+        </div>
+      </div>
+    </div>
+
+    <!-- 针对没有角色的用户的一种提示 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="no_role" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" >
+          <h3 style="text-align: center;color:green;font-weight: bold;">欢迎进入 QH97Game</h3>
+          <h3 style="text-align: center;color:green;font-weight: bold;">您的队伍目前空无一人....</h3>
+          <h3 style="text-align: center;color:green;font-weight: bold;">您可以选择喜欢的人物角色加入自己的阵营</h3>
+          <!-- <h3 style="text-align: center;color:green;font-weight: bold;">开始战斗吧</h3> -->
+          <div style="text-align: center;">
+            <img src="../images/dongzhang/benpao.jpg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 购买成功后的提示 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="myModal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <h3 style="text-align: center;color:green;font-weight: bold;">恭喜成功添加!</h3>
+          <img src="../images/caozhijin/xiaozhao.gif">
+          <hr>
+          <h1 style="text-align: right;">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="close_modal" style="margin-right: 20px;">关闭</button>
+          </h1>
+        </div>
+      </div>
+    </div>
+
     <div id="mainRole" class="selectRole-mainRole">
       <span class="glyphicon glyphicon-user" id="P_message" data-toggle="tooltip" data-placement="right" title="我的信息">
       </span>
@@ -23,14 +93,14 @@
       </span>
       <span class="glyphicon glyphicon-th" id="P_chip" data-toggle="tooltip" data-placement="right" title="我的碎片">
       </span>
-      <span class="glyphicon glyphicon-usd" id="P_gem" data-toggle="tooltip" data-placement="right" title="我的宝石">
+      <span class="glyphicon glyphicon-usd" id="P_gem" data-toggle="tooltip" data-placement="right" title="我的金币">
       </span>
     </div>
     <div class="container" >
       
       <div class="row" style="margin-top:20px;">
         <!-- 安迪 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="1">
           <div class="thumbnail">
             <img src="../images/andi/andi.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -39,16 +109,16 @@
                 <h5>攻击：87</h5>
                 <h5>防御：43</h5>
                 <h5>生命值：560</h5>
+                <h5>交易价：450</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 坂崎良 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="2">
           <div class="thumbnail">
             <img src="../images/banqiliang/banqiliang.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -57,16 +127,16 @@
                 <h5>攻击：83</h5>
                 <h5>防御：50</h5>
                 <h5>生命值：660</h5>
+                <h5>交易价：450</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 坂崎由莉 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="3">
           <div class="thumbnail">
             <img src="../images/banqiyouli/banqiyouli.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -75,16 +145,16 @@
                 <h5>攻击：85</h5>
                 <h5>防御：47</h5>
                 <h5>生命值：530</h5>
+                <h5>交易价：450</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 蔡宝奇 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="4">
           <div class="thumbnail">
             <img src="../images/caibaoqi/caibaoqi.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -93,16 +163,16 @@
                 <h5>攻击：88</h5>
                 <h5>防御：43</h5>
                 <h5>生命值：530</h5>
+                <h5>交易价：450</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 陈可汉 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="5">
           <div class="thumbnail">
             <img src="../images/chengkehan/chengkehan.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -111,34 +181,34 @@
                 <h5>攻击：75</h5>
                 <h5>防御：56</h5>
                 <h5>生命值：580</h5>
+                <h5>交易价：1350</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 大门五郎 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="6">
           <div class="thumbnail">
-            <img src="../images/damen/damen.png" class="img-responsive" alt="Responsive image">
+            <img src="../images/damen/damen.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
               <h3>GORO DAIMEN</h3>
               <p>
                 <h5>攻击：78</h5>
                 <h5>防御：55</h5>
                 <h5>生命值：570</h5>
+                <h5>交易价：1350</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>  
         <!-- 东丈 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="7">
           <div class="thumbnail">
             <img src="../images/dongzhang/dongzhang.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -147,16 +217,16 @@
                 <h5>攻击：86</h5>
                 <h5>防御：48</h5>
                 <h5>生命值：530</h5>
+                <h5>交易价：1350</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 金家潘 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="8">
           <div class="thumbnail">
             <img src="../images/jinjiapan/jinjiapan.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -165,16 +235,16 @@
                 <h5>攻击：80</h5>
                 <h5>防御：45</h5>
                 <h5>生命值：550</h5>
+                <h5>交易价：1350</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 京 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="9">
           <div class="thumbnail">
             <img src="../images/jin/jin.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -183,16 +253,16 @@
                 <h5>攻击：83</h5>
                 <h5>防御：44</h5>
                 <h5>生命值：540</h5>
+                <h5>交易价：3150</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 克拉克 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="10">
           <div class="thumbnail">
             <img src="../images/kelake/kelake.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -201,16 +271,16 @@
                 <h5>攻击：81</h5>
                 <h5>防御：46</h5>
                 <h5>生命值：560</h5>
+                <h5>交易价：3150</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 拉尔夫 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="11">
           <div class="thumbnail">
             <img src="../images/laerfu/laerfu.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -219,16 +289,16 @@
                 <h5>攻击：83</h5>
                 <h5>防御：45</h5>
                 <h5>生命值：540</h5>
+                <h5>交易价：3150</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 丽安娜 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="12">
           <div class="thumbnail">
             <img src="../images/lianna/lianna.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -237,16 +307,16 @@
                 <h5>攻击：85</h5>
                 <h5>防御：40</h5>
                 <h5>生命值：560</h5>
+                <h5>交易价：3150</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 雅典娜 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="13">
           <div class="thumbnail">
             <img src="../images/yadianna/yadianna.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -255,16 +325,16 @@
                 <h5>攻击：88</h5>
                 <h5>防御：39</h5>
                 <h5>生命值：510</h5>
+                <h5>交易价：4800</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 玛丽 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="14">
           <div class="thumbnail">
             <img src="../images/mali/mali.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -273,16 +343,16 @@
                 <h5>攻击：90</h5>
                 <h5>防御：35</h5>
                 <h5>生命值：500</h5>
+                <h5>交易价：4800</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 特瑞 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="15">
           <div class="thumbnail">
             <img src="../images/terui/terui.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -291,16 +361,16 @@
                 <h5>攻击：83</h5>
                 <h5>防御：46</h5>
                 <h5>生命值：540</h5>
+                <h5>交易价：4800</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
         </div>
         <!-- 镇元斋 -->
-        <div class="col-sm-6 col-md-4">
+        <div class="col-sm-6 col-md-4 hasParent" id="16">
           <div class="thumbnail">
             <img src="../images/zhengyuanzhai/zhengyuanzhai.jpg" class="img-responsive" alt="Responsive image">
             <div class="caption">
@@ -309,10 +379,10 @@
                 <h5>攻击：90</h5>
                 <h5>防御：40</h5>
                 <h5>生命值：520</h5>
+                <h5>交易价：4800</h5>
               </p>
               <p>
-                <a href="#" class="btn btn-primary" role="button">加入队伍</a> 
-                <a href="#" class="btn btn-default" role="button">移除队伍</a>
+                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
               </p>
             </div>
           </div>
@@ -333,10 +403,191 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script>
+      var user_location=window.location.search;
+      var uName=user_location.substring(user_location.indexOf("=")+1)
+      var data={"uName":uName}
+      var hasCarId=[];
+      $(document).ready(function(){
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectRole.php",
+            success:function(e){
+              var carId=JSON.parse(e);
+              var allId=carId.carid.split(",");
+              hasCarId=allId;
+              if(hasCarId.length==1){
+                $("#no_role").modal();
+                return;
+              }
+              if(allId!=null){
+                for(var i=0;i<allId.length;i++){
+                  $("#"+hasCarId[i]).remove();
+                }
+              }
+            },
+            error:function(){
+              alert("查询失败！请重新加入")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      });
+      //点击加入队伍按钮
+      $(".Join_Team").on("click",function(e){
+        e.preventDefault();
+        JoinTeam.bind(this)();
+      })
+      function JoinTeam(){
+        var joinCarId=$(this).parents(".hasParent")[0].id;
+        if($.inArray(joinCarId,hasCarId)!=-1){
+          alert("你已经拥有此人物，请不要重复添加")
+        }else{
+          var carid={"uName":uName,"carid":joinCarId};
+          $.ajax({
+            type:"POST",
+            data:carid,
+            url :"joinTeam.php",
+            success:function(e){
+              if(e=="success"){
+                $('#myModal').modal()
+                $("#close_modal").click(function(){
+                  location.reload();
+                })
+              }else if(e=="NoMoeny"){
+                alert("您的账户余额不足购买此人物")
+              }else{
+                alert("购买失败！")
+              }
+            },
+            error:function(){
+              alert("查询失败！请重新加入")
+            }
+          })
+        }
+      }
+
       $('#P_message').tooltip()
       $('#P_team').tooltip()
       $('#P_chip').tooltip()
       $('#P_gem').tooltip()
+
+      //点击导航展示详细的信息
+      $("#P_message").click(function(){//个人信息
+        $("#show_userMessage").modal();
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"sqlUserMessage.php",
+            success:function(e){
+              var allMessage=JSON.parse(e);
+              var length=allMessage.carid.split(",").length;
+              $("#sql_V").html(allMessage.user_v);
+              $("#sql_Team").html(parseInt(length)-1);
+              /*$("#sql_Chip").html(allMessage.carchip);*/
+              $("#sql_acount").html(allMessage.user_money);
+              $("#sql_title").html(allMessage.user_title);
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      })
+      $("#P_team").click(function(){//个人队伍
+        $("#show_userTeam").modal();
+        var str='';
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectRole.php",
+            success:function(e){
+              var carId=JSON.parse(e);
+              var allId=carId.carid.split(",");
+              hasCarId=allId;
+              if(allId.length==1){
+                $("#all_userTeam").html("<h3>我的队伍信息</h3><h3>您当前还未添加任何人物...</h3>")
+                return;
+              }
+              if(allId!=null){
+                for(var i=0;i<allId.length;i++){
+                  if(i!=0){
+                    str+="<img style='margin:20px;' src='../images/showRole/"+i+".png'/>"
+                  }
+                }
+                $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
+              }
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+
+      })
+      $("#P_chip").click(function(){//个人碎片
+        $("#show_userChip").modal();
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"sqlMyChip.php",
+            success:function(e){
+              var sqlMyChip=JSON.parse(e);
+              var reg=/^(chip_)[0-9]{0,2}$/;
+              var allChip={};//保存碎片的信息
+              var count=0;//计算长度
+              var str='';//保存展示的碎片的图片
+              for(var key in sqlMyChip){
+                if(reg.test(key)){
+                  allChip[key]=sqlMyChip[key];
+                  count++;
+                }
+              }
+              for(var key in allChip){
+                if(allChip[key]==null){
+                  delete allChip[key]
+                }
+              }
+              for(var key in allChip){
+
+                var pictureId=key.slice(key.indexOf("_")+1);
+                debugger;
+                str+="<div class='col-sm-6 col-md-4'>"+
+                        "<div class='thumbnail'>"+
+                          "<img src='../images/showRole/"+pictureId+".png'>"+
+                          "<div class='caption'>"+
+                            "<h3>碎片数量：<span>"+allChip[key]+"</span></h3>"+
+                            "<p><a href='#'' class='btn btn-primary' role='button'>合成</a></p>"+
+                          "</div>"+
+                        "</div>"+
+                      "</div>"
+              }
+              $("#sql_showAllChip").html(str);
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      })
+      $("#P_gem").click(function(){//个人金币
+        $("#show_userGem").modal();
+      })
     </script>
   </body>
 </html>
