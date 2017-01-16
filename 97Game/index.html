@@ -8,6 +8,7 @@
     <!-- Bootstrap -->
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="encode.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -121,9 +122,7 @@
               $("#login_message>div").fadeOut(1000,function(){
                 $(this).remove()
               })
-              setTimeout(function(){
-                window.location.href="http://localhost/QHgame/97Game/mainApp/selectRole.html?user="+$("#inputName").val();     //在同当前窗口中打开窗口
-              },1000);
+              window.location.href="http://localhost/QHgame/97Game/mainApp/selectRole.html?UFO"+Math.ceil(Math.random()*520)+"_"+decToHex($("#inputName").val());
             }else{
               $("#login_message").append(
                 "<div class='alert alert-danger' role='alert'>用户名或密码错误！</div>"
@@ -142,9 +141,10 @@
       //regist
       //注册账号
       $("#regist_acount").change(function(){
-        var reg=/^[0-9a-zA-Z]{0,6}$/;
+        var reg=/^[0-9a-zA-Z]{0,12}$/;
         if(!reg.test($(this).val())){
           $(this).val('');
+          debugger;
           alert("账号格式错误！")
         }
       })

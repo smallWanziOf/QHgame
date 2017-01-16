@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="../encode.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="selectModal-body">
+    <div>
+      <!-- <img src="../images/other/selector.jpg" alt="" id="bg-image"> -->
+      <div class="container selectModal-container">
+        <img src="../images/other/jindian.jpg" alt="">
+        <img src="../images/other/zhandou.jpg" alt="">
+        <img src="../images/other/xiulian.jpg" alt="">
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+      var user_location=window.location.search;
+      var uName=hexToDec(user_location.substring(user_location.indexOf("_")+1));
+      var data={"uName":uName};
+      $(document).ready(function(){
+        $.ajax({
+          type:"POST",
+          data:data,
+          url:"testUser.php",
+          success:function(e){
+            if(e=="error"){
+              alert("迷之操作！！！请重新登录");
+              window.location.href="http://localhost/QHgame/97Game";
+            }
+          },
+          error:function(e){
+            alert("迷之操作！！！请重新登录");
+            window.location.href="http://localhost/QHgame/97Game";
+          }
+        })
+      })
+      $("#bg-image").css("height",innerHeight+"px")
+      $("#bg-image").css("width",innerWidth+"px")
+    </script>
+  </body>
+</html>

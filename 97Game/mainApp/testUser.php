@@ -3,19 +3,20 @@
 //header("Content-Type:application/json");
 $name=$_REQUEST['uName'];
 
-//用于保存查询的信息
-$output=(object)array();
+$output=[
+	"name"=>$name
+];
 
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');
 //
-$sql = "SELECT user_v,carid,user_money,user_title,user_power FROM qhgame_login WHERE user_name='$name'";
+$sql="SELECT user_id FROM qhgame_login WHERE user_name='$name'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
 
 if($row){
-	echo json_encode($row);
+	echo json_encode($output);
 }else{
 	echo "error";
 }

@@ -25,7 +25,7 @@
 }
 .selectRole-mainRole{
 	width:40px;
-	height:200px;
+	height:300px;
 	border-radius:5px ;
 	background-color:#fff; 
 	position:fixed;
@@ -42,4 +42,21 @@
 .selectRole-mainRole>span:hover{
 	cursor:pointer;
 }
-
+.selectModal-body{
+	background-color: #000;
+}
+.selectModal-container{
+	text-align: center;
+}
+.selectModal-container>img{
+	margin:70px 0;
+}
+.selectModal-container>img:hover{
+	cursor: pointer;
+	transform:scale(1.2);
+	-ms-transform:scale(1.2); 	/* IE 9 */
+	-moz-transform:scale(1.2);	/* Firefox */
+	-webkit-transform:scale(1.2); /* Safari 和 Chrome */
+	-o-transform:scale(1.2);	/* Opera */
+	transition: all linear 0.3s;
+}
