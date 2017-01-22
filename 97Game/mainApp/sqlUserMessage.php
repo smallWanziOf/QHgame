@@ -9,7 +9,7 @@ $output=(object)array();
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');
 //
-$sql = "SELECT user_v,carid,user_money,user_title,user_power FROM qhgame_login WHERE user_name='$name'";
+$sql = "SELECT user_v,carid,user_money,user_title,user_power,user_combat FROM qhgame_login WHERE user_name='$name'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 

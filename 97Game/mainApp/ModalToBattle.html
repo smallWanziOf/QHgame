@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <script src="../encode.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      .modal{
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body class="Modal-Battle-bg">
+    <!-- 显示闯关的过程 -->
+    <div>
+      <div class="jumbotron battle-message" style="margin-bottom: 0;">
+        <div class="container" id="all_battleMessage">
+          
+        </div>
+      </div>
+    </div>
+    <!-- 显示章节信息 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_selectChapter"aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="all_selectChapter" style="text-align: center"></div>
+        </div>
+    </div>
+    <!-- 我的队伍 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll;">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="all_userTeam" style="text-align: center;"></div>
+        </div>
+    </div>
+    <!-- 闯关信息 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_startchapter" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="all_startchapter" style="text-align: center"></div>
+        </div>
+    </div>
+    <div class="main-container">
+      <div>
+        <button class="btn btn-danger" style="position:relative;margin:0 auto;display: block;margin-top:200px;width:400px;font-size: 30px;" id="start_battle">开始游戏</button>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+      var user_location=window.location.search;
+      var uName=hexToDec(user_location.substring(user_location.indexOf("_")+1));
+      var data={"uName":uName};
+      var chapterCarId;
+      $(document).ready(function(){
+        $.ajax({
+          type:"POST",
+          data:data,
+          url:"testUser.php",
+          success:function(e){
+            if(e=="error"){
+              alert("迷之操作！！！请重新登录");
+              window.location.href="http://localhost/QHgame/97Game";
+            }
+          },
+          error:function(e){
+            alert("迷之操作！！！请重新登录");
+            window.location.href="http://localhost/QHgame/97Game";
+          }
+        })
+      });
+      $("#start_battle").on("click",function(){
+        $("#show_selectChapter").modal();
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"allChapter.php",
+          success:function(e){
+
+            var receiveData=JSON.parse(e);
+            var findChapter=receiveData.chapter;
+            if(receiveData.userPower<10){
+              alert("体力不足无法进行闯关");
+              $("#show_selectChapter").modal('hide');
+              return
+            }else{
+              debugger;
+              var str='<h2>请选择关卡</h2>';    
+              for(var i=0;i<findChapter.length;i++){
+                str+="<div style='display:inline-block' class='chapterDetail'>"+
+                "<img src='../images/bg/97.jpg' style='margin:10px;'>"+
+                "<span id="+findChapter[i].chapterid+">"+findChapter[i].chaptername+"</span></div>";
+              }
+              $("#all_selectChapter").html(str);
+              $(".chapterDetail>span").on("click",function(){
+                $("#show_userTeam").modal();
+                var chapterId=$(this)[0].id;
+                chapterCarId=chapterId;
+                $("#show_selectChapter").modal('hide');
+                var str='';
+                if(uName!=''){
+                  $.ajax({
+                    type:"POST",
+                    data:data,
+                    url :"selectRole.php",
+                    success:function(e){
+                      var carId=JSON.parse(e);
+                      /*if(carId.user_chapter!=null&&chapterId>carId.user_chapter){
+                        alert("您还有未通过的关！请先完成前面的关卡");
+                        
+                      }else if(carId.user_chapter==null){
+                        if(chapterId>1){
+                          alert("请从第一关开始");
+                          
+                        }
+                      }
+                      debugger;*/
+                      var allId=carId.carid.split(",");
+                      if(allId!=null){
+                        for(var i=0;i<allId.length;i++){
+                          if(i!=0){
+                            str+="<div style='display:inline-block;position:relative;' id='RoleSelected_active'>"+
+                            "<img style='margin:20px;' src='../images/showRole/"+allId[i]+".png' id="+allId[i]+">"+
+                            "<img src='../images/other/selected.png' class='RoleSelected' />"+
+                            "</div>"
+                          }
+                        }
+                        $("#all_userTeam").html(
+                          "<h3 style='font-weight: bold;'>请选择三位闯关人物</h3>"+str+
+                          "<div style='margin:20px;'><button class='btn btn-primary' id='SelectedOver'>完成</button><div>"
+                          )
+                      }
+                      $("#RoleSelected_active>img").on("click",function(){
+                        $(this).next().toggleClass("RoleSelected-active")
+                      })
+                      $("#SelectedOver").on("click",function(){
+                        SelectedLess3();
+                      })
+                    },
+                    error:function(){
+                      alert("查询失败！请重新查询")
+                    }
+                  })
+                }else{
+                  alert("登录跳转失败！请重新登录")
+                  window.location.href="http://localhost/QHgame/97Game";
+                }
+              })
+            }
+          },
+          error:function(e){
+            alert("选择失败！请重新选择")
+          }
+        })
+      })
+      function SelectedLess3(){
+        if($(".RoleSelected-active").length<=3&&$(".RoleSelected-active").length>0){
+          var allSelected=$(".RoleSelected-active").prev("img");
+          var selectedArr=[];
+          for(var i=0;i<allSelected.length;i++){
+            selectedArr.push(allSelected[i].id);
+          }
+          var data={"uName":uName,"carId":selectedArr}
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectedTojinDian.php",
+            success:function(e){
+              var receiveData=JSON.parse(e);
+              if(receiveData.hasRole){
+                challgerCarId=selectedArr;
+                $('#show_userTeam').modal('hide');
+                StartChapter(selectedArr);
+              }else{
+                alert("操作失败！请重新选择")
+              }
+            },
+            error:function(){
+              alert("选择失败！请重新选择")
+            }
+          })
+        }else if($(".RoleSelected-active").length<=0){
+          alert("选择失败！最少选择一位人物")
+        }else{
+          alert("选择失败！最多选择三位人物")
+        }
+      }
+      function StartChapter(arr){
+        $("#show_startchapter").modal();
+        var vsStr="<h2>对战信息</h2>";
+        //当前选择的关卡
+        var carr=chapterCarId;
+        var data={"carr":carr,"uarr":arr,"uName":uName};
+        var challenger={};
+        var beChallenger={};
+        var newbeChallenger={};
+        var currentChapter={};
+        var isdefeated=true;
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"StartChapter.php",
+          success:function(e){
+            var receiveData=JSON.parse(e);
+            //显示出战人员
+            for(var i=0;i<arr.length;i++){
+              vsStr+="<div style='display:inline-block;'>"+
+                      "<img src='../images/showRole/"+arr[i]+".png' style='margin:10px;'>"+
+                      "</div>"
+            }
+            vsStr+="<div style='font-size:50px;'><img src='../images/bg/vs.jpg'></div>"
+            currentChapter=receiveData.currentOBJ[0].chapterrole.split(",");
+            for(var i=0;i<currentChapter.length;i++){
+              vsStr+="<div style='display:inline-block;'>"+
+                      "<img src='../images/showRole/"+currentChapter[i]+".png' style='margin:10px;'>"+
+                      "</div>"
+            }
+            $("#all_startchapter").html(vsStr+"<div style='margin:10px;'><button class='btn btn-danger' id='ClickstartChapter'>开始闯关</button></div>");
+
+            
+            var str='<h1 style="text-align:center">战斗开始</h1>';
+            
+            //challgerCarId;
+            for(var key in receiveData){
+              switch (key){
+                case "challenger" : 
+                challenger=receiveData[key];
+                break;
+                case "bechallenger" : 
+                beChallenger=receiveData[key];
+              }
+            }
+            //删除不在闯关人物中的角色
+            for(var i=0;i<currentChapter.length;i++){
+              for(var j=0;j<beChallenger.length;j++){
+                if(currentChapter[i]==beChallenger[j].roleid){
+                  newbeChallenger[i]=beChallenger[j];
+                  newbeChallenger[i].roleattack=newbeChallenger[i].roleattack*carr;
+                  newbeChallenger[i].rolelife=newbeChallenger[i].rolelife*carr;
+                }
+              }
+            }
+            $("#ClickstartChapter").on("click",function(){
+              $("#show_startchapter").modal('hide');
+              for(var i=0,k=0;i<challenger.length;i++){
+                if($.inArray(challenger[i].roleid,challgerCarId)!=-1){
+                  if(newbeChallenger[k]==null){
+                    isdefeated=false; 
+                    str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>";
+                    ChapterVictory(challgerCarId,str);//挑战成功执行函数减体力调整排名随机获得挑战人员的碎片
+                    break;
+                  }
+                  //挑战者攻击-防御
+                  var GGF=challenger[i].roleattack-challenger[i].roledefense;
+                  //挑战者生命值
+                  var GLife=challenger[i].rolelife;
+                  //被挑战者攻击-防御
+                  var FGF=newbeChallenger[k].roleattack-newbeChallenger[k].roledefense;
+                  //被挑战者生命值
+                  var FLife=newbeChallenger[k].rolelife;
+                  //某方人物阵亡
+                  while(GLife>0&&FLife>0){
+                    FLife-=GGF;
+                    GLife-=FGF;
+                    if(FLife<0)FLife=0;
+                    if(GLife<0)GLife=0;
+                    str+=
+                    "<h3 style='color:blue;'>己方：</h3>"+
+                    "<p>"+challenger[i].rolename+"发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>"+
+                    "<h3 style='color:red;'>敌方：</h3>"+
+                    "<p>"+newbeChallenger[k].rolename+"发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>"
+                    if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
+                      challenger[i].rolelife=GLife;
+                      newbeChallenger[k].rolelife=0;
+                      str+="<h2 style='color:red'>敌方"+newbeChallenger[k].rolename+"已阵亡</h2>";
+                      i--;
+                      k++;
+                      break;
+                    }else if(GLife<=FGF){//如果挑战者第一个人物被攻击死
+                      newbeChallenger[k].rolelife=FLife;
+                      challenger[i].rolelife=0;
+                      str+="<h2 style='color:blue'>已方"+challenger[i].rolename+"已阵亡</h2>";
+                      break;
+                    }
+                  }
+                }
+              }
+              if(isdefeated){
+                str+="<h1 style='color:blue;'>挑战失败...</h1>";
+                ChapterDefeated(str);//失败执行函数减体力
+              };
+            })
+          },
+          error:function(){
+            alert("出错!!!请请重新操作")
+          }
+        })
+      }
+      function ChapterVictory(arr,str){
+        var chip=arr[Math.floor(Math.random()*(arr.length-0))];
+        var data={"uName":uName,"rolechip":chip,"currentC":chapterCarId}
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"ChapterVictory.php",
+          success:function(e){
+            if(e!='error'){
+              $('#show_battle').modal('hide');
+              $('.battle-message').css("display","block");
+              var receiveData=JSON.parse(e);
+              if(receiveData.randNum==0){
+                $("#all_battleMessage").html(str+
+                  "<div>"+
+                    "<h3>恭喜获得"+
+                    +receiveData.randMoney+"枚金币，金币可以购买体力及人物</h3>"+
+                  "</div>"+
+                  "<button class='btn btn-danger'"+
+                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+              }else if(receiveData.randNum!=0){
+                $("#all_battleMessage").html(str+
+                  "<div>"+
+                    "<h3>恭喜获得"+
+                    +receiveData.randNum+"个碎片,"+receiveData.randMoney+"枚金币，金币可以购买体力及人物</h3>"+
+                    "<img src='../images/showRole/"+receiveData.carid+".png'>"+
+                  "</div>"+
+                  "<button class='btn btn-danger'"+
+                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+              }
+              $("#close_battleMessage").on('click',function(){
+                $('.battle-message').fadeToggle("3000",function(){
+                  $("#all_battleMessage").html('');
+                  location.reload();
+                });
+              })
+            }else{
+              alert("出错!!!请请重新操作")
+            }
+          },
+          error:function(){
+            alert("出错!!!请请重新操作")
+          }
+        })
+      }
+      function ChapterDefeated(str){
+        var data={"uName":uName};
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"ChapterDefeated.php",
+          success:function(e){
+            if(e=="success"){
+              $('#show_battle').modal('hide');
+              $('.battle-message').css("display","block");
+              $("#all_battleMessage").html(str+
+                "<div>"+
+                  "<img src='../images/other/nochip.jpg'>"+
+                "</div>"+
+                "<button class='btn btn-danger'"+
+              "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+              
+              $("#close_battleMessage").on('click',function(){
+                $('.battle-message').fadeToggle("3000",function(){
+                  $("#all_battleMessage").html('');
+                  location.reload();
+                });
+              })
+            }else{
+              alert("出错!!!请请重新操作")
+            }
+          },
+          error:function(e){
+            alert("出错!!!请请重新操作")
+          },
+        })
+      }
+    </script>
+  </body>
+</html>

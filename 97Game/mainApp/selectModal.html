@@ -18,11 +18,38 @@
   </head>
   <body class="selectModal-body">
     <div>
+      <div class="jumbotron battle-message" >
+        <div class="container" id="all_battleMessage">
+          
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <!-- 我的队伍 -->
+      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="all_userTeam" style="text-align: center;"></div>
+        </div>
+      </div>
+      <!-- 经典模式的战斗 -->
+      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_battle" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content" id="all_battle" style="text-align: center;">
+            <table class="select-battle">
+              
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- 经典模式的战斗信息 -->
+      <div id="battle_message" class="battle-message">
+
+      </div>
       <!-- <img src="../images/other/selector.jpg" alt="" id="bg-image"> -->
       <div class="container selectModal-container">
-        <img src="../images/other/jindian.jpg" alt="">
-        <img src="../images/other/zhandou.jpg" alt="">
-        <img src="../images/other/xiulian.jpg" alt="">
+        <img src="../images/other/jindian01.jpg" alt="" id="jinDian_Modal" class="selectModal-role">
+        <img src="../images/other/zhandou01.jpg" alt="" id="zhanDou_Modal">
+        <img src="../images/other/xiulian01.jpg" alt="" id="xiuLian_Modal">
       </div>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -33,12 +60,14 @@
       var user_location=window.location.search;
       var uName=hexToDec(user_location.substring(user_location.indexOf("_")+1));
       var data={"uName":uName};
+      var challgerCarId=[];
       $(document).ready(function(){
         $.ajax({
           type:"POST",
           data:data,
           url:"testUser.php",
           success:function(e){
+
             if(e=="error"){
               alert("迷之操作！！！请重新登录");
               window.location.href="http://localhost/QHgame/97Game";
@@ -52,6 +81,289 @@
       })
       $("#bg-image").css("height",innerHeight+"px")
       $("#bg-image").css("width",innerWidth+"px")
+
+      //点击进入经典模式
+      $("#jinDian_Modal").on("click",function(){
+        $.ajax({
+          type:"POST",
+          data:data,
+          url:"sqlUserMessage.php",
+          success:function(e){
+            var ReceivedData=JSON.parse(e);
+            debugger;
+            if(ReceivedData.carid==null){
+              alert("必须拥有 三个 及以上的人物且体力大于 0 才可以进入");
+              return;
+            }
+            var ConditionCar=ReceivedData.carid.length;
+            var ConditionPower=Number(ReceivedData.user_power);
+            if(ConditionCar>=6&&ConditionPower>0){
+              //进入经典模式展示个人队伍
+              $("#show_userTeam").modal();
+              var str='';
+              if(uName!=''){
+                $.ajax({
+                  type:"POST",
+                  data:data,
+                  url :"selectRole.php",
+                  success:function(e){
+                    var carId=JSON.parse(e);
+                    var allId=carId.carid.split(",");
+                    if(allId!=null){
+                      for(var i=0;i<allId.length;i++){
+                        if(i!=0){
+                          str+="<div style='display:inline-block;position:relative;' id='RoleSelected_active'>"+
+                          "<img style='margin:20px;' src='../images/showRole/"+allId[i]+".png' id="+allId[i]+">"+
+                          "<img src='../images/other/selected.png' class='RoleSelected' />"+
+                          "</div>"
+                        }
+                      }
+                      $("#all_userTeam").html(
+                        "<h3 style='font-weight: bold;'>请选择出战人物</h3>"+str+
+                        "<div style='margin:20px;'><button class='btn btn-primary' id='SelectedOver'>完成</button><div>"
+                        )
+                    }
+                    $("#RoleSelected_active>img").on("click",function(){
+                      $(this).next().toggleClass("RoleSelected-active")
+                    })
+                    $("#SelectedOver").on("click",function(){
+                      SelectedLess3();
+                    })
+                  },
+                  error:function(){
+                    alert("查询失败！请重新查询")
+                  }
+                })
+              }else{
+                alert("登录跳转失败！请重新登录")
+                window.location.href="http://localhost/QHgame/97Game";
+              }  
+            }else{
+              alert("必须拥有 三个 及以上的人物且体力大于 0 才可以进入")
+            }
+            
+          },
+          error:function(e){
+            alert("选择失败！请重新选择")
+          }
+        })
+      })
+      function SelectedLess3(){
+        if($(".RoleSelected-active").length>0){
+          var allSelected=$(".RoleSelected-active").prev("img");
+          var selectedArr=[];
+          for(var i=0;i<allSelected.length;i++){
+            selectedArr.push(allSelected[i].id);
+          }
+          var data={"uName":uName,"carId":selectedArr}
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectedTojinDian.php",
+            success:function(e){
+              var receiveData=JSON.parse(e);
+              if(receiveData.hasRole){
+                challgerCarId=selectedArr;
+                $('#show_userTeam').modal('hide');
+                BattleTeam();
+              }else{
+                alert("操作失败！请重新选择")
+              }
+            },
+            error:function(){
+              alert("选择失败！请重新选择")
+            }
+          })
+        }else{
+          alert("选择失败！请重新选择")
+        }
+      }
+      function BattleTeam(){
+        $.ajax({
+            type:"POST",
+            data:'',
+            url :"showBattle.php",
+            success:function(e){
+              var receiveData=JSON.parse(e);
+              var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th></th></tr>';
+              for(var i=receiveData.length,order=0;i>0;i--){
+                if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null&&receiveData[i-1].carid.length>=5){
+                  str+="<tr>"+
+                      "<td>"+(++order)+"</td><td>"+receiveData[i-1].user_name+"</td><td>"+receiveData[i-1].user_combat+
+                      "</td><td></td>"+
+                       "</tr>"
+                }else if(receiveData[i-1].carid!=null&&receiveData[i-1].carid.length>=5){
+                  str+="<tr>"+
+                      "<td>"+(++order)+"</td><td class='changeName'>"+receiveData[i-1].user_name+"</td>"+
+                      "<td>"+receiveData[i-1].user_combat+
+                      "</td><td><a class='btn btn-primary'>发起挑战</a></td>"+
+                       "</tr>"
+                }else{
+                  continue;
+                }
+              }
+              $('#show_battle').modal();
+              $("#all_battle>table").html(str);
+              $(".select-battle td>a").on("click",function(){
+                ClickBattle.bind(this)();
+              })
+            },
+            error:function(){
+              alert("选择失败！请重新选择")
+            }
+        })
+      }
+      function ClickBattle(){
+        var changeOBJ=$(this).parents("td").siblings(".changeName").html();
+        var data={"uName":uName,"changeOBJ":changeOBJ};
+        var challenger={};
+        var beChallenger={};
+        var isdefeated=true;
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"startBattle.php",
+          success:function(e){
+            var str='<h1 style="text-align:center">战斗开始</h1>';
+            var receiveData=JSON.parse(e);
+            challgerCarId;
+            for(var key in receiveData){
+              switch (key){
+                case "challenger" : 
+                challenger=receiveData[key];
+                break;
+                case "bechallenger" : 
+                beChallenger=receiveData[key];
+              }
+            }
+            for(var i=0,k=0;i<challenger.length;i++){
+              if($.inArray(challenger[i].roleid,challgerCarId)!=-1){
+                if(beChallenger[k]==null){
+                  isdefeated=false; 
+                  str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>";
+                  BattleVictory(challgerCarId,str);//挑战成功执行函数减体力调整排名随机获得挑战人员的碎片
+                  break;
+                }
+                //挑战者攻击-防御
+                var GGF=challenger[i].roleattack-challenger[i].roledefense;
+                //挑战者生命值
+                var GLife=challenger[i].rolelife;
+                //被挑战者攻击-防御
+                var FGF=beChallenger[k].roleattack-beChallenger[k].roledefense;
+                //被挑战者生命值
+                var FLife=beChallenger[k].rolelife;
+                //某方人物阵亡
+                while(GLife>0&&FLife>0){
+                  FLife-=GGF;
+                  GLife-=FGF;
+                  if(FLife<0)FLife=0;
+                  if(GLife<0)GLife=0;
+                  str+=
+                  "<h3 style='color:blue;'>己方：</h3>"+
+                  "<p>"+challenger[i].rolename+"发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>"+
+                  "<h3 style='color:red;'>敌方：</h3>"+
+                  "<p>"+beChallenger[k].rolename+"发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>"
+                  if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
+                    challenger[i].rolelife=GLife;
+                    beChallenger[k].rolelife=0;
+                    str+="<h2 style='color:red'>敌方"+beChallenger[k].rolename+"已阵亡</h2>";
+                    i--;
+                    k++;
+                    break;
+                  }else if(GLife<=FGF){//如果挑战者第一个人物被攻击死
+                    beChallenger[k].rolelife=FLife;
+                    challenger[i].rolelife=0;
+                    str+="<h2 style='color:blue'>已方"+challenger[i].rolename+"已阵亡</h2>";
+                    break;
+                  }
+                }
+              }
+            }
+            if(isdefeated){
+              str+="<h1 style='color:blue;'>挑战失败...</h1>";
+              BattleDefeated(str);//失败执行函数减体力
+            };
+          },
+          error:function(){
+            alert("出错!!!请请重新操作")
+          }
+        })
+      }
+      function BattleVictory(arr,str){
+        var chip=arr[Math.floor(Math.random()*(arr.length-0))];
+        var data={"uName":uName,"rolechip":chip}
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"BattleVictory.php",
+          success:function(e){
+            if(e!='error'){
+              $('#show_battle').modal('hide');
+              $('.battle-message').css("display","block");
+              var receiveData=JSON.parse(e);
+              debugger;
+              if(receiveData.randNum==0){
+                $("#all_battleMessage").html(str+"<div>未获得任何碎片</div><button class='btn btn-danger'"+
+                "id='close_battleMessage'>关闭</button>")
+              }else{
+                $("#all_battleMessage").html(str+
+                  "<div>"+
+                    "<h3>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
+                    "<img src='../images/showRole/"+receiveData.carid+".png'>"+
+                  "</div>"+
+                  "<button class='btn btn-danger'"+
+                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+              }
+              $("#close_battleMessage").on('click',function(){
+                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('')});
+              })
+            }else{
+              alert("出错!!!请请重新操作")
+            }
+          },
+          error:function(){
+            alert("出错!!!请请重新操作")
+          }
+        })
+      }
+      function BattleDefeated(str){
+        var data={"uName":uName};
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"BattleDefeated.php",
+          success:function(e){
+            if(e=="success"){
+              $('#show_battle').modal('hide');
+              $('.battle-message').css("display","block");
+              $("#all_battleMessage").html(str+
+                "<div>"+
+                  "<img src='../images/other/nochip.jpg'>"+
+                "</div>"+
+                "<button class='btn btn-danger'"+
+              "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+              
+              $("#close_battleMessage").on('click',function(){
+                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('')});
+              })
+            }else{
+              alert("出错!!!请请重新操作")
+            }
+          },
+          error:function(e){
+            alert("出错!!!请请重新操作")
+          },
+        })
+      }
+      $("#zhanDou_Modal").on("click",function(){
+        window.location.href="http://localhost/QHgame/97Game/mainApp/ModalToBattle.html?UFO"+
+        +Math.ceil(Math.random()*520)+'_'+decToHex(uName);
+      })
+      $("#xiuLian_Modal").on("click",function(){
+        alert("暂未开放")
+        /*window.location.href="http://localhost/QHgame/97Game/mainApp/ModalToBattle.html?UFO"+
+        +Math.ceil(Math.random()*520)+'_'+decToHex(uName);*/
+      })
     </script>
   </body>
 </html>

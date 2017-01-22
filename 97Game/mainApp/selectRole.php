@@ -6,7 +6,7 @@ $name=$_REQUEST['uName'];
 
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');
-$sql = "SELECT carid FROM qhgame_login WHERE user_name='$name'";
+$sql = "SELECT carid,user_chapter FROM qhgame_login WHERE user_name='$name'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 if($row){

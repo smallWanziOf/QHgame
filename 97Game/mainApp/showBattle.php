@@ -1,23 +1,16 @@
 <?php
-//验证这个用户是否有角色
+//找出所有的用户及战力
 //header("Content-Type:application/json");
-$name=$_REQUEST['uName'];
-
-//用于保存查询的信息
-$output=[
-	'message'=>[],
-];
-
+$output=[];
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');
 //
-$sql = "SELECT * FROM user_$name";
+$sql="SELECT user_name,user_combat,carid FROM qhgame_login order by user_combat";
 $result = mysqli_query($conn, $sql);
+//$row = mysqli_fetch_assoc($result);
 
 while ($row = mysqli_fetch_assoc($result)){
-	$output['message'][]=$row;
+	$output[]=$row;
 };
-
 echo json_encode($output);
-
 ?>
