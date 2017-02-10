@@ -12,6 +12,8 @@
     <script src="data/config.js"></script>
     <style>
       body{background-color: #000;}
+      #main_Container{width:1200px;margin:0 auto;}
+      #user_name{opacity:0;position:absolute;}
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -21,77 +23,80 @@
     <![endif]-->
   </head>
   <body>
-    <div class="bg-shandian" id="bg-randomS"></div>
-    <div class="container">
-      <div class="bg-color">
-        <!-- 大蛇图片 -->
-        <div class="bg-login">
-          <img src="images/bg/bglogin01.jpg" alt=""> 
-        </div>
-        <!-- 登录组 -->
-        <div class="bg-form">
-          <form class="form-horizontal" role="form">
-            <div class="form-group">
-              <label for="inputName" class="col-sm-2 control-label" style="color:#fff;">账号：</label>
-              <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputName" placeholder="请输入账号">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="inputPassword" class="col-sm-2 control-label" style="color:#fff;">密码：</label>
-              <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword" placeholder="请输入密码">
-              </div>
-            </div>
-            <!-- <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> 记住账号
-                  </label>
+    <input type="password" id="user_name"/>
+    <div id="main_Container">
+      <div class="bg-shandian" id="bg-randomS"></div>
+      <div class="container">
+        <div class="bg-color">
+          <!-- 大蛇图片 -->
+          <div class="bg-login">
+            <img src="images/bg/bglogin01.jpg" alt=""> 
+          </div>
+          <!-- 登录组 -->
+          <div class="bg-form">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="inputName" class="col-sm-2 control-label" style="color:#fff;">账号：</label>
+                <div class="col-sm-10">
+                  <input type="email" class="form-control" id="inputName" placeholder="请输入账号">
                 </div>
               </div>
-            </div> -->
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <button type="button" class="btn btn-primary" id="bg_login">确认登录</button>
-                <button type="button" class="btn btn-default" id="bg_regist" data-target="#myModal" data-toggle="modal">注册账号</button>
-              </div>
-            </div>
-          </form> 
-        </div>
-        <!-- 登录信息 -->
-        <div id="login_message"></div>
-        <!-- 注册模态框 -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">欢迎注册！</h4>
-              </div>
-              <div class="modal-body">
-                <div class="input-group" style="margin-top: 20px;">
-                  <span class="input-group-addon">账号</span>
-                  <input type="text" class="form-control" placeholder="请输入账号(由8位随机的汉字或字母或数字组成)" id="regist_acount">
+              <div class="form-group">
+                <label for="inputPassword" class="col-sm-2 control-label" style="color:#fff;">密码：</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" id="inputPassword" placeholder="请输入密码">
                 </div>
-
-                <div class="input-group" style="margin-top:20px;margin-bottom: 20px;">
-                  <span class="input-group-addon">密码</span>
-                  <input type="password" class="form-control" placeholder="密码" id="regist_pwd">
-                </div>
-
-                <div class="regist-message"></div>
-
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="regist_sure">确定</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="regist_cancle">取消</button>
+              <!-- <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> 记住账号
+                    </label>
+                  </div>
+                </div>
+              </div> -->
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="button" class="btn btn-primary" id="bg_login">确认登录</button>
+                  <button type="button" class="btn btn-default" id="bg_regist" data-target="#myModal" data-toggle="modal">注册账号</button>
+                </div>
+              </div>
+            </form> 
+          </div>
+          <!-- 登录信息 -->
+          <div id="login_message"></div>
+          <!-- 注册模态框 -->
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                  <h4 class="modal-title" id="myModalLabel">欢迎注册！</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="input-group" style="margin-top: 20px;">
+                    <span class="input-group-addon">账号</span>
+                    <input type="text" class="form-control" placeholder="请输入账号(由8位随机的汉字或字母或数字组成)" id="regist_acount">
+                  </div>
+
+                  <div class="input-group" style="margin-top:20px;margin-bottom: 20px;">
+                    <span class="input-group-addon">密码</span>
+                    <input type="password" class="form-control" placeholder="密码" id="regist_pwd">
+                  </div>
+
+                  <div class="regist-message"></div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" id="regist_sure">确定</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal" id="regist_cancle">取消</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div> 
+        </div> 
+      </div>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>

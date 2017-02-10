@@ -1,29 +1,14 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>拳皇合卡</title>
-    <!-- Bootstrap -->
-    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
-    <script src="../encode.js"></script>
-    <script src="../data/config.js"></script>
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
     <style>
       .modal{
         overflow-y: scroll;
       }
-      .selectRole-mainRole{height:250px;}
+      .selectRole-mainRole{min-height:80px;}
       .thumbnail{border:none;}
       .jumbotron{background-color:transparent}
       #all_battleMessage span{color:#fff;}
+      .input-group{width:110px;margin:0 auto;}
+      #sql_showAllChip img{border-radius: 10px;box-shadow: 5px 5px rebeccapurple;}
+      #all_userTeam img{border-radius: 10px;box-shadow: 0px 0px 20px crimson;}
       body{background-color:#000;}
     </style>
   </head>
@@ -33,7 +18,7 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content" >
           <div class="container">
-            <img src="../images/other/usermessage.jpg" alt="" style="margin:0 auto;position:relative;left:30px;">
+            <img src="images/other/usermessage.jpg" alt="" style="margin:0 auto;position:relative;left:30px;">
             <h3>个人信息</h3>
             <h5>账户名称：<span id="sql_name"></span></h5>
             <h5>账户余额：<span id="sql_acount"></span></h5>
@@ -45,7 +30,7 @@
         </div>
       </div>
     </div>
-
+  
     <!-- 我的队伍 -->
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -57,18 +42,118 @@
       </div>
     </div>
 
+    <!-- 我的角色碎片 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_userChip" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_showAllChip"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 我的金币 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_userGem" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="text-align: center;">
+          <div class="jumbotron" style="margin-bottom:0" >
+            <img src="images/other/money.jpg" id="payImg" style="width:100%;">
+            <p>账户余额：<span id="sql_showAllMoney"></span></p>
+            <p><a class="btn btn-primary btn-lg" id="payToWeiXin" role="button">充值</a></p>
+            <!--<p style="text-align: left;font-size: 18px;">
+              * 10元=1000金<br/>
+              * 50元=7000金 + 20个人物碎片<br/>
+              * 100元=15000金+7800人物任选其一<br/>
+              * 888元=188888金+炎之克里斯
+            </p>
+            <p>(请添加微信：1305226892)</p>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 赞助页面 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_donate" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="text-align: center;">
+          <div class="jumbotron" style="margin-bottom:0" >
+            <img src="images/other/payweixin.jpg" style="width:100%;">
+            <h5>(微信：1305226892)</h5>
+            <h5>(官方QQ群：605273753)</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 查看人物的提示 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="lookRoleDal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" id="lookRole_Dal">
+      </div>
+    </div>
+
+    <!-- 强化成功后的提示 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="2" id="show_int" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div id="sql_show_int"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏帮助 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_book" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_book" style="text-align: center;">
+            <div class='col-sm-12 col-md-12' style='margin-top:20px'>
+              <h3>拳皇97 合卡游戏玩法介绍</h3>
+              <h5>(官方QQ群：605273753  微信：1305226892)</h5>
+              <div style='text-align: left;padding-left: 100px;' class='query_help'>
+                <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
+                <p><2>游戏目前只支持三种方式获得碎片</p>
+                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.3>可以选择进入抽奖页面进行抽奖或得人物碎片</p>       
+                <p><3>拥有人物碎片后可以进行强化！来提高当前人物的属性100%成功率</p>       
+                <p><4>如果发现主页面商城中的人物角色太少不防试试“神秘商店”这里有你想要的一切</p>       
+                <p><5>如果想要查看当前的人物属性或者其他的信息可以点击左边的导航进行查询</p>       
+                <p><6>“战斗模式”中不仅可以得到相应的人物碎片还可以获得一定数量的金币，但是会消耗一定的体力</p>       
+                <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
+                <p><8>加群可以一起讨论玩法，现在加入可以联系群主送人物哦！</p> 
+                <p><9>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="mainRole" class="selectRole-mainRole">
       <span class="glyphicon glyphicon-user" id="P_message" data-toggle="tooltip" data-placement="right" title="我的信息">
+        <b>我的信息</b>
       </span>
       <span class="glyphicon glyphicon-flag" id="P_team" data-toggle="tooltip" data-placement="right" title="我的队伍">
+        <b>我的队伍</b>
       </span>
-
-      <span class="glyphicon glyphicon-arrow-left" onclick="javascript:history.back();" id="P_left" data-toggle="tooltip" data-placement="right" title="返回上级">
+      <span class="glyphicon glyphicon-th" id="P_chip" data-toggle="tooltip" data-placement="right" title="我的碎片">
+        <b>我的碎片</b>
       </span>
-
+      <span class="glyphicon glyphicon-usd" id="P_gem" data-toggle="tooltip" data-placement="right" title="我的金币">
+        <b>我的金币</b>
+      </span>
+      <span class="glyphicon glyphicon-arrow-left" id="P_return" data-toggle="tooltip" data-placement="right" title="返回上级">
+        <b>返回上级</b>
+      </span>
+      <span class="glyphicon glyphicon-off" id="P_index" data-toggle="tooltip" data-placement="right" title="退出登录">
+        <b>退出登录</b>
+      </span>
       <span class="glyphicon glyphicon-refresh" id="P_refresh" data-toggle="tooltip" data-placement="right" title="刷新页面">
+        <b>刷新页面</b>
       </span>
-      <span class="glyphicon glyphicon-home" id="P_index" data-toggle="tooltip" data-placement="right" title="返回主页">
+      <span class="glyphicon glyphicon-book" id="P_book" data-toggle="tooltip" data-placement="right" title="查看帮助">
+        <b>查看帮助</b>
+      </span>
+      <span class="glyphicon glyphicon-heart-empty" id="P_donate" data-toggle="tooltip" data-placement="right" title="赞助">
+        <b>赞助</b>
       </span>
     </div>
     <!-- 显示闯关的过程 -->
@@ -88,12 +173,6 @@
           <div class="modal-content" id="all_selectChapter" style="text-align: center"></div>
         </div>
     </div>
-    <!-- 我的队伍 -->
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll;">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content" id="all_userTeam" style="text-align: center;"></div>
-        </div>
-    </div>
     <!-- 闯关信息 -->
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_startchapter" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -105,517 +184,5 @@
         <button class="btn btn-danger" style="position:relative;margin:0 auto;display: block;margin-top:200px;width:400px;font-size: 30px;" id="start_battle">开始游戏</button>
       </div>
     </div>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script>
-      var user_location=window.location.search;
-      var uName=hexToDec(user_location.substring(user_location.indexOf("_")+1));
-      var data={"uName":uName};
-      var chapterCarId;
-      $(document).ready(function(){
-        $.ajax({
-          type:"POST",
-          data:data,
-          url:"testUser.php",
-          success:function(e){
-            if(e=="error"){
-              alert("迷之操作！！！请重新登录");
-              window.location.href=dev_location;
-            }
-          },
-          error:function(e){
-            alert("迷之操作！！！请重新登录");
-            window.location.href=dev_location;
-          }
-        })
-      });
-      $("#start_battle").on("click",function(){
-        $("#show_selectChapter").modal();
-        $.ajax({
-          type:"POST",
-          data:data,
-          url :"allChapter.php",
-          success:function(e){
-            var receiveData=JSON.parse(e);
-            var findChapter=receiveData.chapter;
-            if(receiveData.userPower<10){
-              alert("体力不足无法进行闯关(当前体力小于10)");
-              $("#show_selectChapter").modal('hide');
-              return
-            }else{
-              var str='<h2>请选择关卡</h2>';    
-              for(var i=0;i<findChapter.length;i++){
-                str+="<div style='display:inline-block' class='chapterDetail'>"+
-                "<img src='../images/bg/97.jpg' style='margin:10px;'>"+
-                "<span id="+findChapter[i].chapterid+">"+findChapter[i].chaptername+"</span></div>";
-              }
-              $("#all_selectChapter").html(str);
-              $(".chapterDetail>span").on("click",function(){
-                $("#show_userTeam").modal();
-                var chapterId=$(this)[0].id;
-                chapterCarId=chapterId;
-                $("#show_selectChapter").modal('hide');
-                var str='';
-                if(uName!=''){
-                  $.ajax({
-                    type:"POST",
-                    data:data,
-                    url :"selectRole.php",
-                    success:function(e){
-                      var carId=JSON.parse(e);
-                      var allId=carId.carid.split(",");
-                      if(allId!=null){
-                        for(var i=0;i<allId.length;i++){
-                          if(i!=0){
-                            str+="<div style='display:inline-block;position:relative;' id='RoleSelected_active'>"+
-                            "<img style='margin:20px;' src='../images/showRole/"+allId[i]+".png' id="+allId[i]+">"+
-                            "<img src='../images/other/selected.png' class='RoleSelected' />"+
-                            "</div>"
-                          }
-                        }
-                        $("#all_userTeam").html(
-                          "<h3 style='font-weight: bold;'>请选择三位闯关人物</h3>"+str+
-                          "<div style='margin:20px;'><button class='btn btn-primary' id='SelectedOver'>完成</button><div>"
-                          )
-                      }
-                      $("#RoleSelected_active>img").on("click",function(){
-                        $(this).next().toggleClass("RoleSelected-active")
-                      })
-                      $("#SelectedOver").on("click",function(){
-                        SelectedLess3();
-                      })
-                    },
-                    error:function(){
-                      alert("查询失败！请重新查询")
-                    }
-                  })
-                }else{
-                  alert("登录跳转失败！请重新登录")
-                  window.location.href=dev_location;
-                }
-              })
-            }
-          },
-          error:function(e){
-            alert("选择失败！请重新选择")
-          }
-        })
-      })
-      function SelectedLess3(){
-        if($(".RoleSelected-active").length<=3&&$(".RoleSelected-active").length>0){
-          var allSelected=$(".RoleSelected-active").prev("img");
-          var selectedArr=[];
-          for(var i=0;i<allSelected.length;i++){
-            selectedArr.push(allSelected[i].id);
-          }
-          var data={"uName":uName,"carId":selectedArr}
-          $.ajax({
-            type:"POST",
-            data:data,
-            url :"selectedToJinDian.php",
-            success:function(e){
-              var receiveData=JSON.parse(e);
-              if(receiveData.hasRole){
-                challgerCarId=selectedArr;
-                $('#show_userTeam').modal('hide');
-                StartChapter(selectedArr);
-              }else{
-                alert("操作失败！请重新选择")
-              }
-            },
-            error:function(){
-              alert("选择失败！请重新选择")
-            }
-          })
-        }else if($(".RoleSelected-active").length<=0){
-          alert("选择失败！最少选择一位人物")
-        }else{
-          alert("选择失败！最多选择三位人物")
-        }
-      }
-      function StartChapter(arr){
-        $("#show_startchapter").modal();
-        var vsStr="<h2>对战信息</h2>";
-        //当前选择的关卡
-        var carr=chapterCarId;
-        var data={"carr":carr,"uarr":arr,"uName":uName};
-        var challenger={};
-        var beChallenger={};
-        var newbeChallenger={};
-        var currentChapter={};
-        var isdefeated=true;
-        $.ajax({
-          type:"POST",
-          data:data,
-          url :"StartChapter.php",
-          success:function(e){
-            var receiveData=JSON.parse(e);
-            //显示出战人员
-            for(var i=0;i<arr.length;i++){
-              vsStr+="<div style='display:inline-block;'>"+
-                      "<img src='../images/showRole/"+arr[i]+".png' style='margin:10px;'>"+
-                      "</div>"
-            }
-            vsStr+="<div style='font-size:50px;'><img src='../images/bg/vs.jpg'></div>"
-            currentChapter=receiveData.currentOBJ[0].chapterrole.split(",");
-            for(var i=0;i<currentChapter.length;i++){
-              vsStr+="<div style='display:inline-block;'>"+
-                      "<img src='../images/showRole/"+currentChapter[i]+".png' style='margin:10px;'>"+
-                      "</div>"
-            }
-            $("#all_startchapter").html(vsStr+"<div style='margin:10px;'><button class='btn btn-danger' id='ClickstartChapter'>开始闯关</button></div>");
-
-            
-            var str='<h1 style="text-align:center">战斗开始</h1>';
-            
-            //challgerCarId;
-            for(var key in receiveData){
-              switch (key){
-                case "challenger" : 
-                challenger=receiveData[key];
-                break;
-                case "bechallenger" : 
-                beChallenger=receiveData[key];
-              }
-            }
-            //删除不在闯关人物中的角色
-            for(var i=0;i<currentChapter.length;i++){
-              for(var j=0;j<beChallenger.length;j++){
-                if(currentChapter[i]==beChallenger[j].roleid){
-                  newbeChallenger[i]=beChallenger[j];
-                  newbeChallenger[i].roleattack=newbeChallenger[i].roleattack*carr;
-                  newbeChallenger[i].rolelife=newbeChallenger[i].rolelife*carr;
-                }
-              }
-            }
-            
-            for(var key in challenger){
-              if($.inArray(challenger[key].roleid,arr)!=-1){
-                data1.push(challenger[key]);
-              }
-            }
-            data2=newbeChallenger;
-            battleLength1=data1.length;
-            battleLength2=data2.length;
-            $("#ClickstartChapter").on("click",function(){                
-              $("#show_startchapter").modal('hide');
-              $(".battle-message").css("display","block");
-              $(".main-container").remove();
-              startBattle.init(data1[battleIndex1],data2[battleIndex2]);
-            })
-          },
-          error:function(){
-            alert("出错!!!请请重新操作")
-          }
-        })
-      }
-      function ChapterVictory(arr){
-        var chip=arr[Math.floor(Math.random()*(arr.length-0))];
-        debugger;
-        var data={"uName":uName,"rolechip":chip,"currentC":chapterCarId}
-        $.ajax({
-          type:"POST",
-          data:data,
-          url :"ChapterVictory.php",
-          success:function(e){
-            if(e!='error'){
-              $('#show_battle').modal('hide');
-              $('.battle-message').css("display","block");
-              var receiveData=JSON.parse(e);
-              if(receiveData.randNum==0){
-                $("#all_battleMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
-                "id='close_battleMessage'>关闭</button>")                     
-              }else if(receiveData.randNum!=0){
-                $("#all_battleMessage").append(
-                "<div>"+
-                "<h3 style='color:#fff;'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
-                          "<img src='../images/showRole/"+receiveData.carid+".png'>"+
-                "</div>"+
-                "<button class='btn btn-danger'"+
-                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
-              }
-              $(".battle-message").on('click','#close_battleMessage',function(){
-                window.location.reload();
-              })
-            }else{
-              alert("出错!!!请请重新操作")
-            }
-          },
-          error:function(){
-            alert("出错!!!请请重新操作")
-          }
-        })
-      }
-      function ChapterDefeated(){
-        var data={"uName":uName};
-        $.ajax({
-          type:"POST",
-          data:data,
-          url :"ChapterDefeated.php",
-          success:function(e){
-            if(e=="success"){
-              $("#all_battleMessage").append("<div style='color:#fff'>未获得任何碎片</div>"+
-                "<button class='btn btn-danger' id='close_battleMessage'>关闭</button>")                     
-              $(".battle-message").on('click','#close_battleMessage',function(){
-                window.location.reload();
-              })
-            }else{
-              alert("出错!!!请请重新操作")
-            }
-          },
-          error:function(e){
-            alert("出错!!!请请重新操作")
-          },
-        })
-      }
-      
-      /*左侧导航的功能*/
-      //hover左边导航进行提示的信息
-      $('#P_message').tooltip();
-      $('#P_team').tooltip();
-      $('#P_left').tooltip();
-      $('#P_refresh').tooltip();
-      $('#P_index').tooltip();
-
-      //点击导航展示详细的信息
-      $("#P_message").click(function(){//个人信息
-        $("#show_userMessage").modal();
-        if(uName!=''){
-          $.ajax({
-            type:"POST",
-            data:data,
-            url :"sqlUserMessage.php",
-            success:function(e){
-              var allMessage=JSON.parse(e);
-              if(allMessage.carid==null){
-                $("#sql_Team").html();
-              }else{
-                var length=allMessage.carid.split(",").length;
-                $("#sql_Team").html(parseInt(length)-1);
-              }
-              $("#sql_name").html(data.uName);
-              $("#sql_V").html(allMessage.user_v);
-              $("#sql_power").html(allMessage.user_power);
-              $("#sql_acount").html(allMessage.user_money);
-              $("#sql_title").html(allMessage.user_title);
-              $("#sql_combat").html(allMessage.user_combat);
-            },
-            error:function(){
-              alert("查询失败！请重新查询")
-            }
-          })
-        }else{
-          alert("登录跳转失败！请重新登录")
-          window.location.href=dev_location;
-        }  
-      })
-
-      $("#P_team").click(function(){//个人队伍
-        $("#show_userTeam").modal();
-        var str='';
-        if(uName!=''){
-          $.ajax({
-            type:"POST",
-            data:data,
-            url :"selectRole.php",
-            success:function(e){
-              var carId=JSON.parse(e);
-              if(carId.carid!=null){
-                var allId=carId.carid.split(",");
-              }else{
-                $("#all_userTeam").html("<img src='../images/other/nochip01.jpg'><h3>您当前还未添加任何人物...</h3>")
-                return;
-              }
-              
-              hasCarId=allId;
-              if(allId.length==1){
-                $("#all_userTeam").html("<img src='../images/other/nochip01.jpg'><h3>您当前还未添加任何人物...</h3>")
-                return;
-              }
-              if(allId!=null){
-                $.ajax({
-                  type:"POST",
-                  data:{"uName":uName,"carId":allId},
-                  url :"showCurrentRole.php",
-                  success:function(e){
-                    var data=JSON.parse(e);
-                    var roleData;
-                    for(var i=0;i<allId.length;i++){
-                      if(i!=0){
-                        for(var k=0;k<data.length;k++){
-                          if(data[k]['roleid']==allId[i]){
-                            roleData=data[k];
-                            break;
-                          }
-                        }
-                        str+="<div class='col-sm-6 col-md-4'>"+
-                                "<div class='thumbnail'>"+
-                                  "<img src='../images/showRole/"+allId[i]+".png'/>"+
-                                  "<div class='caption' style='text-align:center;'>"+
-                                    "<p>攻击力："+roleData.roleattack+"</p>"+
-                                    "<p>防御力："+roleData.roledefense+"</p>"+
-                                    "<p>生命值："+roleData.rolelife+"</p>"+
-                                  "</div>"+
-                                "</div>"+
-                              "</div>"
-                      }
-                    }
-                    $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
-                  },
-                  error:function(){
-                    alert("查询失败！请重新查询")
-                  }
-                })
-                
-              }
-            },
-            error:function(){
-              alert("查询失败！请重新查询")
-            }
-          })
-        }else{
-          alert("登录跳转失败！请重新登录")
-          window.location.href=dev_location;
-        }  
-      })
-
-      $('#P_refresh').click(function(){//刷新页面
-        window.location.reload();
-      })
-
-      $('#P_index').click(function(){//返回登录页
-        window.location.href=dev_location;
-      })
-
-      $('#P_book').click(function(){
-          $("#show_book").modal();
-      })
-      /****************对战的算法***************/
-      var data1=[];
-      var data2=[];
-      var battleIndex1=0;
-      var battleIndex2=0;
-      var battleLength1;
-      var battleLength2;
-      var startBattle={
-        zhan1:null,
-        zhan2:null,
-        timer:null,
-        win:false,
-        init:function(n1,n2){
-          this.zhan1=n1;
-          this.zhan2=n2;
-          //显示当前的对战的人的图片
-          var strImg='';
-          strImg+="<p><img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' /' class='img1'></p><p><img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /></p>";
-          $(".imgC>.showVsImg").html(strImg);
-          //1秒执行一次对战
-          this.timer=setInterval(this.start1.bind(this),1000);
-        },
-        start1:function(){
-          //存放乙方攻击的内容
-          var strBattle1='<b style="color:green;font-size:18px;margin-left:10px;">乙方造成</b>';
-          //存放敌方攻击的内容
-          var strBattle2='<b style="color:red;font-size:18px;margin-left:10px;">敌方造成</b>';
-          //attack1乙方的基础攻击属性
-          var attack1=parseInt(this.zhan1['roleattack']);
-          //attack2敌方的基础攻击属性
-          var attack2=parseInt(this.zhan2['roleattack']);
-          //随机增加乙方攻击力
-          var randAttack1=Math.floor(Math.random()*50);
-          //随机增加敌方攻击力
-          var randAttack2=Math.floor(Math.random()*50);
-          //改变乙方的攻击力+随机增加的攻击力
-          attack1+=parseInt(randAttack1);
-          //改变敌方的攻击力+随机增加的攻击力
-          attack2+=parseInt(randAttack2);
-          //获取乙方生命值
-          var life1=parseInt(this.zhan1['rolelife']);
-          //获取敌方生命值
-          var life2=parseInt(this.zhan2['rolelife']);
-          //获取乙方防御力并削弱乘0.6
-          var define1=Math.floor(this.zhan1['roledefense']*0.6);
-          //获取敌方防御力并削弱乘0.6
-          var define2=Math.floor(this.zhan2['roledefense']*0.6);
-          //乙方攻击的条件
-          if(life2+define2>attack1){
-            if(randAttack1>30){
-              strBattle1+="<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
-              $(".imgC .img1").css("transform","scale(1.2)");
-              setTimeout(function(){
-                $(".imgC .img1").css("transform","scale(1)");
-              },500);
-            }else{
-              strBattle1+=":";
-            }
-            if(parseInt(attack1-define2)<=0){
-              this.zhan2['rolelife']=life2-1;
-              strBattle1+="<span>1点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
-            }else{
-              this.zhan2['rolelife']=life2-(attack1-define2);
-              strBattle1+="<span>"+parseInt(attack1-define2)+"点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
-            }
-            $("#all_battleMessage>div").append(strBattle1);
-          }else{
-            strBattle1+="<p style='color:red'>"+parseInt(attack1)+"点伤害!敌方阵亡</p>";
-            $("#all_battleMessage>div").append(strBattle1);
-            $(".imgC .img2").css("transform","scale(0)");
-            clearInterval(this.timer);
-            this.timer=null;
-            data1[battleIndex1]['rolelife']=this.zhan1['rolelife'];
-            var Index2=++battleIndex2;
-            if(Index2<battleLength2){
-              battleTeam(battleIndex1,Index2);
-            }else{
-              $("#all_battleMessage>div").append("<h2 style='color:#fff;'>恭喜！挑战胜利！</h2>");
-              ChapterVictory(challgerCarId);
-              return;
-            }
-          }
-          //敌方攻击的条件
-          if(life1+define1>attack2){
-            
-            if(randAttack2>30){
-              strBattle2+="<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
-              $(".imgC .img2").css("transform","scale(1.2)");
-              setTimeout(function(){
-                $(".imgC .img2").css("transform","scale(1)");
-              },500);
-            }else{
-              strBattle2+=":";
-            }
-            if(parseInt(attack2-define1)<=0){
-              this.zhan1['rolelife']=life1-1;
-              strBattle2+="<span>1点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
-            }else{
-              this.zhan1['rolelife']=life1-(attack2-define1);
-              strBattle2+="<span>"+parseInt(attack2-define1)+"点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
-            }       
-            $("#all_battleMessage>div").append(strBattle2);
-          }else{
-            strBattle2+="<p style='color:red'>"+parseInt(attack2)+"点伤害!乙方阵亡</p>";
-            $("#all_battleMessage>div").append(strBattle2);
-            $(".imgC .img1").css("transform","scale(0)");
-            clearInterval(this.timer);
-            this.timer=null;
-            data2[battleIndex2]['rolelife']=this.zhan2['rolelife'];
-            var Index1=++battleIndex1;
-            if(Index1<battleLength1){ 
-              battleTeam(Index1,battleIndex2);
-            }else{
-              $("#all_battleMessage>div").append("<h2 style='color:#fff;'>很遗憾。。。挑战失败</h2>");
-              ChapterDefeated();
-              return;
-            }
-          }
-        }
-      }
-      //某方阵亡继续调用这个方法
-      function battleTeam(n1,n2){
-        startBattle.init(data1[n1],data2[n2]);
-      }
-    </script>
+    <script src="js/ModalToBattle.js"></script>
   </body>
-</html>

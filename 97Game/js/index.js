@@ -19,13 +19,15 @@
           url:"login.php",
           success:function(e){
             if(e=="success"){
+              $("#user_name").val(userMessage["userName"]);
               $("#login_message").append(
                 "<div class='alert alert-success' role='alert'>登录成功！正在跳转...</div>"
               )
               $("#login_message>div").fadeOut(1000,function(){
                 $(this).remove()
               })
-              window.location.href=dev_location+"mainApp/selectRole.html?UFO"+Math.ceil(Math.random()*520)+"_"+decToHex($("#inputName").val());
+              $("#main_Container").load(dev_location+"mainApp/selectRole.html");
+              //window.location.href=dev_location+"mainApp/selectRole.html?UFO"+Math.ceil(Math.random()*520)+"_"+decToHex($("#inputName").val());
             }else{
               $("#login_message").append(
                 "<div class='alert alert-danger' role='alert'>用户名或密码错误！</div>"
@@ -98,4 +100,8 @@
           case 13 : 
           $("#bg_login").trigger("click");
         }
+      })
+      //监听用户改变
+      $("#user_name").change(function(){
+        alert(1121)
       })

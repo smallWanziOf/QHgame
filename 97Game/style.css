@@ -40,6 +40,7 @@
     width:85%;
     height:100%;
     background:url("./images/showAllRole/97.jpg") no-repeat;
+    border-radius: 25px;
     background-position:center;
 }
 .CarImg{
@@ -56,21 +57,28 @@
 	opacity:1;
 }
 .selectRole-mainRole{
-	width:40px;
-	height:500px;
-	border-radius:5px ;
-	background-color:#fff; 
+	text-align: center;
+	width:100%;
+	min-height:80px;
 	position:fixed;
-	left:-5px;
-	top:100px;
+	left:0px;
+	top:0px;
     z-index:10;
+    background: rgba(0,0,0,0.8);
 }
 .selectRole-mainRole>span{
 	position:relative;
-	top:10px;
-	left:10px;
-	font-size: 20px;
-	margin-bottom:30px;
+	font-size: 30px;
+	margin:20px 50px;
+	color:mintcream;
+
+}
+.selectRole-mainRole>span>b{
+	position: absolute;
+    bottom: -18px;
+    font-size: 12px;
+    width: 50px;
+    left: -10px;
 }
 .selectRole-mainRole>span:hover{
 	cursor:pointer;
