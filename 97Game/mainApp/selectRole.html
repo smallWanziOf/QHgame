@@ -25,14 +25,14 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content" >
           <div class="container">
-            <img src="../images/other/usermessage.jpg" alt="">
+            <img src="../images/other/usermessage.jpg" alt="" style="margin:0 auto;position:relative;left:30px;">
             <h3>个人信息</h3>
-            <h5>VIP 等级：<span id="sql_V"></span></h5>
+            <h5>账户名称：<span id="sql_name"></span></h5>
             <h5>账户余额：<span id="sql_acount"></span></h5>
             <h5>队伍体力：<span id="sql_power"></span></h5>
             <h5>队伍数量：<span id="sql_Team"></span></h5>
             <h5>队伍战力：<span id="sql_combat"></span></h5>
-            <h5>获得称号：<span id="sql_title"></span></h5>
+            <h5>VIP 等级：<span id="sql_title"></span></h5>
           </div>
         </div>
       </div>
@@ -62,10 +62,40 @@
     <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_userGem" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content" style="text-align: center;">
-          <div class="jumbotron" style="margin-bottom:0">
-            <img src="../images/other/money.jpg" alt="">
+          <div class="jumbotron" style="margin-bottom:0" >
+            <img src="../images/other/money.jpg" id="payImg" style="width:100%;">
             <p>账户余额：<span id="sql_showAllMoney"></span></p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">给账户加油</a></p>
+            <p><a class="btn btn-primary btn-lg" id="payToWeiXin" role="button">给账户加油</a></p>
+            <p style="text-align: left;font-size: 18px;">
+              * 10元=100金<br/>
+              * 50元=700金 + 20个人物碎片<br/>
+              * 100元=1500金+7800人物任选其一<br/>
+              * 888元=18888金+炎之克里斯
+            </p>
+            <p>(请添加微信：1305226892)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 抽奖页面 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_lottery" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_lottery" style="text-align: center;">
+            <div class='col-sm-12 col-md-12' style='margin-top:20px'>
+              <div class='thumbnail'>
+                <div class='caption'>
+                  <p>
+                    <a class='btn btn-primary intensify' role='button' id='lottery1'>抽一次</a>
+                      &nbsp;&nbsp;&nbsp;
+                    <a class='btn btn-primary intensify' role='button' id='lottery10'>抽十次</a>
+                  </p>
+                  <h3 style='color:red'>必得已拥有人物碎片！有机会获得神秘人物</h3>
+                  <p>(注：抽一次消耗 60金币,十连抽只需 550金币)</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -88,14 +118,40 @@
     
     <!-- 购买成功后的提示 -->
     <div class="modal fade bs-example-modal-sm" tabindex="-1" id="myModal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
+      <div class="modal-dialog modal-sm" id="buy_success">
+        <!--         <div class="modal-content" >
           <h3 style="text-align: center;color:green;font-weight: bold;">恭喜成功添加!</h3>
           <img src="../images/caozhijin/xiaozhao.gif">
           <hr>
           <h1 style="text-align: right;">
             <button type="button" class="btn btn-primary" data-dismiss="modal" id="close_modal" style="margin-right: 20px;">关闭</button>
           </h1>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- 游戏帮助 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_book" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_book" style="text-align: center;">
+            <div class='col-sm-12 col-md-12' style='margin-top:20px'>
+              <h3>拳皇97 合卡游戏玩法介绍</h3>
+              <div style='text-align: left;padding-left: 100px;' class='query_help'>
+                <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
+                <p><2>游戏目前只支持三种方式获得碎片</p>
+                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.3>可以选择进入抽奖页面进行抽奖或得人物碎片</p>       
+                <p><3>拥有人物碎片后可以进行强化！来提高当前人物的属性</p>       
+                <p><4>如果发现主页面商城中的人物角色太少不防试试“神秘商店”这里有你想要的</p>       
+                <p><5>如果想要查看当前的人物属性或者其他的信息可以点击左边的导航进行查询</p>       
+                <p><6>“战斗模式”中不仅可以得到相应的人物碎片还可以获得一定数量的金币</p>       
+                <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
+                <p><8>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！微信：1305226892 </p>       
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -111,307 +167,19 @@
       </span>
       <span class="glyphicon glyphicon-fire" id="P_battle" data-toggle="tooltip" data-placement="right" title="开始战斗">
       </span>
+      <span class="glyphicon glyphicon-home" id="P_index" data-toggle="tooltip" data-placement="right" title="返回主页">
+      </span>
+      <span class="glyphicon glyphicon-gift" id="P_gift" data-toggle="tooltip" data-placement="right" title="神秘商店">
+      </span>
+      <span class="glyphicon glyphicon-refresh" id="P_refresh" data-toggle="tooltip" data-placement="right" title="刷新页面">
+      </span>
+      <span class="glyphicon glyphicon-sunglasses" id="P_sunglasses" data-toggle="tooltip" data-placement="right" title="进入抽奖">
+      </span>
+      <span class="glyphicon glyphicon-book" id="P_book" data-toggle="tooltip" data-placement="right" title="查看帮助">
+      </span>
     </div>
     <div class="container" >
-      
-      <div class="row" style="margin-top:20px;">
-        <!-- 安迪 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="1">
-          <div class="thumbnail">
-            <img src="../images/andi/andi.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>ANDY BOGARD</h3>
-              <p>
-                <h5>攻击：87</h5>
-                <h5>防御：43</h5>
-                <h5>生命值：560</h5>
-                <h5>交易价：450</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 坂崎良 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="2">
-          <div class="thumbnail">
-            <img src="../images/banqiliang/banqiliang.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>RYO SAKAZAKI</h3>
-              <p>
-                <h5>攻击：83</h5>
-                <h5>防御：50</h5>
-                <h5>生命值：660</h5>
-                <h5>交易价：450</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 坂崎由莉 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="3">
-          <div class="thumbnail">
-            <img src="../images/banqiyouli/banqiyouli.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>YURI SAKAZAKI</h3>
-              <p>
-                <h5>攻击：85</h5>
-                <h5>防御：47</h5>
-                <h5>生命值：530</h5>
-                <h5>交易价：450</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 蔡宝奇 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="4">
-          <div class="thumbnail">
-            <img src="../images/caibaoqi/caibaoqi.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>CHOI BOUNGE</h3>
-              <p>
-                <h5>攻击：88</h5>
-                <h5>防御：43</h5>
-                <h5>生命值：530</h5>
-                <h5>交易价：450</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 陈可汉 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="5">
-          <div class="thumbnail">
-            <img src="../images/chengkehan/chengkehan.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>CHANG KOEHAN</h3>
-              <p>
-                <h5>攻击：75</h5>
-                <h5>防御：56</h5>
-                <h5>生命值：580</h5>
-                <h5>交易价：1350</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 大门五郎 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="6">
-          <div class="thumbnail">
-            <img src="../images/damen/damen.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>GORO DAIMEN</h3>
-              <p>
-                <h5>攻击：78</h5>
-                <h5>防御：55</h5>
-                <h5>生命值：570</h5>
-                <h5>交易价：1350</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>  
-        <!-- 东丈 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="7">
-          <div class="thumbnail">
-            <img src="../images/dongzhang/dongzhang.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>JOE HIGASHI</h3>
-              <p>
-                <h5>攻击：86</h5>
-                <h5>防御：48</h5>
-                <h5>生命值：530</h5>
-                <h5>交易价：1350</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 金家潘 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="8">
-          <div class="thumbnail">
-            <img src="../images/jinjiapan/jinjiapan.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>KIM KAPHWAN</h3>
-              <p>
-                <h5>攻击：80</h5>
-                <h5>防御：45</h5>
-                <h5>生命值：550</h5>
-                <h5>交易价：1350</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 京 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="9">
-          <div class="thumbnail">
-            <img src="../images/jin/jin.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>KING</h3>
-              <p>
-                <h5>攻击：83</h5>
-                <h5>防御：44</h5>
-                <h5>生命值：540</h5>
-                <h5>交易价：3150</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 克拉克 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="10">
-          <div class="thumbnail">
-            <img src="../images/kelake/kelake.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>CLARK</h3>
-              <p>
-                <h5>攻击：81</h5>
-                <h5>防御：46</h5>
-                <h5>生命值：560</h5>
-                <h5>交易价：3150</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 拉尔夫 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="11">
-          <div class="thumbnail">
-            <img src="../images/laerfu/laerfu.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>RALF</h3>
-              <p>
-                <h5>攻击：83</h5>
-                <h5>防御：45</h5>
-                <h5>生命值：540</h5>
-                <h5>交易价：3150</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 丽安娜 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="12">
-          <div class="thumbnail">
-            <img src="../images/lianna/lianna.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>LEONA</h3>
-              <p>
-                <h5>攻击：85</h5>
-                <h5>防御：40</h5>
-                <h5>生命值：560</h5>
-                <h5>交易价：3150</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 雅典娜 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="13">
-          <div class="thumbnail">
-            <img src="../images/yadianna/yadianna.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>ATHENA ASAMIYA</h3>
-              <p>
-                <h5>攻击：88</h5>
-                <h5>防御：39</h5>
-                <h5>生命值：510</h5>
-                <h5>交易价：4800</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 玛丽 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="14">
-          <div class="thumbnail">
-            <img src="../images/mali/mali.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>BIUE MARY</h3>
-              <p>
-                <h5>攻击：90</h5>
-                <h5>防御：35</h5>
-                <h5>生命值：500</h5>
-                <h5>交易价：4800</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 特瑞 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="15">
-          <div class="thumbnail">
-            <img src="../images/terui/terui.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>TEERY BOGARD</h3>
-              <p>
-                <h5>攻击：83</h5>
-                <h5>防御：46</h5>
-                <h5>生命值：540</h5>
-                <h5>交易价：4800</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 镇元斋 -->
-        <div class="col-sm-6 col-md-4 hasParent" id="16">
-          <div class="thumbnail">
-            <img src="../images/zhengyuanzhai/zhengyuanzhai.jpg" class="img-responsive" alt="Responsive image">
-            <div class="caption">
-              <h3>CHIN GENTSAI</h3>
-              <p>
-                <h5>攻击：90</h5>
-                <h5>防御：40</h5>
-                <h5>生命值：520</h5>
-                <h5>交易价：4800</h5>
-              </p>
-              <p>
-                <a href="#" class="btn btn-primary Join_Team" role="button">加入队伍</a> 
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- 提示 -->
-        <!-- <div class="col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="../images/other/title.jpg" class="img-circle" alt="Responsive image">
-            <div class="caption">
-              <h3>其他人物正在开发中哦...</h3>
-            </div>
-          </div>
-        </div> -->
+      <div class="row allRoleContainer" style="margin-top:20px;">
       </div>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -455,12 +223,119 @@
                   $("#no_role").modal();
                   return;
                 }
-                if(allId!=null){
-                  for(var i=0;i<allId.length;i++){
-                    $("#"+hasCarId[i]).remove();
+                $.ajax({
+                  type:"POST",
+                  data:data,
+                  url :"showAllRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var str='';
+                    for(var i=0;i<data.length;i++){
+                      if($.inArray(data[i].id,allId)==-1&&data[i].tradeprice<=6300){
+                        str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
+                              '<div class="thumbnail">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
+                                '<div class="caption">'+
+                                  '<h3>'+data[i].rolename+'</h3>'+
+                                  '<p>'+
+                                    '<h5>攻击：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>防御：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>生命值：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>交易价：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="min-width: 2em;width:'
+                                    +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
+                                    '</h5>'+
+                                  '</p>'+
+                                  '<p>'+
+                                    '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                                  '</p>'+
+                                '</div>'+
+                              '</div>'+
+                            '</div>'
+                      }
+                    }
+                    $(".allRoleContainer").html(str)
+                    /*增加条形动画*/
+                    $(".progress-bar").hover(function(){
+                      $(this).addClass("active")
+                    },function(){
+                      $(this).removeClass("active")
+                    })
+                  },
+                  error:function(e){
+                    alert("程序出错请重试！")
                   }
-                }
+                })
               }else{
+                $.ajax({
+                  type:"POST",
+                  data:data,
+                  url :"showAllRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var str='';
+                    for(var i=0;i<data.length;i++){
+                      if(data[i].tradeprice<=6300){
+                        str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
+                              '<div class="thumbnail">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
+                                '<div class="caption">'+
+                                  '<h3>'+data[i].rolename+'</h3>'+
+                                  '<p>'+
+                                    '<h5>攻击：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="width:'
+                                    +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>防御：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="width:'
+                                    +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>生命值：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="width:'
+                                    +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>交易价：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="min-width: 2em;width:'
+                                    +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
+                                    '</h5>'+
+                                  '</p>'+
+                                  '<p>'+
+                                    '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                                  '</p>'+
+                                '</div>'+
+                              '</div>'+
+                            '</div>'
+                      }
+                    }
+                    $(".allRoleContainer").html(str)
+                    /*增加条形动画*/
+                    $(".progress-bar").hover(function(){
+                      $(this).addClass("active")
+                    },function(){
+                      $(this).removeClass("active")
+                    })
+                  },
+                  error:function(e){
+                    alert("程序出错请重试！")
+                  }
+                })
                 $("#no_role").modal();
               }
             },
@@ -474,11 +349,12 @@
         }  
       });
       //点击加入队伍按钮
-      $(".Join_Team").on("click",function(e){
+      $(".allRoleContainer").on("click",".Join_Team",function(e){
         e.preventDefault();
         JoinTeam.bind(this)();
       })
       function JoinTeam(){
+        var me=this;
         var joinCarId=$(this).parents(".hasParent")[0].id;
         if($.inArray(joinCarId,hasCarId)!=-1){
           alert("你已经拥有此人物，请不要重复添加")
@@ -489,11 +365,22 @@
             data:carid,
             url :"joinTeam.php",
             success:function(e){
+              
               if(e=="success"){
+                var str="<h1 style='color:#fff;margin:20px auto;text-align:center;'>恭喜获得</h1>"
+                str+="<img src='../images/showAllRole/"+carid['carid']+".jpg'>";
+                $("#buy_success").html(str)
+                /*防止用户点击多次重复购买*/
+                $(me).addClass("disabled");
+                $("#buy_success img").animate({ 
+                    width: "100%",
+                    height: "90%",
+                    left:"+50px"
+                }, 1000 );
+                $("#buy_success img").animate({ 
+                    left:"0px"
+                }, 1000 );
                 $('#myModal').modal()
-                $("#close_modal").click(function(){
-                  location.reload();
-                })
               }else if(e=="NoMoeny"){
                 alert("您的账户余额不足购买此人物")
               }else{
@@ -513,6 +400,11 @@
       $('#P_chip').tooltip();
       $('#P_gem').tooltip();
       $('#P_battle').tooltip();
+      $('#P_index').tooltip();
+      $('#P_gift').tooltip();
+      $('#P_refresh').tooltip();
+      $('#P_sunglasses').tooltip();
+      $('#P_book').tooltip();
 
       //点击导航展示详细的信息
       $("#P_message").click(function(){//个人信息
@@ -530,6 +422,7 @@
                 var length=allMessage.carid.split(",").length;
                 $("#sql_Team").html(parseInt(length)-1);
               }
+              $("#sql_name").html(data.uName);
               $("#sql_V").html(allMessage.user_v);
               $("#sql_power").html(allMessage.user_power);
               $("#sql_acount").html(allMessage.user_money);
@@ -568,21 +461,40 @@
                 return;
               }
               if(allId!=null){
-                for(var i=0;i<allId.length;i++){
-                  if(i!=0){
-                    str+="<div class='col-sm-6 col-md-4'>"+
-                            "<div class='thumbnail'>"+
-                              "<img src='../images/showRole/"+allId[i]+".png'/>"+
-                              "<div class='caption' style='text-align:left;'>"+
-                                "<p>攻击力：789</p>"+
-                                "<p>攻击力：789</p>"+
-                                "<p>攻击力：789</p>"+
-                              "</div>"+
-                            "</div>"+
-                          "</div>"
+                $.ajax({
+                  type:"POST",
+                  data:{"uName":uName,"carId":allId},
+                  url :"showCurrentRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var roleData;
+                    for(var i=0;i<allId.length;i++){
+                      if(i!=0){
+                        for(var k=0;k<data.length;k++){
+                          if(data[k]['roleid']==allId[i]){
+                            roleData=data[k];
+                            break;
+                          }
+                        }
+                        str+="<div class='col-sm-6 col-md-4'>"+
+                                "<div class='thumbnail'>"+
+                                  "<img src='../images/showRole/"+allId[i]+".png'/>"+
+                                  "<div class='caption' style='text-align:center;'>"+
+                                    "<p>攻击力："+roleData.roleattack+"</p>"+
+                                    "<p>防御力："+roleData.roledefense+"</p>"+
+                                    "<p>生命值："+roleData.rolelife+"</p>"+
+                                  "</div>"+
+                                "</div>"+
+                              "</div>"
+                      }
+                    }
+                    $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
+                  },
+                  error:function(){
+                    alert("查询失败！请重新查询")
                   }
-                }
-                $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
+                })
+                
               }
             },
             error:function(){
@@ -593,7 +505,6 @@
           alert("登录跳转失败！请重新登录")
           window.location.href="http://localhost/QHgame/97Game";
         }  
-
       })
       $("#P_chip").click(function(){//个人碎片
         $("#show_userChip").modal();
@@ -626,8 +537,10 @@
                         "<img src='../images/other/nochip01.jpg'>"+
                         "<h3>您目前还未获得任何碎片</h3>"+
                       "</div>"
+                $("#sql_showAllChip").html(str);
+              }else{
+                $("#sql_showAllChip").html("<h3>我的碎片信息</h3>"+str);
               }
-              $("#sql_showAllChip").html("<h3>我的碎片信息</h3>"+str);
               $(".intensify").on("click",function(e){
                 e.preventDefault();
                 var roleId=$(this).parent().siblings("h3").children()[0].id;
@@ -685,8 +598,238 @@
       $("#P_battle").click(function(){//进入选择战斗模式
         window.location.href="http://localhost/QHgame/97Game/mainApp/selectModal.html?UFO"+Math.ceil(Math.random()*520)+'_'+decToHex(uName);
       })
+      $('#P_index').click(function(){//返回登录页
+        window.location.href="http://localhost/QHgame/97Game";
+      })
+      $('#P_gift').click(function(){//登录神秘商店
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectRole.php",
+            success:function(e){
+              var carId=JSON.parse(e);
+              if(carId.carid!=null){
+                var allId=carId.carid.split(",");
+                hasCarId=allId;
+                if(hasCarId.length==1){
+                  $("#no_role").modal();
+                  return;
+                }
+                $.ajax({
+                  type:"POST",
+                  data:data,
+                  url :"showAllRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var str='';
+                    for(var i=0;i<data.length;i++){
+                      if($.inArray(data[i].id,allId)==-1&&data[i].tradeprice>6300){
+                        str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
+                              '<div class="thumbnail">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
+                                '<div class="caption">'+
+                                  '<h3>'+data[i].rolename+'</h3>'+
+                                  '<p>'+
+                                    '<h5>攻击：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>防御：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>生命值：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5>交易价：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
+                                    '</h5>'+
+                                  '</p>'+
+                                  '<p>'+
+                                    '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                                  '</p>'+
+                                '</div>'+
+                              '</div>'+
+                            '</div>'
+                      }
+                    }
+                    $(".allRoleContainer").html(str);
+                    /*增加条形动画*/
+                    $(".progress-bar").hover(function(){
+                      $(this).addClass("active")
+                    },function(){
+                      $(this).removeClass("active")
+                    })
+                  },
+                  error:function(e){
+                    alert("程序出错请重试！")
+                  }
+                })
+              }else{
+                $.ajax({
+                  type:"POST",
+                  data:data,
+                  url :"showAllRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    debugger;
+                    var str='';
+                    for(var i=0;i<data.length;i++){
+                      if(data[i].tradeprice>6300){
+                        str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
+                              '<div class="thumbnail">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
+                                '<div class="caption">'+
+                                  '<h3>'+data[i].rolename+'</h3>'+
+                                  '<p>'+
+                                    '<h5>攻击：'+data[i].roleattack+'</h5>'+
+                                    '<h5>防御：'+data[i].roledefense+'</h5>'+
+                                    '<h5>生命值：'+data[i].rolelife+'</h5>'+
+                                    '<h5>交易价：'+data[i].tradeprice+'</h5>'+
+                                  '</p>'+
+                                  '<p>'+
+                                    '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                                  '</p>'+
+                                '</div>'+
+                              '</div>'+
+                            '</div>'
+                      }
+                    }
+                    $(".allRoleContainer").html(str)
+                  },
+                  error:function(e){
+                    alert("程序出错请重试！")
+                  }
+                })
+                $("#no_role").modal();
+              }
+            },
+            error:function(){
+              alert("查询失败！请重新加入")
+            }
+          })
+      })
+      $('#P_refresh').click(function(){//刷新页面
+        window.location.reload();
+      })
+      $('#P_sunglasses').click(function(){//进入抽奖
+        $("#show_lottery").modal();
+
+      })
+        /*点击一次抽一次*/
+        $("#lottery1").click(function(){
+          if($(".html-Append").length>0){
+            $(".html-Append").remove();
+          }
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"lottery1.php",
+            success:function(e){
+              if(e=="error"){
+                alert("当前用户余额不足本次抽奖！");
+                return;
+              }else if(e=="rolenum0"){
+                alert("请先购买人物后再进行抽奖！");
+                return;
+              }else{
+                $("#lottery10").addClass('disabled');
+                $("#lottery1").addClass('disabled');
+                var data=JSON.parse(e);
+                var str="<div class='col-sm-6 col-md-4 html-Append' style='margin:0px'>"+
+                          "<div class='thumbnail'>"+
+                            "<img src='../images/showRole/"+data.carid+".png'>"+
+                            "<div class='caption'>"+
+                              "<h3>碎片数量：<span id='"+data.carid+"'>"+data.randNum+"</span></h3>"+
+                            "</div>"+
+                          "</div>"+
+                          "</div>"
+                $("#sql_lottery").append(str);
+                $(".html-Append img").animate({ 
+                  opacity:"1"
+                },1000 );
+                $(".html-Append img").css("transform","rotateY(360deg)")
+                $(".html-Append img").css("box-shadow","0 0 50px blue")
+              }
+              $("#lottery10").removeClass('disabled');
+              $("#lottery1").removeClass('disabled');
+            },
+            error:function(){
+              alert("出错请重试！")
+            }
+          })
+        });
+        /*点击抽十次*/
+        $("#lottery10").click(function(){
+          if($(".html-Append").length>0){
+            $(".html-Append").remove();
+          }
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"lottery10.php",
+            success:function(e){
+              if(e=="error"){
+                alert("当前用户余额不足本次抽奖！");
+                return;
+              }else if(e=="rolenum0"){
+                alert("请先购买人物后再进行抽奖！");
+                return;
+              }else{
+                $("#lottery10").addClass('disabled');
+                $("#lottery1").addClass('disabled');
+                var data=JSON.parse(e);
+                var str='';
+                var i=0;
+                var timer=setInterval(function(){
+                  if(i<10){
+                    $("#sql_lottery").append(
+                      "<div class='col-sm-6 col-md-4 html-Append' style='margin:0px'>"+
+                            "<div class='thumbnail'>"+
+                              "<img src='../images/showRole/"+data['carid'][i]+".png'>"+
+                              "<div class='caption'>"+
+                                "<h3>碎片数量：<span id='"+data['carid'][i]+"'>"+data['randNum'][i]+
+                                "</span></h3>"+
+                              "</div>"+
+                            "</div>"+
+                            "</div>"
+                    );
+                    $(".html-Append img").animate({ 
+                      opacity:"1",
+                      scale:"2"
+                    }, 1000 );
+                    $(".html-Append img").css("transform","rotateY(360deg)")
+                    $(".html-Append img").css("box-shadow","0 0 50px blue")
+                  }else{
+                    clearInterval(timer);
+                    $("#lottery10").removeClass('disabled');
+                    $("#lottery1").removeClass('disabled');
+                  }
+                  i++;
+                },1000)
 
 
+              }
+            },
+            error:function(){
+              alert("出错请重试！")
+            }
+          })
+        })
+      $('#P_book').click(function(){
+          $("#show_book").modal();
+      })
+      $("#payToWeiXin").click(function(e){
+        e.preventDefault();
+        var ImgSrc=document.getElementById('payImg');
+        ImgSrc.src='../images/other/payweixin.jpg';
+      })
     </script>
   </body>
 </html>

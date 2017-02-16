@@ -9,6 +9,12 @@
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <script src="../encode.js"></script>
+    <style>
+    .jumbotron {background-color:#000;}
+    .fontSizeC {color:#fff;}
+    .selectRole-mainRole{height:250px;}
+    .thumbnail{border:none;}
+    </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -17,6 +23,76 @@
     <![endif]-->
   </head>
   <body class="selectModal-body">
+    <!-- 我的个人新信息 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_userMessage" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" >
+          <div class="container">
+            <img src="../images/other/usermessage.jpg" alt="" style="margin:0 auto;position:relative;left:30px;">
+            <h3>个人信息</h3>
+            <h5>账户名称：<span id="sql_name"></span></h5>
+            <h5>账户余额：<span id="sql_acount"></span></h5>
+            <h5>队伍体力：<span id="sql_power"></span></h5>
+            <h5>队伍数量：<span id="sql_Team"></span></h5>
+            <h5>队伍战力：<span id="sql_combat"></span></h5>
+            <h5>VIP 等级：<span id="sql_title"></span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 我的队伍 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content"  style="text-align: center;">
+          <div class="row" id="all_userTeam">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏帮助 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_book" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_book" style="text-align: center;">
+            <div class='col-sm-12 col-md-12' style='margin-top:20px'>
+              <h3>拳皇97 合卡游戏玩法介绍</h3>
+              <div style='text-align: left;padding-left: 100px;' class='query_help'>
+                <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
+                <p><2>游戏目前只支持三种方式获得碎片</p>
+                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.3>可以选择进入抽奖页面进行抽奖或得人物碎片</p>       
+                <p><3>拥有人物碎片后可以进行强化！来提高当前人物的属性</p>       
+                <p><4>如果发现主页面商城中的人物角色太少不防试试“神秘商店”这里有你想要的</p>       
+                <p><5>如果想要查看当前的人物属性或者其他的信息可以点击左边的导航进行查询</p>       
+                <p><6>“战斗模式”中不仅可以得到相应的人物碎片还可以获得一定数量的金币</p>       
+                <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
+                <p><8>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！微信：1305226892 </p>       
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mainRole" class="selectRole-mainRole">
+      <span class="glyphicon glyphicon-user" id="P_message" data-toggle="tooltip" data-placement="right" title="我的信息">
+      </span>
+      <span class="glyphicon glyphicon-flag" id="P_team" data-toggle="tooltip" data-placement="right" title="我的队伍">
+      </span>
+
+      <span class="glyphicon glyphicon-arrow-left" onclick="javascript:history.back();" id="P_left" data-toggle="tooltip" data-placement="right" title="返回上级">
+      </span>
+
+      <span class="glyphicon glyphicon-refresh" id="P_refresh" data-toggle="tooltip" data-placement="right" title="刷新页面">
+      </span>
+      <span class="glyphicon glyphicon-book" id="P_book" data-toggle="tooltip" data-placement="right" title="查看帮助">
+      </span>
+    </div>
+
     <div>
       <div class="jumbotron battle-message" >
         <div class="container" id="all_battleMessage">
@@ -24,7 +100,7 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div class="container ModeContainer">
       <!-- 我的队伍 -->
       <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -90,14 +166,13 @@
           url:"sqlUserMessage.php",
           success:function(e){
             var ReceivedData=JSON.parse(e);
-            debugger;
-            if(ReceivedData.carid==null){
-              alert("必须拥有 三个 及以上的人物且体力大于 0 才可以进入");
+            if(ReceivedData.carid==null/*||ReceivedData.user_power<=0*/){
+              alert("您当前还未添加任何人物拥有！请先购买人物");
               return;
             }
             var ConditionCar=ReceivedData.carid.length;
             var ConditionPower=Number(ReceivedData.user_power);
-            if(ConditionCar>=6&&ConditionPower>0){
+            if(/*ConditionCar>=6&&ConditionPower>0*/true){
               //进入经典模式展示个人队伍
               $("#show_userTeam").modal();
               var str='';
@@ -139,7 +214,7 @@
                 window.location.href="http://localhost/QHgame/97Game";
               }  
             }else{
-              alert("必须拥有 三个 及以上的人物且体力大于 0 才可以进入")
+              alert("出错请重新尝试！")
             }
             
           },
@@ -187,12 +262,12 @@
               var receiveData=JSON.parse(e);
               var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th></th></tr>';
               for(var i=receiveData.length,order=0;i>0;i--){
-                if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null&&receiveData[i-1].carid.length>=5){
+                if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
                       "<td>"+(++order)+"</td><td>"+receiveData[i-1].user_name+"</td><td>"+receiveData[i-1].user_combat+
                       "</td><td></td>"+
                        "</tr>"
-                }else if(receiveData[i-1].carid!=null&&receiveData[i-1].carid.length>=5){
+                }else if(receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
                       "<td>"+(++order)+"</td><td class='changeName'>"+receiveData[i-1].user_name+"</td>"+
                       "<td>"+receiveData[i-1].user_combat+
@@ -224,8 +299,10 @@
           data:data,
           url :"startBattle.php",
           success:function(e){
-            var str='<h1 style="text-align:center">战斗开始</h1>';
+            $('.ModeContainer').css("display",'none');
+            var str='<h1 style="text-align:center;color:#fff;">战斗开始</h1>*';
             var receiveData=JSON.parse(e);
+            debugger;
             challgerCarId;
             for(var key in receiveData){
               switch (key){
@@ -240,16 +317,17 @@
               if($.inArray(challenger[i].roleid,challgerCarId)!=-1){
                 if(beChallenger[k]==null){
                   isdefeated=false; 
-                  str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>";
+                  str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>*";
                   BattleVictory(challgerCarId,str);//挑战成功执行函数减体力调整排名随机获得挑战人员的碎片
                   break;
                 }
                 //挑战者攻击-防御
-                var GGF=challenger[i].roleattack-challenger[i].roledefense;
+                var GGF=challenger[i].roleattack-beChallenger[k].roledefense;
                 //挑战者生命值
                 var GLife=challenger[i].rolelife;
                 //被挑战者攻击-防御
-                var FGF=beChallenger[k].roleattack-beChallenger[k].roledefense;
+                var FGF=beChallenger[k].roleattack-challenger[i].roledefense;
+                if(FGF<0)FGF=0;
                 //被挑战者生命值
                 var FLife=beChallenger[k].rolelife;
                 //某方人物阵亡
@@ -259,28 +337,28 @@
                   if(FLife<0)FLife=0;
                   if(GLife<0)GLife=0;
                   str+=
-                  "<h3 style='color:blue;'>己方：</h3>"+
-                  "<p>"+challenger[i].rolename+"发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>"+
-                  "<h3 style='color:red;'>敌方：</h3>"+
-                  "<p>"+beChallenger[k].rolename+"发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>"
+                  "<span style='color:green;'>己方：</span>"+
+                  "<span class='fontSizeC'>"+challenger[i].rolename+"发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</span>"+
+                  "<span style='color:red;'>敌方：</span>"+
+                  "<span class='fontSizeC'>"+beChallenger[k].rolename+"发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</span>"
                   if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
                     challenger[i].rolelife=GLife;
                     beChallenger[k].rolelife=0;
-                    str+="<h2 style='color:red'>敌方"+beChallenger[k].rolename+"已阵亡</h2>";
+                    str+="<h2 style='color:red'>敌方"+beChallenger[k].rolename+"已阵亡</h2>*";
                     i--;
                     k++;
                     break;
                   }else if(GLife<=FGF){//如果挑战者第一个人物被攻击死
                     beChallenger[k].rolelife=FLife;
                     challenger[i].rolelife=0;
-                    str+="<h2 style='color:blue'>已方"+challenger[i].rolename+"已阵亡</h2>";
+                    str+="<h2 style='color:green'>已方"+challenger[i].rolename+"已阵亡</h2>*";
                     break;
                   }
                 }
               }
             }
             if(isdefeated){
-              str+="<h1 style='color:blue;'>挑战失败...</h1>";
+              str+="<h1 style='color:blue;'>挑战失败...</h1>*";
               BattleDefeated(str);//失败执行函数减体力
             };
           },
@@ -290,6 +368,10 @@
         })
       }
       function BattleVictory(arr,str){
+        var str=str.split("*");
+        var length=str.length;
+        var index=0;
+        var timer;
         var chip=arr[Math.floor(Math.random()*(arr.length-0))];
         var data={"uName":uName,"rolechip":chip}
         $.ajax({
@@ -301,21 +383,47 @@
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
               var receiveData=JSON.parse(e);
-              debugger;
               if(receiveData.randNum==0){
-                $("#all_battleMessage").html(str+"<div>未获得任何碎片</div><button class='btn btn-danger'"+
-                "id='close_battleMessage'>关闭</button>")
+                  timer=setInterval(function(){
+                    if(index<length-1){
+                      $("#all_battleMessage").append(str[index]);
+                    }else{
+                      clearInterval(timer); 
+                      $("#all_battleMessage").append("<div>未获得任何碎片</div><button class='btn btn-danger'"+
+                      "id='close_battleMessage'>关闭</button>")                     
+                    }
+                    index++;
+                  },1000)
+                /*$("#all_battleMessage").html(str+"<div>未获得任何碎片</div><button class='btn btn-danger'"+
+                "id='close_battleMessage'>关闭</button>")*/
               }else{
-                $("#all_battleMessage").html(str+
+                  timer=setInterval(function(){
+                    if(index<length-1){
+                      $("#all_battleMessage").append(str[index]);
+                    }else{
+                      clearInterval(timer);
+                      $("#all_battleMessage").append(
+                      "<div>"+
+                          "<h3>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
+                          "<img src='../images/showRole/"+receiveData.carid+".png'>"+
+                      "</div>"+
+                      "<button class='btn btn-danger'"+
+                      "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
+                    }
+                    index++;
+                  },1000)
+                /*$("#all_battleMessage").html(str+
                   "<div>"+
                     "<h3>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
                     "<img src='../images/showRole/"+receiveData.carid+".png'>"+
                   "</div>"+
                   "<button class='btn btn-danger'"+
-                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")*/
               }
-              $("#close_battleMessage").on('click',function(){
-                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('')});
+              $(".battle-message").on('click','#close_battleMessage',function(){
+                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
+                  $(".battle-message").css('display','none')});
+                  $('.ModeContainer').css("display",'block')
               })
             }else{
               alert("出错!!!请请重新操作")
@@ -327,6 +435,10 @@
         })
       }
       function BattleDefeated(str){
+        var str=str.split("*");
+        var length=str.length;
+        var index=0;
+        var timer;
         var data={"uName":uName};
         $.ajax({
           type:"POST",
@@ -336,15 +448,27 @@
             if(e=="success"){
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
-              $("#all_battleMessage").html(str+
+              timer=setInterval(function(){
+                if(index<length-1){
+                  $("#all_battleMessage").append(str[index]);
+                }else{
+                  clearInterval(timer); 
+                  $("#all_battleMessage").append("<div>未获得任何碎片</div><button class='btn btn-danger'"+
+                  "id='close_battleMessage'>关闭</button>")                     
+                }
+                index++;
+              },1000)              
+              /*$("#all_battleMessage").html(str+
                 "<div>"+
                   "<img src='../images/other/nochip.jpg'>"+
                 "</div>"+
                 "<button class='btn btn-danger'"+
-              "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+              "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")*/
               
-              $("#close_battleMessage").on('click',function(){
-                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('')});
+              $(".battle-message").on('click','#close_battleMessage',function(){
+                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
+                  $(".battle-message").css('display','none')});
+                  $('.ModeContainer').css("display",'block')
               })
             }else{
               alert("出错!!!请请重新操作")
@@ -363,6 +487,125 @@
         alert("暂未开放")
         /*window.location.href="http://localhost/QHgame/97Game/mainApp/ModalToBattle.html?UFO"+
         +Math.ceil(Math.random()*520)+'_'+decToHex(uName);*/
+      })
+
+
+      /*左侧导航的功能*/
+      //hover左边导航进行提示的信息
+      $('#P_message').tooltip();
+      $('#P_team').tooltip();
+      $('#P_left').tooltip();
+      $('#P_refresh').tooltip();
+      $('#P_book').tooltip();
+
+      //点击导航展示详细的信息
+      $("#P_message").click(function(){//个人信息
+        $("#show_userMessage").modal();
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"sqlUserMessage.php",
+            success:function(e){
+              var allMessage=JSON.parse(e);
+              if(allMessage.carid==null){
+                $("#sql_Team").html();
+              }else{
+                var length=allMessage.carid.split(",").length;
+                $("#sql_Team").html(parseInt(length)-1);
+              }
+              $("#sql_name").html(data.uName);
+              $("#sql_V").html(allMessage.user_v);
+              $("#sql_power").html(allMessage.user_power);
+              $("#sql_acount").html(allMessage.user_money);
+              $("#sql_title").html(allMessage.user_title);
+              $("#sql_combat").html(allMessage.user_combat);
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      })
+
+      $("#P_team").click(function(){//个人队伍
+        $("#show_userTeam").modal();
+        var str='';
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectRole.php",
+            success:function(e){
+              var carId=JSON.parse(e);
+              if(carId.carid!=null){
+                var allId=carId.carid.split(",");
+              }else{
+                $("#all_userTeam").html("<img src='../images/other/nochip01.jpg'><h3>您当前还未添加任何人物...</h3>")
+                return;
+              }
+              
+              hasCarId=allId;
+              if(allId.length==1){
+                $("#all_userTeam").html("<img src='../images/other/nochip01.jpg'><h3>您当前还未添加任何人物...</h3>")
+                return;
+              }
+              if(allId!=null){
+                $.ajax({
+                  type:"POST",
+                  data:{"uName":uName,"carId":allId},
+                  url :"showCurrentRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var roleData;
+                    for(var i=0;i<allId.length;i++){
+                      if(i!=0){
+                        for(var k=0;k<data.length;k++){
+                          if(data[k]['roleid']==allId[i]){
+                            roleData=data[k];
+                            break;
+                          }
+                        }
+                        str+="<div class='col-sm-6 col-md-4'>"+
+                                "<div class='thumbnail'>"+
+                                  "<img src='../images/showRole/"+allId[i]+".png'/>"+
+                                  "<div class='caption' style='text-align:center;'>"+
+                                    "<p>攻击力："+roleData.roleattack+"</p>"+
+                                    "<p>防御力："+roleData.roledefense+"</p>"+
+                                    "<p>生命值："+roleData.rolelife+"</p>"+
+                                  "</div>"+
+                                "</div>"+
+                              "</div>"
+                      }
+                    }
+                    $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
+                  },
+                  error:function(){
+                    alert("查询失败！请重新查询")
+                  }
+                })
+                
+              }
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      })
+
+      $('#P_refresh').click(function(){//刷新页面
+        window.location.reload();
+      })
+
+      $('#P_book').click(function(){
+          $("#show_book").modal();
       })
     </script>
   </body>

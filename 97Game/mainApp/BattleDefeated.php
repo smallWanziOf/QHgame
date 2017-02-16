@@ -10,7 +10,7 @@ $sqlPower = "SELECT user_power FROM qhgame_login WHERE user_name='$name'";
 $resultPower = mysqli_query($conn,$sqlPower);
 $rowPower = mysqli_fetch_assoc($resultPower);
 if($rowPower['user_power']>0){
-	$rowPower = $rowPower['user_power'] - 2;
+	$rowPower = $rowPower['user_power'];
 }else{
 	$rowPower=0;
 };

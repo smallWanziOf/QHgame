@@ -19,9 +19,80 @@
       .modal{
         overflow-y: scroll;
       }
+      .selectRole-mainRole{height:250px;}
+      .thumbnail{border:none;}
     </style>
   </head>
   <body class="Modal-Battle-bg">
+    <!-- 我的个人新信息 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_userMessage" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" >
+          <div class="container">
+            <img src="../images/other/usermessage.jpg" alt="" style="margin:0 auto;position:relative;left:30px;">
+            <h3>个人信息</h3>
+            <h5>账户名称：<span id="sql_name"></span></h5>
+            <h5>账户余额：<span id="sql_acount"></span></h5>
+            <h5>队伍体力：<span id="sql_power"></span></h5>
+            <h5>队伍数量：<span id="sql_Team"></span></h5>
+            <h5>队伍战力：<span id="sql_combat"></span></h5>
+            <h5>VIP 等级：<span id="sql_title"></span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 我的队伍 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content"  style="text-align: center;">
+          <div class="row" id="all_userTeam">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏帮助 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_book" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="row" id="sql_book" style="text-align: center;">
+            <div class='col-sm-12 col-md-12' style='margin-top:20px'>
+              <h3>拳皇97 合卡游戏玩法介绍</h3>
+              <div style='text-align: left;padding-left: 100px;' class='query_help'>
+                <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
+                <p><2>游戏目前只支持三种方式获得碎片</p>
+                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.3>可以选择进入抽奖页面进行抽奖或得人物碎片</p>       
+                <p><3>拥有人物碎片后可以进行强化！来提高当前人物的属性</p>       
+                <p><4>如果发现主页面商城中的人物角色太少不防试试“神秘商店”这里有你想要的</p>       
+                <p><5>如果想要查看当前的人物属性或者其他的信息可以点击左边的导航进行查询</p>       
+                <p><6>“战斗模式”中不仅可以得到相应的人物碎片还可以获得一定数量的金币</p>       
+                <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
+                <p><8>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！微信：1305226892 </p>       
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mainRole" class="selectRole-mainRole">
+      <span class="glyphicon glyphicon-user" id="P_message" data-toggle="tooltip" data-placement="right" title="我的信息">
+      </span>
+      <span class="glyphicon glyphicon-flag" id="P_team" data-toggle="tooltip" data-placement="right" title="我的队伍">
+      </span>
+
+      <span class="glyphicon glyphicon-arrow-left" onclick="javascript:history.back();" id="P_left" data-toggle="tooltip" data-placement="right" title="返回上级">
+      </span>
+
+      <span class="glyphicon glyphicon-refresh" id="P_refresh" data-toggle="tooltip" data-placement="right" title="刷新页面">
+      </span>
+      <span class="glyphicon glyphicon-book" id="P_book" data-toggle="tooltip" data-placement="right" title="查看帮助">
+      </span>
+    </div>
     <!-- 显示闯关的过程 -->
     <div>
       <div class="jumbotron battle-message" style="margin-bottom: 0;">
@@ -86,11 +157,10 @@
           data:data,
           url :"allChapter.php",
           success:function(e){
-
             var receiveData=JSON.parse(e);
             var findChapter=receiveData.chapter;
             if(receiveData.userPower<10){
-              alert("体力不足无法进行闯关");
+              alert("体力不足无法进行闯关(当前体力小于10)");
               $("#show_selectChapter").modal('hide');
               return
             }else{
@@ -383,6 +453,124 @@
           },
         })
       }
+      
+      /*左侧导航的功能*/
+      //hover左边导航进行提示的信息
+      $('#P_message').tooltip();
+      $('#P_team').tooltip();
+      $('#P_left').tooltip();
+      $('#P_refresh').tooltip();
+      $('#P_book').tooltip();
+
+      //点击导航展示详细的信息
+      $("#P_message").click(function(){//个人信息
+        $("#show_userMessage").modal();
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"sqlUserMessage.php",
+            success:function(e){
+              var allMessage=JSON.parse(e);
+              if(allMessage.carid==null){
+                $("#sql_Team").html();
+              }else{
+                var length=allMessage.carid.split(",").length;
+                $("#sql_Team").html(parseInt(length)-1);
+              }
+              $("#sql_name").html(data.uName);
+              $("#sql_V").html(allMessage.user_v);
+              $("#sql_power").html(allMessage.user_power);
+              $("#sql_acount").html(allMessage.user_money);
+              $("#sql_title").html(allMessage.user_title);
+              $("#sql_combat").html(allMessage.user_combat);
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      })
+
+      $("#P_team").click(function(){//个人队伍
+        $("#show_userTeam").modal();
+        var str='';
+        if(uName!=''){
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"selectRole.php",
+            success:function(e){
+              var carId=JSON.parse(e);
+              if(carId.carid!=null){
+                var allId=carId.carid.split(",");
+              }else{
+                $("#all_userTeam").html("<img src='../images/other/nochip01.jpg'><h3>您当前还未添加任何人物...</h3>")
+                return;
+              }
+              
+              hasCarId=allId;
+              if(allId.length==1){
+                $("#all_userTeam").html("<img src='../images/other/nochip01.jpg'><h3>您当前还未添加任何人物...</h3>")
+                return;
+              }
+              if(allId!=null){
+                $.ajax({
+                  type:"POST",
+                  data:{"uName":uName,"carId":allId},
+                  url :"showCurrentRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var roleData;
+                    for(var i=0;i<allId.length;i++){
+                      if(i!=0){
+                        for(var k=0;k<data.length;k++){
+                          if(data[k]['roleid']==allId[i]){
+                            roleData=data[k];
+                            break;
+                          }
+                        }
+                        str+="<div class='col-sm-6 col-md-4'>"+
+                                "<div class='thumbnail'>"+
+                                  "<img src='../images/showRole/"+allId[i]+".png'/>"+
+                                  "<div class='caption' style='text-align:center;'>"+
+                                    "<p>攻击力："+roleData.roleattack+"</p>"+
+                                    "<p>防御力："+roleData.roledefense+"</p>"+
+                                    "<p>生命值："+roleData.rolelife+"</p>"+
+                                  "</div>"+
+                                "</div>"+
+                              "</div>"
+                      }
+                    }
+                    $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
+                  },
+                  error:function(){
+                    alert("查询失败！请重新查询")
+                  }
+                })
+                
+              }
+            },
+            error:function(){
+              alert("查询失败！请重新查询")
+            }
+          })
+        }else{
+          alert("登录跳转失败！请重新登录")
+          window.location.href="http://localhost/QHgame/97Game";
+        }  
+      })
+
+      $('#P_refresh').click(function(){//刷新页面
+        window.location.reload();
+      })
+
+      $('#P_book').click(function(){
+          $("#show_book").modal();
+      })
     </script>
   </body>
 </html>

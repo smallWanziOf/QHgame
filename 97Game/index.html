@@ -9,6 +9,9 @@
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="encode.js"></script>
+    <style>
+      body{background-color: #000;}
+    </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -22,24 +25,24 @@
       <div class="bg-color">
         <!-- 大蛇图片 -->
         <div class="bg-login">
-          <img src="images/bg/bglogin.jpg" alt=""> 
+          <img src="images/bg/bglogin01.jpg" alt=""> 
         </div>
         <!-- 登录组 -->
         <div class="bg-form">
           <form class="form-horizontal" role="form">
             <div class="form-group">
-              <label for="inputName" class="col-sm-2 control-label">账号：</label>
+              <label for="inputName" class="col-sm-2 control-label" style="color:#fff;">账号：</label>
               <div class="col-sm-10">
                 <input type="email" class="form-control" id="inputName" placeholder="请输入账号">
               </div>
             </div>
             <div class="form-group">
-              <label for="inputPassword" class="col-sm-2 control-label">密码：</label>
+              <label for="inputPassword" class="col-sm-2 control-label" style="color:#fff;">密码：</label>
               <div class="col-sm-10">
                 <input type="password" class="form-control" id="inputPassword" placeholder="请输入密码">
               </div>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <div class="checkbox">
                   <label>
@@ -47,7 +50,7 @@
                   </label>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
                 <button type="button" class="btn btn-primary" id="bg_login">确认登录</button>
@@ -69,7 +72,7 @@
               <div class="modal-body">
                 <div class="input-group" style="margin-top: 20px;">
                   <span class="input-group-addon">账号</span>
-                  <input type="text" class="form-control" placeholder="请输入账号(由6位随机的字母或数字组成)" id="regist_acount">
+                  <input type="text" class="form-control" placeholder="请输入账号(由6位随机的汉字或字母或数字组成)" id="regist_acount">
                 </div>
 
                 <div class="input-group" style="margin-top:20px;margin-bottom: 20px;">
@@ -141,10 +144,9 @@
       //regist
       //注册账号
       $("#regist_acount").change(function(){
-        var reg=/^[0-9a-zA-Z]{0,12}$/;
+        var reg=/^[0-9a-zA-Z\u4e00-\u9fa5]{0,6}$/;
         if(!reg.test($(this).val())){
           $(this).val('');
-          debugger;
           alert("账号格式错误！")
         }
       })
@@ -171,9 +173,9 @@
                 $(".regist-message").html("用户名已被注册")
               }else if(e=="success"){
                 $(".regist-message").html("注册成功！")
-                setTimeout(function(){
+                //setTimeout(function(){
                   $("#regist_cancle").click()
-                },1000);
+                //},0);
                 $("#inputName").val($("#regist_acount").val());
                 $("#inputPassword").val($("#regist_pwd").val());
                 $("#regist_acount").val('');

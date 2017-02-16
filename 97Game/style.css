@@ -25,7 +25,7 @@
 }
 .selectRole-mainRole{
 	width:40px;
-	height:300px;
+	height:500px;
 	border-radius:5px ;
 	background-color:#fff; 
 	position:fixed;
@@ -117,4 +117,22 @@
 	color:#fff;
 	font-size:30px;
 	cursor: pointer;
+}
+.query_help>p{
+	height:40px;
+}
+.html-Append img{
+	opacity: 0; 
+	transform:rotateY(0deg);
+	-ms-transform:rotateY(0deg); 	/* IE 9 */
+	-moz-transform:rotateY(0deg); 	/* Firefox */
+	-webkit-transform:rotateY(0deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(0deg);
+	transition: all linear 1s;
+}
+#buy_success img{
+	border:1px solid red;
+	box-shadow: 0 0 50px #FF7333;
+	border-radius: 10px;
+	position:relative;
 }
