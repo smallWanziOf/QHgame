@@ -3,10 +3,15 @@
 //header("Content-Type:application/json");
 $name=$_REQUEST['uName'];
 $carId=$_REQUEST['carId'];
+
 $output=[
 	"hasRole"=>true,
 	"message"=>''
 ];
+//设置pk值的时候发现输入','号也可以,导致pk值全部清零程序紊乱！2017.2.11已修复
+if($carId[0]===","){
+	$output["hasRole"]=false;
+};
 
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');

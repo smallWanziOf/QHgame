@@ -16,7 +16,9 @@
 	}else{
 		$sql = "INSERT INTO qhgame_login(user_name,user_pwd,user_power,user_money) VALUES ('$name','$pwd',100,888)";
 		$resultSql = mysqli_query($conn, $sql);
-		if($resultSql){
+		$sqlinster = "INSERT INTO user_sign(user_name) VALUES ('$name')";
+		$resultinster = mysqli_query($conn, $sqlinster);
+		if($resultSql&&$resultinster){
 			echo "success";
 		}else{
 			echo "error";

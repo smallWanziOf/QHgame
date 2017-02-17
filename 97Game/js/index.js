@@ -20,21 +20,11 @@
           success:function(e){
             if(e=="success"){
               $("#user_name").val(userMessage["userName"]);
-              $("#login_message").append(
-                "<div class='alert alert-success' role='alert'>登录成功！正在跳转...</div>"
-              )
-              $("#login_message>div").fadeOut(1000,function(){
-                $(this).remove()
-              })
+              $("#login_tip").html("<h3>登录成功！页面正在跳转中...</h3>");
               $("#main_Container").load(dev_location+"mainApp/selectRole.html");
               //window.location.href=dev_location+"mainApp/selectRole.html?UFO"+Math.ceil(Math.random()*520)+"_"+decToHex($("#inputName").val());
             }else{
-              $("#login_message").append(
-                "<div class='alert alert-danger' role='alert'>用户名或密码错误！</div>"
-              )
-              $("#login_message>div").fadeOut(5000,function(){
-                $(this).remove()
-              })
+              $("#login_tip").html("<div class='alert alert-danger' role='alert'>用户名或密码错误！</div>");
             }
           },
           error:function(error){

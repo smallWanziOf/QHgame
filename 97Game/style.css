@@ -5,6 +5,9 @@
 	right:0;
 	left:0;
 	z-index: 1;
+    background: url("images/bg/login.jpg") no-repeat;
+    background-attachment:fixed;
+    background-size: 100% 100%;
 }
 .bg-shandian>img{
 	position:absolute;
@@ -12,6 +15,8 @@
 }
 .bg-login{
 	text-align: center;
+	position: relative;
+	z-index:1;
 }
 .bg-form{
 	position:relative;
@@ -22,7 +27,6 @@
 }
 .selectRole-body{
     background-color:#000;
-	/*background-image: url("./images/other/selector01.jpg");*/
 }
 .outCarImg{
 	position:relative;
@@ -68,6 +72,7 @@
 }
 .selectRole-mainRole>div{width:1200px;margin:0 auto;}
 .selectRole-mainRole>div>span{
+	cursor:pointer;
 	position:relative;
 	font-size: 30px;
 	margin:20px 20px;

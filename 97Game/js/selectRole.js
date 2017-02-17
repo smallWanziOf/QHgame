@@ -342,7 +342,6 @@
                     alert("查询失败！请重新查询")
                   }
                 })
-                
               }
             },
             error:function(){
@@ -772,4 +771,116 @@
       })
       $("#P_donate").click(function(){//赞助
         $("#show_donate").modal();
+      })
+      $("#P_sign").click(function(){//每日签到
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"phpSql/daySign.php",
+          success:function(e){
+            $("#show_sign").modal();
+            var str="";
+            if(e=="equal"){
+              str="<h3 style='color:red'>今天已经签到过了，明天再来吧！</h3>";
+            }else if(e=="success"){
+              str="<h3 style='color:green'>签到成功！</h3><h5>恭喜获得50金币+100体力值,祝你游戏愉快!</h5>";
+            }else if(e=="error"){
+              str="<h3 style='color:red'>签到失败！请尝试重新签到</h3>";
+            }
+            $("#sql_sign").html(str);
+          },
+          error:function(e){
+            alert("签到失败！请尝试重新签到");
+            window.location.href=dev_location;
+          }
+        })
+      })
+      $("#P_seting").click(function(){//显示个人设置提示
+        $("#show_seting").modal();
+      })
+      $("#changeName_btn").click(function(e){//修改用户名
+        e.preventDefault();
+        var reg=/^[0-9a-zA-Z\u4e00-\u9fa5]{0,8}$/;
+        if(!reg.test($.trim($("#changeName_form").val()))){
+          $("#changename_tip").html("<h3 style='color:red'>账号格式有误请输入字母,数字或者汉字</h3>");
+        }else{
+          var data={
+            "userName":$("#user_name").val(),
+            "newName":$.trim($("#changeName_form").val()),
+            "userPwd":$.trim($("#changeName_pwd").val())
+          };
+          $.ajax({
+            type:"POST",
+            data:data,
+            url :"phpSql/setuserName.php",
+            success:function(e){
+              var str="";
+              if(e=="hasExist"){
+                str="<h3 style='color:red'>当前注册的用户名已被注册！请重新选择</h3>";
+              }else if(e=="errorpwd"){
+                str="<h3 style='color:red'>账号密码有误！密码为原账号密码</h5>";
+              }else if(e=="nomoney"){
+                str="<h3 style='color:red'>当前账户余额不足！</h3>";
+              }else if(e=="error"){
+                str="<h3 style='color:green'>修改失败！请尝试重新修改</h3>";
+              }else{
+                str="<h3 style='color:green'>恭喜改名成功！请重新登录</h3>";
+                setTimeout(function(){
+                  window.location.href=dev_location;
+                },1000);
+              }
+              $("#changename_tip").html(str);
+            },
+            error:function(e){
+              alert("修改失败！请尝试重新修改");
+              window.location.href=dev_location;
+            }
+          }) 
+        }
+      })
+      $("#changepwd_btn").click(function(e){//修改密码
+        e.preventDefault();
+        var reg=/^[0-9a-zA-Z]{0,20}$/;
+        if($.trim($("#changepwd_pwd1").val())!=$.trim($("#changepwd_pwd2").val())){
+          $("#changepwd_tip").html("<h3 style='color:red'>确认密码有误！</h3>");
+          return;
+        }
+        if($.trim($("#changepwd_form").val())==''||$.trim($("#changepwd_pwd1").val())==''||$.trim($("#changepwd_pwd2").val())==''){
+          $("#changepwd_tip").html("<h3 style='color:red'>密码不能为空！</h3>");
+          return;
+        }
+        if(!reg.test($.trim($("#changepwd_pwd2").val()))){
+          $("#changepwd_tip").html("<h3 style='color:red'>密码格式有误只能为数字或字母的组合</h3>");
+          return;
+        }
+        var data={
+          "userName":$("#user_name").val(),
+          "oldpwd":$.trim($("#changepwd_form").val()),
+          "newpwd":$.trim($("#changepwd_pwd2").val())
+        };
+        $.ajax({
+          type:"POST",
+          data:data,
+          url :"phpSql/setuserPwd.php",
+          success:function(e){
+            var str="";
+            if(e=="nouser"){
+              str="<h3 style='color:red'>当前用户不存在！请重新登录</h3>";
+            }else if(e=="errorpwd"){
+              str="<h3 style='color:red'>初始密码有误！</h5>";
+            }else if(e=="error"){
+              str="<h3 style='color:red'>修改失败！请尝试重新修改</h3>";
+            }else{
+              str="<h3 style='color:green'>恭喜修改成功！请重新登录</h3>";
+              setTimeout(function(){
+                window.location.href=dev_location;
+              },1000);
+            }
+            $("#changepwd_tip").html(str);
+          },
+          error:function(e){
+            alert("修改失败！请尝试重新修改");
+            window.location.href=dev_location;
+          }
+        })
       })

@@ -38,7 +38,7 @@ $output['carid']=$rolechip;
 $rowChip=$rowChip['rolechip']+$randNum;
 
 //更新当前用户的对应人物的碎片
-$sql="UPDATE all_user SET rolechip=$rowChip WHERE roleid='$rolechip' AND user_name=$name";
+$sql="UPDATE all_user SET rolechip=$rowChip WHERE roleid='$rolechip' AND user_name='$name'";
 $result = mysqli_query($conn, $sql);
 
 //查找当前用户对应人物的金币

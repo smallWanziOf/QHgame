@@ -9,7 +9,7 @@
     body{
       background: url("images/other/fight.jpg") no-repeat;
       background-attachment:fixed;
-      background-size: 100%;
+      background-size: 100% 100%;
     } 
   </style>
   <body class="selectRole-body">
@@ -31,6 +31,14 @@
       </div>
     </div>
   
+    <!-- 签到信息 -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" id="show_sign" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="sql_sign" style="text-align: center;">
+        </div>
+      </div>
+    </div>
+
     <!-- 我的队伍 -->
     <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -143,6 +151,80 @@
       </div>
     </div>
 
+    <!-- 个人设置的提示 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="2" id="show_seting" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="text-align: center;">
+          <div class="bg-form">
+            <div>
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                  <a href="#changeName" aria-controls="home" role="tab" data-toggle="tab">修改用户名</a>
+                </li>
+                <li role="presentation">
+                  <a href="#changepwd" aria-controls="profile" role="tab" data-toggle="tab">修改密码</a>
+                </li>
+              </ul>
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="changeName">
+                  <form class="form-horizontal" style="margin:30px;">
+                    <div class="form-group">
+                      <label for="changeName_form" class="col-sm-2 control-label">修改用户名：</label>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control" id="changeName_form" placeholder="请输入想要修改的用户名">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="changeName_pwd" class="col-sm-2 control-label">账号密码：</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" id="changeName_pwd" placeholder="请输入密码">
+                      </div>
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <h5 style="color:red;">*修改用户名需消耗500金币</h5>
+                        <div id="changename_tip"></div>
+                        <button type="submit" class="btn btn-success" id="changeName_btn">确认修改</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="changepwd">
+                  <form class="form-horizontal" style="margin:30px;">
+                    <div class="form-group">
+                      <label for="changepwd_form" class="col-sm-2 control-label">初始密码：</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" id="changepwd_form" placeholder="请输入初始密码">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="changepwd_pwd1" class="col-sm-2 control-label">新密码：</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" id="changepwd_pwd1" placeholder="请输入密码">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="changepwd_pwd2" class="col-sm-2 control-label">确认密码：</label>
+                      <div class="col-sm-10">
+                        <input type="password" class="form-control" id="changepwd_pwd2" placeholder="请输入密码">
+                      </div>
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <div id="changepwd_tip"></div>
+                        <button type="submit" class="btn btn-success" id="changepwd_btn">确认修改</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 游戏帮助 -->
     <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_book" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
@@ -154,8 +236,8 @@
               <div style='text-align: left;padding-left: 100px;' class='query_help'>
                 <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
                 <p><2>游戏目前只支持三种方式获得碎片</p>
-                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出站人物的碎片</p>       
-                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出站人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出战人物的碎片</p>       
+                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出战人物的碎片</p>       
                 <p style='margin-left: 20px;'><2.3>可以选择进入抽奖页面进行抽奖或得人物碎片</p>       
                 <p><3>拥有人物碎片后可以进行强化！来提高当前人物的属性100%成功率</p>       
                 <p><4>如果发现主页面商城中的人物角色太少不防试试“神秘商店”这里有你想要的一切</p>       
@@ -164,6 +246,7 @@
                 <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
                 <p><8>加群可以一起讨论玩法，现在加入可以联系群主送人物哦！</p> 
                 <p><9>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！</p>
+                <p><10>每日签到还可以获得50金币+100体力值</p>
               </div>
             </div>
           </div>
@@ -185,6 +268,9 @@
       <span class="glyphicon glyphicon-gift" id="P_gift" data-toggle="tooltip" data-placement="right" title="神秘商店">
         <b>神秘商店</b>
       </span>
+      <span class="glyphicon glyphicon-pencil" id="P_sign" data-toggle="tooltip" data-placement="right" title="每日签到">
+        <b>每日签到</b>
+      </span>
       <span class="glyphicon glyphicon-sunglasses" id="P_sunglasses" data-toggle="tooltip" data-placement="right" title="进入抽奖">
         <b>进入抽奖</b>
       </span>
@@ -202,6 +288,9 @@
       </span>
       <span class="glyphicon glyphicon-book" id="P_book" data-toggle="tooltip" data-placement="right" title="查看帮助">
         <b>查看帮助</b>
+      </span>
+      <span class="glyphicon glyphicon-cog" id="P_seting" data-toggle="tooltip" data-placement="right" title="个人设置">
+        <b>个人设置</b>
       </span>
       <span class="glyphicon glyphicon-heart-empty" id="P_donate" data-toggle="tooltip" data-placement="right" title="赞助">
         <b>赞助</b>
