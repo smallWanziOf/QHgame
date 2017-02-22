@@ -51,8 +51,7 @@ if($userMoney>=$rolePrice){
 	$stringCarId = implode(",",$parseCarId);
 
 	//增加当前用户的人物的属性
-	$addDatatoUserTab = "INSERT INTO user_$name VALUES (null,$carid,$roleN,$roleA,$roleD,$roleL,null,$roleT)";
-	//$addDatatoUserTab = "INSERT INTO user_$name VALUES (null,$carid,0,0,0,0)";
+	$addDatatoUserTab = "INSERT INTO all_user VALUES (null,'$name','$carid','$roleN','$roleA','$roleD','$roleL',null,'$roleT')";
 	mysqli_query($conn, $addDatatoUserTab);
 
 	//扣除用户的金币

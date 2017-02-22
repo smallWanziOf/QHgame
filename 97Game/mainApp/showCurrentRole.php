@@ -7,12 +7,11 @@ mysqli_query($conn, 'SET NAMES UTF8');
 
 
 //查找当前用户对应人物的碎片
-$sqlChip = "SELECT * FROM user_$name";
+$sqlChip = "SELECT * FROM all_user WHERE user_name='$name'";
 $resultChip = mysqli_query($conn, $sqlChip);
 while ($row = mysqli_fetch_assoc($resultChip)){
 	$output[]=$row;
 };
 
 echo json_encode($output);
-
 ?>

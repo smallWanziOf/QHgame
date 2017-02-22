@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>拳皇合卡</title>
     <!-- Bootstrap -->
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <script src="../encode.js"></script>
+    <script src="../data/config.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -21,6 +22,7 @@
       }
       .selectRole-mainRole{height:250px;}
       .thumbnail{border:none;}
+      .jumbotron{background-color:transparent}
     </style>
   </head>
   <body class="Modal-Battle-bg">
@@ -141,12 +143,12 @@
           success:function(e){
             if(e=="error"){
               alert("迷之操作！！！请重新登录");
-              window.location.href="http://localhost/QHgame/97Game";
+              window.location.href=dev_location;
             }
           },
           error:function(e){
             alert("迷之操作！！！请重新登录");
-            window.location.href="http://localhost/QHgame/97Game";
+            window.location.href=dev_location;
           }
         })
       });
@@ -164,7 +166,6 @@
               $("#show_selectChapter").modal('hide');
               return
             }else{
-              debugger;
               var str='<h2>请选择关卡</h2>';    
               for(var i=0;i<findChapter.length;i++){
                 str+="<div style='display:inline-block' class='chapterDetail'>"+
@@ -223,7 +224,7 @@
                   })
                 }else{
                   alert("登录跳转失败！请重新登录")
-                  window.location.href="http://localhost/QHgame/97Game";
+                  window.location.href=dev_location;
                 }
               })
             }
@@ -244,7 +245,7 @@
           $.ajax({
             type:"POST",
             data:data,
-            url :"selectedTojinDian.php",
+            url :"selectedToJinDian.php",
             success:function(e){
               var receiveData=JSON.parse(e);
               if(receiveData.hasRole){
@@ -321,21 +322,24 @@
               }
             }
             $("#ClickstartChapter").on("click",function(){
+              
               $("#show_startchapter").modal('hide');
               for(var i=0,k=0;i<challenger.length;i++){
                 if($.inArray(challenger[i].roleid,challgerCarId)!=-1){
                   if(newbeChallenger[k]==null){
                     isdefeated=false; 
-                    str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>";
+                    str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>*";
                     ChapterVictory(challgerCarId,str);//挑战成功执行函数减体力调整排名随机获得挑战人员的碎片
                     break;
                   }
                   //挑战者攻击-防御
-                  var GGF=challenger[i].roleattack-challenger[i].roledefense;
+                  var GGF=challenger[i].roleattack-newbeChallenger[k].roledefense+Math.floor(Math.random()*10);
+                  if(GGF<0)GGF=0;
                   //挑战者生命值
                   var GLife=challenger[i].rolelife;
                   //被挑战者攻击-防御
-                  var FGF=newbeChallenger[k].roleattack-newbeChallenger[k].roledefense;
+                  var FGF=newbeChallenger[k].roleattack-challenger[i].roledefense;
+                  if(FGF<0)FGF=0;
                   //被挑战者生命值
                   var FLife=newbeChallenger[k].rolelife;
                   //某方人物阵亡
@@ -345,21 +349,21 @@
                     if(FLife<0)FLife=0;
                     if(GLife<0)GLife=0;
                     str+=
-                    "<h3 style='color:blue;'>己方：</h3>"+
-                    "<p>"+challenger[i].rolename+"发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>"+
+                    "<h3 style='color:green;'>己方：</h3>"+
+                    "<p style='color:#000;'><img style='width:20px;border-radius:5px;' src='../images/showAllRole/"+challenger[i].roleid+".jpg'>发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>*"+
                     "<h3 style='color:red;'>敌方：</h3>"+
-                    "<p>"+newbeChallenger[k].rolename+"发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>"
+                    "<p style='color:#000;'><img style='width:20px;border-radius:5px;' src='../images/showAllRole/"+newbeChallenger[k].roleid+".jpg'>发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>*"
                     if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
                       challenger[i].rolelife=GLife;
                       newbeChallenger[k].rolelife=0;
-                      str+="<h2 style='color:red'>敌方"+newbeChallenger[k].rolename+"已阵亡</h2>";
+                      str+="<h2 style='color:red'>敌方"+newbeChallenger[k].rolename+"已阵亡</h2>*";
                       i--;
                       k++;
                       break;
                     }else if(GLife<=FGF){//如果挑战者第一个人物被攻击死
                       newbeChallenger[k].rolelife=FLife;
                       challenger[i].rolelife=0;
-                      str+="<h2 style='color:blue'>已方"+challenger[i].rolename+"已阵亡</h2>";
+                      str+="<h2 style='color:blue'>已方"+challenger[i].rolename+"已阵亡</h2>*";
                       break;
                     }
                   }
@@ -377,6 +381,10 @@
         })
       }
       function ChapterVictory(arr,str){
+        var str=str.split("*");
+        var length=str.length;
+        var index=0;
+        var timer;
         var chip=arr[Math.floor(Math.random()*(arr.length-0))];
         var data={"uName":uName,"rolechip":chip,"currentC":chapterCarId}
         $.ajax({
@@ -384,33 +392,44 @@
           data:data,
           url :"ChapterVictory.php",
           success:function(e){
+            $(".main-container").animate({opacity: '-0'},1000);
             if(e!='error'){
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
               var receiveData=JSON.parse(e);
               if(receiveData.randNum==0){
-                $("#all_battleMessage").html(str+
-                  "<div>"+
-                    "<h3>恭喜获得"+
-                    +receiveData.randMoney+"枚金币，金币可以购买体力及人物</h3>"+
-                  "</div>"+
-                  "<button class='btn btn-danger'"+
-                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+                  timer=setInterval(function(){
+                    if(index<length-1){
+                      $("#all_battleMessage").append(str[index]);
+                    }else{
+                      clearInterval(timer); 
+                      $("#all_battleMessage").append("<div style='color:#000'>未获得任何碎片</div><button class='btn btn-danger'"+
+                      "id='close_battleMessage'>关闭</button>")                     
+                    }
+                    index++;
+                  },500)
               }else if(receiveData.randNum!=0){
-                $("#all_battleMessage").html(str+
-                  "<div>"+
-                    "<h3>恭喜获得"+
-                    +receiveData.randNum+"个碎片,"+receiveData.randMoney+"枚金币，金币可以购买体力及人物</h3>"+
-                    "<img src='../images/showRole/"+receiveData.carid+".png'>"+
-                  "</div>"+
-                  "<button class='btn btn-danger'"+
-                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+                  timer=setInterval(function(){
+                    if(index<length-1){
+                      $("#all_battleMessage").append(str[index]);
+                    }else{
+                      clearInterval(timer);
+                      $("#all_battleMessage").append(
+                      "<div>"+
+                          "<h3 style='color:#000'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
+                          "<img src='../images/showRole/"+receiveData.carid+".png'>"+
+                      "</div>"+
+                      "<button class='btn btn-danger'"+
+                      "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
+                    }
+                    index++;
+                  },500)
               }
-              $("#close_battleMessage").on('click',function(){
-                $('.battle-message').fadeToggle("3000",function(){
-                  $("#all_battleMessage").html('');
-                  location.reload();
-                });
+              $(".battle-message").on('click','#close_battleMessage',function(){
+                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
+                  $(".battle-message").css('display','none')});
+                  $('.ModeContainer').css("display",'block');
+                  $(".main-container").animate({opacity: '+1'},1000);
               })
             }else{
               alert("出错!!!请请重新操作")
@@ -422,27 +441,36 @@
         })
       }
       function ChapterDefeated(str){
+        var str=str.split("*");
+        var length=str.length;
+        var index=0;
+        var timer;
         var data={"uName":uName};
         $.ajax({
           type:"POST",
           data:data,
           url :"ChapterDefeated.php",
           success:function(e){
+            $(".main-container").animate({opacity: '-0'},1000);
             if(e=="success"){
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
-              $("#all_battleMessage").html(str+
-                "<div>"+
-                  "<img src='../images/other/nochip.jpg'>"+
-                "</div>"+
-                "<button class='btn btn-danger'"+
-              "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")
+                   timer=setInterval(function(){
+                    if(index<length-1){
+                      $("#all_battleMessage").append(str[index]);
+                    }else{
+                      clearInterval(timer); 
+                      $("#all_battleMessage").append("<div style='color:#fff'>未获得任何碎片</div><button class='btn btn-danger'"+
+                      "id='close_battleMessage'>关闭</button>")                     
+                    }
+                    index++;
+                  },500)
               
-              $("#close_battleMessage").on('click',function(){
-                $('.battle-message').fadeToggle("3000",function(){
-                  $("#all_battleMessage").html('');
-                  location.reload();
-                });
+              $(".battle-message").on('click','#close_battleMessage',function(){
+                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
+                  $(".battle-message").css('display','none')});
+                  $('.ModeContainer').css("display",'block');
+                  $(".main-container").animate({opacity: '+1'},1000);
               })
             }else{
               alert("出错!!!请请重新操作")
@@ -491,7 +519,7 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
 
@@ -560,7 +588,7 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
 

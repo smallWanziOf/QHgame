@@ -24,7 +24,7 @@ $sqlUpPower="UPDATE qhgame_login SET user_power=$rowPower WHERE user_name='$name
 $resultUpPower = mysqli_query($conn, $sqlUpPower);*/
 
 //查找当前用户对应人物的碎片
-$sqlChip = "SELECT rolechip FROM user_$name WHERE roleid=$rolechip";
+$sqlChip = "SELECT rolechip FROM all_user WHERE roleid='$rolechip' AND user_name='$name'";
 $resultChip = mysqli_query($conn, $sqlChip);
 $rowChip = mysqli_fetch_assoc($resultChip);
 $randNumCon=rand(1,10);
@@ -41,7 +41,7 @@ if($randNumCon==8){
 
 
 //更新当前用户的对应人物的碎片
-$sql="UPDATE user_$name SET rolechip=$rowChip WHERE roleid=$rolechip";
+$sql="UPDATE all_user SET rolechip=$rowChip WHERE roleid=$rolechip AND user_name='$name'";
 $result = mysqli_query($conn, $sql);
 
 

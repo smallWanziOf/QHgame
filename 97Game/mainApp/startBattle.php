@@ -10,10 +10,10 @@ $output=[
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');
 //查找所有被挑战者的队伍信息
-$sqlBeChallenger="SELECT * FROM user_$changeOBJ";
+$sqlBeChallenger="SELECT * FROM all_user WHERE user_name='$changeOBJ'";
 $resultBeChallenger = mysqli_query($conn, $sqlBeChallenger);
 //查找所有挑战者的队伍信息
-$sqlChallenger="SELECT * FROM user_$name";
+$sqlChallenger="SELECT * FROM all_user WHERE user_name='$name'";
 $resultChallenger = mysqli_query($conn, $sqlChallenger);
 //$row = mysqli_fetch_assoc($result);
 

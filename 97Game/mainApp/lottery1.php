@@ -41,7 +41,7 @@ if($currentMoney>=60&&$carLength!=0){
 	$proNum = $pos[$randNums];
 
 	//查找当前用户对应人物的碎片
-	$sqlChip = "SELECT rolechip FROM user_$name WHERE roleid='$proNum'";
+	$sqlChip = "SELECT rolechip FROM all_user WHERE roleid='$proNum' AND user_name='$name'";
 	$resultChip = mysqli_query($conn, $sqlChip);
 	$rowChip = mysqli_fetch_assoc($resultChip);
 	$randNum=rand(1,2);
@@ -50,7 +50,7 @@ if($currentMoney>=60&&$carLength!=0){
 	$rowChip=$rowChip['rolechip']+$randNum;
 
 	//更新当前用户的对应人物的碎片
-	$sql="UPDATE user_$name SET rolechip=$rowChip WHERE roleid=$proNum";
+	$sql="UPDATE all_user SET rolechip=$rowChip WHERE roleid='$proNum' AND user_name='$name'" ;
 	$result = mysqli_query($conn, $sql);
 
 	//更新当前用户的金币

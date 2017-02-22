@@ -22,7 +22,7 @@ $resultBeChallenger = mysqli_query($conn, $sqlBeChallenger);
 print_r($rowBeChallenger['chapterrole']);*/
 
 //查找所有挑战者的队伍信息
-$sqlChallenger="SELECT * FROM user_$name";
+$sqlChallenger="SELECT * FROM all_user WHERE user_name='$name'";
 $resultChallenger = mysqli_query($conn, $sqlChallenger);
 //$row = mysqli_fetch_assoc($result);
 

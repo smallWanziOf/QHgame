@@ -2,22 +2,17 @@
 //验证这个用户是否有角色
 //header("Content-Type:application/json");
 $name=$_REQUEST['uName'];
-
-//用于保存查询的信息
-$output=[
-	'message'=>[],
-];
+$carid=$_REQUEST["carid"];
 
 $conn = mysqli_connect('127.0.0.1','root','','qhgame', 3306);
 mysqli_query($conn, 'SET NAMES UTF8');
-//
-$sql = "SELECT * FROM all_user WHERE user_name='$name'";
+$sql = "SELECT rolestory,roler FROM allrole WHERE roleid='$carid'";
 $result = mysqli_query($conn, $sql);
-
-while ($row = mysqli_fetch_assoc($result)){
-	$output['message'][]=$row;
-};
-
-echo json_encode($output);
+$row = mysqli_fetch_assoc($result);
+if($row){
+	echo json_encode($row);
+}else{
+	echo "error";
+}
 
 ?>

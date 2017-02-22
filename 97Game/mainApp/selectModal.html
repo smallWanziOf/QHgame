@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>拳皇合卡</title>
     <!-- Bootstrap -->
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <script src="../encode.js"></script>
+    <script src="../data/config.js"></script>
     <style>
     .jumbotron {background-color:#000;}
     .fontSizeC {color:#fff;}
@@ -93,8 +94,8 @@
       </span>
     </div>
 
-    <div>
-      <div class="jumbotron battle-message" >
+    <div  style="text-align:center;">
+      <div class="jumbotron battle-message">
         <div class="container" id="all_battleMessage">
           
         </div>
@@ -108,7 +109,7 @@
         </div>
       </div>
       <!-- 经典模式的战斗 -->
-      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_battle" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_battle" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y:auto;">
         <div class="modal-dialog modal-lg">
           <div class="modal-content" id="all_battle" style="text-align: center;">
             <table class="select-battle">
@@ -146,12 +147,12 @@
 
             if(e=="error"){
               alert("迷之操作！！！请重新登录");
-              window.location.href="http://localhost/QHgame/97Game";
+              window.location.href=dev_location;
             }
           },
           error:function(e){
             alert("迷之操作！！！请重新登录");
-            window.location.href="http://localhost/QHgame/97Game";
+            window.location.href=dev_location;
           }
         })
       })
@@ -187,7 +188,7 @@
                     if(allId!=null){
                       for(var i=0;i<allId.length;i++){
                         if(i!=0){
-                          str+="<div style='display:inline-block;position:relative;' id='RoleSelected_active'>"+
+                          str+="<div style='display:inline-block;position:relative;cursor:pointer;' id='RoleSelected_active'>"+
                           "<img style='margin:20px;' src='../images/showRole/"+allId[i]+".png' id="+allId[i]+">"+
                           "<img src='../images/other/selected.png' class='RoleSelected' />"+
                           "</div>"
@@ -206,20 +207,23 @@
                     })
                   },
                   error:function(){
-                    alert("查询失败！请重新查询")
+                    alert("查询失败！请重新查询");
+                    window.location.reload();
                   }
                 })
               }else{
                 alert("登录跳转失败！请重新登录")
-                window.location.href="http://localhost/QHgame/97Game";
+                window.location.href=dev_location;
               }  
             }else{
-              alert("出错请重新尝试！")
+              alert("出错请重新尝试！");
+              window.location.reload();
             }
             
           },
           error:function(e){
-            alert("选择失败！请重新选择")
+            alert("选择失败！请重新选择");
+            window.location.reload();
           }
         })
       })
@@ -234,7 +238,7 @@
           $.ajax({
             type:"POST",
             data:data,
-            url :"selectedTojinDian.php",
+            url :"selectedToJinDian.php",
             success:function(e){
               var receiveData=JSON.parse(e);
               if(receiveData.hasRole){
@@ -242,15 +246,18 @@
                 $('#show_userTeam').modal('hide');
                 BattleTeam();
               }else{
-                alert("操作失败！请重新选择")
+                alert("操作失败！请重新选择");
+                window.location.reload();
               }
             },
             error:function(){
-              alert("选择失败！请重新选择")
+              alert("选择失败！请重新选择");
+              window.location.reload();
             }
           })
         }else{
-          alert("选择失败！请重新选择")
+          alert("选择失败！请重新选择");
+          window.location.reload();
         }
       }
       function BattleTeam(){
@@ -260,6 +267,7 @@
             url :"showBattle.php",
             success:function(e){
               var receiveData=JSON.parse(e);
+              debugger;
               var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th></th></tr>';
               for(var i=receiveData.length,order=0;i>0;i--){
                 if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
@@ -284,7 +292,8 @@
               })
             },
             error:function(){
-              alert("选择失败！请重新选择")
+              alert("选择失败！请重新选择");
+              window.location.reload();
             }
         })
       }
@@ -302,7 +311,6 @@
             $('.ModeContainer').css("display",'none');
             var str='<h1 style="text-align:center;color:#fff;">战斗开始</h1>*';
             var receiveData=JSON.parse(e);
-            debugger;
             challgerCarId;
             for(var key in receiveData){
               switch (key){
@@ -323,6 +331,7 @@
                 }
                 //挑战者攻击-防御
                 var GGF=challenger[i].roleattack-beChallenger[k].roledefense;
+                if(GGF<0)GGF=0;
                 //挑战者生命值
                 var GLife=challenger[i].rolelife;
                 //被挑战者攻击-防御
@@ -337,10 +346,13 @@
                   if(FLife<0)FLife=0;
                   if(GLife<0)GLife=0;
                   str+=
-                  "<span style='color:green;'>己方：</span>"+
-                  "<span class='fontSizeC'>"+challenger[i].rolename+"发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</span>"+
-                  "<span style='color:red;'>敌方：</span>"+
-                  "<span class='fontSizeC'>"+beChallenger[k].rolename+"发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</span>"
+                  "<div>"+
+                  "<span class='fontSizeC'><img src='../images/showRole/"+challenger[i].roleid+".png' class='GongJi'></span>"+
+                  "<span class='fontSizeC' style='margin-left:20%;'><img src='../images/showRole/"+beChallenger[k].roleid+".png' class='FangShou'></span>"+
+                  "<p class='fontSizeC'>己方：发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>"+
+                  "<p class='fontSizeC'>敌方：发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>"+
+        		  "</div>*"
+                  
                   if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
                     challenger[i].rolelife=GLife;
                     beChallenger[k].rolelife=0;
@@ -363,7 +375,8 @@
             };
           },
           error:function(){
-            alert("出错!!!请请重新操作")
+            alert("出错!!!请请重新操作");
+            window.location.reload();
           }
         })
       }
@@ -386,25 +399,27 @@
               if(receiveData.randNum==0){
                   timer=setInterval(function(){
                     if(index<length-1){
-                      $("#all_battleMessage").append(str[index]);
+                      $("#all_battleMessage").html(str[index]);
+                      $(".GongJi").animate({left: '+50px'},600);
+                      $(".FangShou").animate({left: '-50px'},600);
                     }else{
                       clearInterval(timer); 
-                      $("#all_battleMessage").append("<div>未获得任何碎片</div><button class='btn btn-danger'"+
+                      $("#all_battleMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
                       "id='close_battleMessage'>关闭</button>")                     
                     }
                     index++;
                   },1000)
-                /*$("#all_battleMessage").html(str+"<div>未获得任何碎片</div><button class='btn btn-danger'"+
-                "id='close_battleMessage'>关闭</button>")*/
               }else{
                   timer=setInterval(function(){
                     if(index<length-1){
-                      $("#all_battleMessage").append(str[index]);
+                      $("#all_battleMessage").html(str[index]);
+                      $(".GongJi").animate({left: '+50px'},600);
+                      $(".FangShou").animate({left: '-50px'},600);
                     }else{
                       clearInterval(timer);
                       $("#all_battleMessage").append(
                       "<div>"+
-                          "<h3>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
+                          "<h3 style='color:#fff;'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
                           "<img src='../images/showRole/"+receiveData.carid+".png'>"+
                       "</div>"+
                       "<button class='btn btn-danger'"+
@@ -412,13 +427,6 @@
                     }
                     index++;
                   },1000)
-                /*$("#all_battleMessage").html(str+
-                  "<div>"+
-                    "<h3>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
-                    "<img src='../images/showRole/"+receiveData.carid+".png'>"+
-                  "</div>"+
-                  "<button class='btn btn-danger'"+
-                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")*/
               }
               $(".battle-message").on('click','#close_battleMessage',function(){
                 $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
@@ -426,11 +434,13 @@
                   $('.ModeContainer').css("display",'block')
               })
             }else{
-              alert("出错!!!请请重新操作")
+              alert("出错!!!请请重新操作");
+              window.location.reload();
             }
           },
           error:function(){
-            alert("出错!!!请请重新操作")
+            alert("出错!!!请请重新操作");
+            window.location.reload();  
           }
         })
       }
@@ -450,37 +460,34 @@
               $('.battle-message').css("display","block");
               timer=setInterval(function(){
                 if(index<length-1){
-                  $("#all_battleMessage").append(str[index]);
+                      $("#all_battleMessage").html(str[index]);
+                      $(".GongJi").animate({left: '+50px'},600);
+                      $(".FangShou").animate({left: '-50px'},600);
                 }else{
                   clearInterval(timer); 
-                  $("#all_battleMessage").append("<div>未获得任何碎片</div><button class='btn btn-danger'"+
+                  $("#all_battleMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
                   "id='close_battleMessage'>关闭</button>")                     
                 }
                 index++;
-              },1000)              
-              /*$("#all_battleMessage").html(str+
-                "<div>"+
-                  "<img src='../images/other/nochip.jpg'>"+
-                "</div>"+
-                "<button class='btn btn-danger'"+
-              "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")*/
-              
+              },500)              
               $(".battle-message").on('click','#close_battleMessage',function(){
                 $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
                   $(".battle-message").css('display','none')});
                   $('.ModeContainer').css("display",'block')
               })
             }else{
-              alert("出错!!!请请重新操作")
+              alert("出错!!!请请重新操作");
+              window.location.reload();
             }
           },
           error:function(e){
-            alert("出错!!!请请重新操作")
+            alert("出错!!!请请重新操作");
+            window.location.reload();
           },
         })
       }
       $("#zhanDou_Modal").on("click",function(){
-        window.location.href="http://localhost/QHgame/97Game/mainApp/ModalToBattle.html?UFO"+
+        window.location.href=dev_location+"mainApp/ModalToBattle.html?UFO"+
         +Math.ceil(Math.random()*520)+'_'+decToHex(uName);
       })
       $("#xiuLian_Modal").on("click",function(){
@@ -522,12 +529,13 @@
               $("#sql_combat").html(allMessage.user_combat);
             },
             error:function(){
-              alert("查询失败！请重新查询")
+              alert("查询失败！请重新查询");
+              window.location.reload();
             }
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
 
@@ -584,19 +592,21 @@
                     $("#all_userTeam").html("<h3>我的队伍信息</h3>"+str)
                   },
                   error:function(){
-                    alert("查询失败！请重新查询")
+                    alert("查询失败！请重新查询");
+                    window.location.reload();
                   }
                 })
                 
               }
             },
             error:function(){
-              alert("查询失败！请重新查询")
+              alert("查询失败！请重新查询");
+              window.location.reload();
             }
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
 

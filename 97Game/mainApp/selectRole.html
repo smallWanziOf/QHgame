@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>拳皇合卡</title>
     <!-- Bootstrap -->
     <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
     <script src="../encode.js"></script>
+    <script src="../data/config.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -17,6 +18,8 @@
     <![endif]-->
     <style>
       .thumbnail{border:none;}
+      .allRoleContainer .thumbnail>img{margin-left:0;}
+      .allRoleContainer .thumbnail{background-color:#000;}
     </style>
   </head>
   <body class="selectRole-body">
@@ -66,13 +69,13 @@
             <img src="../images/other/money.jpg" id="payImg" style="width:100%;">
             <p>账户余额：<span id="sql_showAllMoney"></span></p>
             <p><a class="btn btn-primary btn-lg" id="payToWeiXin" role="button">给账户加油</a></p>
-            <p style="text-align: left;font-size: 18px;">
-              * 10元=100金<br/>
-              * 50元=700金 + 20个人物碎片<br/>
-              * 100元=1500金+7800人物任选其一<br/>
-              * 888元=18888金+炎之克里斯
+            <!--<p style="text-align: left;font-size: 18px;">
+              * 10元=1000金<br/>
+              * 50元=7000金 + 20个人物碎片<br/>
+              * 100元=15000金+7800人物任选其一<br/>
+              * 888元=188888金+炎之克里斯
             </p>
-            <p>(请添加微信：1305226892)</p>
+            <p>(请添加微信：1305226892)</p>-->
           </div>
         </div>
       </div>
@@ -87,9 +90,9 @@
               <div class='thumbnail'>
                 <div class='caption'>
                   <p>
-                    <a class='btn btn-primary intensify' role='button' id='lottery1'>抽一次</a>
+                    <a class='btn btn-primary' role='button' id='lottery1'>抽一次</a>
                       &nbsp;&nbsp;&nbsp;
-                    <a class='btn btn-primary intensify' role='button' id='lottery10'>抽十次</a>
+                    <a class='btn btn-primary' role='button' id='lottery10'>抽十次</a>
                   </p>
                   <h3 style='color:red'>必得已拥有人物碎片！有机会获得神秘人物</h3>
                   <p>(注：抽一次消耗 60金币,十连抽只需 550金币)</p>
@@ -105,7 +108,7 @@
     <div class="modal fade bs-example-modal-sm" tabindex="-1" id="no_role" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content" >
-          <h3 style="text-align: center;color:green;font-weight: bold;">欢迎进入 QH97Game</h3>
+          <h3 style="text-align: center;color:green;font-weight: bold;">欢迎进入'拳皇合卡'游戏</h3>
           <h3 style="text-align: center;color:green;font-weight: bold;">您的队伍目前空无一人....</h3>
           <h3 style="text-align: center;color:green;font-weight: bold;">您可以选择喜欢的人物角色加入自己的阵营</h3>
           <!-- <h3 style="text-align: center;color:green;font-weight: bold;">开始战斗吧</h3> -->
@@ -119,14 +122,12 @@
     <!-- 购买成功后的提示 -->
     <div class="modal fade bs-example-modal-sm" tabindex="-1" id="myModal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm" id="buy_success">
-        <!--         <div class="modal-content" >
-          <h3 style="text-align: center;color:green;font-weight: bold;">恭喜成功添加!</h3>
-          <img src="../images/caozhijin/xiaozhao.gif">
-          <hr>
-          <h1 style="text-align: right;">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="close_modal" style="margin-right: 20px;">关闭</button>
-          </h1>
-        </div> -->
+      </div>
+    </div>
+
+    <!-- 查看人物的提示 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="lookRoleDal" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" id="lookRole_Dal">
       </div>
     </div>
 
@@ -137,6 +138,7 @@
           <div class="row" id="sql_book" style="text-align: center;">
             <div class='col-sm-12 col-md-12' style='margin-top:20px'>
               <h3>拳皇97 合卡游戏玩法介绍</h3>
+              <h5>(官方QQ群：605273753  微信：1305226892)</h5>
               <div style='text-align: left;padding-left: 100px;' class='query_help'>
                 <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
                 <p><2>游戏目前只支持三种方式获得碎片</p>
@@ -148,7 +150,8 @@
                 <p><5>如果想要查看当前的人物属性或者其他的信息可以点击左边的导航进行查询</p>       
                 <p><6>“战斗模式”中不仅可以得到相应的人物碎片还可以获得一定数量的金币</p>       
                 <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
-                <p><8>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！微信：1305226892 </p>       
+                <p><8>加群送人物！</p> 
+                <p><9>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！</p>
               </div>
             </div>
           </div>
@@ -201,12 +204,12 @@
           success:function(e){
             if(e=="error"){
               alert("迷之操作！！！请重新登录");
-              window.location.href="http://localhost/QHgame/97Game";
+              window.location.href=dev_location;
             }
           },
           error:function(e){
             alert("迷之操作！！！请重新登录");
-            window.location.href="http://localhost/QHgame/97Game";
+            window.location.href=dev_location;
           }
         })
         if(uName!=''){
@@ -233,27 +236,27 @@
                     for(var i=0;i<data.length;i++){
                       if($.inArray(data[i].id,allId)==-1&&data[i].tradeprice<=6300){
                         str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
-                              '<div class="thumbnail">'+
-                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
-                                '<div class="caption">'+
-                                  '<h3>'+data[i].rolename+'</h3>'+
+                              '<div class="thumbnail outCarImg">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive CarImg">'+
+                                '<div class="caption RoleImg">'+
+                                  '<h3 style="color:#fff;">'+data[i].rolename+'</h3>'+
                                   '<p>'+
-                                    '<h5>攻击：'+
+                                    '<h5 style="color:#fff;">攻击：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
                                     '</h5>'+
-                                    '<h5>防御：'+
+                                    '<h5 style="color:#fff;">防御：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
                                     '</h5>'+
-                                    '<h5>生命值：'+
+                                    '<h5 style="color:#fff;">生命值：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
                                     '</h5>'+
-                                    '<h5>交易价：'+
+                                    '<h5 style="color:#fff;">交易价：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="min-width: 2em;width:'
                                     +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
@@ -261,6 +264,78 @@
                                   '</p>'+
                                   '<p>'+
                                     '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                             		'<a href="#" class="btn btn-danger Look_Role" role="button" style="margin-left:20px;">查看属性</a>'+ 
+                                  '</p>'+
+                                '</div>'+
+                              '</div>'+
+                            '</div>'
+                      }
+                    }
+                    $(".allRoleContainer").html(str)
+                    $(".progress-bar").hover(function(){
+                    	$(this).addClass("active")
+                    },function(){
+                    	$(this).removeClass("active")
+                    })
+                    /*翻拍效果*/
+                    $(".allRoleContainer").on("mouseover",".CarImg",function(){
+                        $(this).addClass("imgHover");
+                        $(this).next('div').addClass("rotateImg");
+                        $(this).css("opacity","0");
+                    })
+                    $("body").on("mouseover",function(e){
+                        if(e.target.nodeName=="BODY"){
+                        	$(".CarImg").removeClass("imgHover");
+                            $(".RoleImg").removeClass("rotateImg");
+                            $(".CarImg").css("opacity","1")
+                        }              
+                    })
+                  },
+                  error:function(e){
+                    alert("程序出错请重试！")
+                  }
+                })
+              }else{
+                $("#P_book").trigger("click");
+                $.ajax({
+                  type:"POST",
+                  data:data,
+                  url :"showAllRole.php",
+                  success:function(e){
+                    var data=JSON.parse(e);
+                    var str='';
+                    for(var i=0;i<data.length;i++){
+                      if(data[i].tradeprice<=6300){
+                        str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
+                              '<div class="thumbnail outCarImg">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive CarImg">'+
+                                '<div class="caption RoleImg">'+
+                                  '<h3 style="color:#fff;">'+data[i].rolename+'</h3>'+
+                                  '<p>'+
+                                    '<h5 style="color:#fff;">攻击：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="width:'
+                                    +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5 style="color:#fff;">防御：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="width:'
+                                    +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5 style="color:#fff;">生命值：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="width:'
+                                    +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5 style="color:#fff;">交易价：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="min-width: 2em;width:'
+                                    +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
+                                    '</h5>'+
+                                  '</p>'+
+                                  '<p>'+
+                                    '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                            		'<a href="#" class="btn btn-danger Look_Role" role="button" style="margin-left:20px;">查看属性</a>'+
                                   '</p>'+
                                 '</div>'+
                               '</div>'+
@@ -274,62 +349,18 @@
                     },function(){
                       $(this).removeClass("active")
                     })
-                  },
-                  error:function(e){
-                    alert("程序出错请重试！")
-                  }
-                })
-              }else{
-                $.ajax({
-                  type:"POST",
-                  data:data,
-                  url :"showAllRole.php",
-                  success:function(e){
-                    var data=JSON.parse(e);
-                    var str='';
-                    for(var i=0;i<data.length;i++){
-                      if(data[i].tradeprice<=6300){
-                        str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
-                              '<div class="thumbnail">'+
-                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
-                                '<div class="caption">'+
-                                  '<h3>'+data[i].rolename+'</h3>'+
-                                  '<p>'+
-                                    '<h5>攻击：'+
-                                    '<div class="progress" >'+
-                                    '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="width:'
-                                    +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
-                                    '</h5>'+
-                                    '<h5>防御：'+
-                                    '<div class="progress" >'+
-                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="width:'
-                                    +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
-                                    '</h5>'+
-                                    '<h5>生命值：'+
-                                    '<div class="progress" >'+
-                                    '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="width:'
-                                    +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
-                                    '</h5>'+
-                                    '<h5>交易价：'+
-                                    '<div class="progress" >'+
-                                    '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="min-width: 2em;width:'
-                                    +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
-                                    '</h5>'+
-                                  '</p>'+
-                                  '<p>'+
-                                    '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
-                                  '</p>'+
-                                '</div>'+
-                              '</div>'+
-                            '</div>'
-                      }
-                    }
-                    $(".allRoleContainer").html(str)
-                    /*增加条形动画*/
-                    $(".progress-bar").hover(function(){
-                      $(this).addClass("active")
-                    },function(){
-                      $(this).removeClass("active")
+					          /*翻拍效果*/
+                    $(".allRoleContainer").on("mouseover",".CarImg",function(){
+                        $(this).addClass("imgHover");
+                        $(this).next('div').addClass("rotateImg");
+                        $(this).css("opacity","0");
+                    })
+                    $("body").on("mouseover",function(e){
+                        if(e.target.nodeName=="BODY"){
+                        	$(".CarImg").removeClass("imgHover");
+                            $(".RoleImg").removeClass("rotateImg");
+                            $(".CarImg").css("opacity","1")
+                        }              
                     })
                   },
                   error:function(e){
@@ -345,13 +376,18 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       });
       //点击加入队伍按钮
       $(".allRoleContainer").on("click",".Join_Team",function(e){
         e.preventDefault();
         JoinTeam.bind(this)();
+      })
+      //点击查看属性按钮
+      $(".allRoleContainer").on("click",".Look_Role",function(e){
+        e.preventDefault();
+        LookRole.bind(this)();
       })
       function JoinTeam(){
         var me=this;
@@ -393,7 +429,28 @@
           })
         }
       }
-
+      function LookRole(){
+        var me=this;
+        var lookCarId=$(this).parents(".hasParent")[0].id;
+        var carid={"uName":uName,"carid":lookCarId};
+        $.ajax({
+            type:"POST",
+            data:carid,
+            url :"lookRole.php",
+            success:function(e){
+                var data = JSON.parse(e);
+                var str="<h1 style='color:#fff;margin:20px auto;text-align:center;'>人物介绍</h1>"
+                str+="<img src='../images/showAllRole/"+carid['carid']+".jpg' style='float:left;margin-right:10px;'>";
+                str+="<div style='color:#fff;'><h3 style='color:aqua;'>人物故事</h3>"+data.rolestory+"<h3 style='color:aqua;'>人物技能</h3>"+data.rolestory+"</div>";
+                $("#lookRole_Dal").html(str);
+                $('#lookRoleDal').modal()
+                $(".modal-backdrop.in").css("opacity","0.8")
+            },
+            error:function(){
+              alert("查询失败！请重新加入")
+            }
+        })
+      }
       //hover左边导航进行提示的信息
       $('#P_message').tooltip();
       $('#P_team').tooltip();
@@ -435,7 +492,7 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
       $("#P_team").click(function(){//个人队伍
@@ -466,6 +523,7 @@
                   data:{"uName":uName,"carId":allId},
                   url :"showCurrentRole.php",
                   success:function(e){
+                    debugger;
                     var data=JSON.parse(e);
                     var roleData;
                     for(var i=0;i<allId.length;i++){
@@ -503,7 +561,7 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
       $("#P_chip").click(function(){//个人碎片
@@ -566,7 +624,7 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       })
 
@@ -592,14 +650,14 @@
           })
         }else{
           alert("登录跳转失败！请重新登录")
-          window.location.href="http://localhost/QHgame/97Game";
+          window.location.href=dev_location;
         }  
       });
       $("#P_battle").click(function(){//进入选择战斗模式
-        window.location.href="http://localhost/QHgame/97Game/mainApp/selectModal.html?UFO"+Math.ceil(Math.random()*520)+'_'+decToHex(uName);
+        window.location.href=dev_location+"mainApp/selectModal.html?UFO"+Math.ceil(Math.random()*520)+'_'+decToHex(uName);
       })
       $('#P_index').click(function(){//返回登录页
-        window.location.href="http://localhost/QHgame/97Game";
+        window.location.href=dev_location;
       })
       $('#P_gift').click(function(){//登录神秘商店
           $.ajax({
@@ -625,27 +683,27 @@
                     for(var i=0;i<data.length;i++){
                       if($.inArray(data[i].id,allId)==-1&&data[i].tradeprice>6300){
                         str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
-                              '<div class="thumbnail">'+
-                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
-                                '<div class="caption">'+
-                                  '<h3>'+data[i].rolename+'</h3>'+
+                              '<div class="thumbnail outCarImg">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive CarImg">'+
+                                '<div class="caption RoleImg">'+
+                                  '<h3 style="color:#fff;">'+data[i].rolename+'</h3>'+
                                   '<p>'+
-                                    '<h5>攻击：'+
+                                    '<h5 style="color:#fff;">攻击：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
                                     '</h5>'+
-                                    '<h5>防御：'+
+                                    '<h5 style="color:#fff;">防御：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
                                     '</h5>'+
-                                    '<h5>生命值：'+
+                                    '<h5 style="color:#fff;">生命值：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
                                     '</h5>'+
-                                    '<h5>交易价：'+
+                                    '<h5 style="color:#fff;">交易价：'+
                                     '<div class="progress" >'+
                                     '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
                                     +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
@@ -653,6 +711,7 @@
                                   '</p>'+
                                   '<p>'+
                                     '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                           		    '<a href="#" class="btn btn-danger Look_Role" role="button" style="margin-left:20px;">查看属性</a>'+
                                   '</p>'+
                                 '</div>'+
                               '</div>'+
@@ -666,6 +725,19 @@
                     },function(){
                       $(this).removeClass("active")
                     })
+                     /*翻拍效果*/
+                    $(".allRoleContainer").on("mouseover",".CarImg",function(){
+                        $(this).addClass("imgHover");
+                        $(this).next('div').addClass("rotateImg");
+                        $(this).css("opacity","0");
+                    })
+                    $("body").on("mouseover",function(e){
+                        if(e.target.nodeName=="BODY"){
+                        	$(".CarImg").removeClass("imgHover");
+                            $(".RoleImg").removeClass("rotateImg");
+                            $(".CarImg").css("opacity","1")
+                        }              
+                    })
                   },
                   error:function(e){
                     alert("程序出错请重试！")
@@ -678,30 +750,65 @@
                   url :"showAllRole.php",
                   success:function(e){
                     var data=JSON.parse(e);
-                    debugger;
                     var str='';
                     for(var i=0;i<data.length;i++){
                       if(data[i].tradeprice>6300){
                         str+='<div class="col-sm-6 col-md-4 hasParent" id='+data[i].roleid+'>'+
-                              '<div class="thumbnail">'+
-                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive">'+
-                                '<div class="caption">'+
-                                  '<h3>'+data[i].rolename+'</h3>'+
+                              '<div class="thumbnail outCarImg">'+
+                                '<img src="../images/showAllRole/'+data[i].roleid+'.jpg" class="img-responsive CarImg">'+
+                                '<div class="caption RoleImg">'+
+                                  '<h3 style="color:#fff;">'+data[i].rolename+'</h3>'+
                                   '<p>'+
-                                    '<h5>攻击：'+data[i].roleattack+'</h5>'+
-                                    '<h5>防御：'+data[i].roledefense+'</h5>'+
-                                    '<h5>生命值：'+data[i].rolelife+'</h5>'+
-                                    '<h5>交易价：'+data[i].tradeprice+'</h5>'+
+                                    '<h5 style="color:#fff;">攻击：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].roleattack+'%">'+data[i].roleattack+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5 style="color:#fff;">防御：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].roledefense+'%">'+data[i].roledefense+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5 style="color:#fff;">生命值：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar"  style="max-width:100%;width:'
+                                    +data[i].rolelife/10+'%">'+data[i].rolelife+'</div></div>'+
+                                    '</h5>'+
+                                    '<h5 style="color:#fff;">交易价：'+
+                                    '<div class="progress" >'+
+                                    '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar"  style="min-width: 2em;width:'
+                                    +data[i].tradeprice/100+'%">'+data[i].tradeprice+'</div></div>'+
+                                    '</h5>'+
                                   '</p>'+
                                   '<p>'+
                                     '<a href="#" class="btn btn-primary Join_Team" role="button" >加入队伍</a>'+ 
+                            		'<a href="#" class="btn btn-danger Look_Role" role="button" style="margin-left:20px;">查看属性</a>'+
                                   '</p>'+
                                 '</div>'+
                               '</div>'+
                             '</div>'
                       }
                     }
-                    $(".allRoleContainer").html(str)
+                    $(".allRoleContainer").html(str);
+                     /*增加条形动画*/
+                    $(".progress-bar").hover(function(){
+                      $(this).addClass("active")
+                    },function(){
+                      $(this).removeClass("active")
+                    })
+                     /*翻拍效果*/
+                    $(".allRoleContainer").on("mouseover",".CarImg",function(){
+                        $(this).addClass("imgHover");
+                        $(this).next('div').addClass("rotateImg");
+                        $(this).css("opacity","0");
+                    })
+                    $("body").on("mouseover",function(e){
+                        if(e.target.nodeName=="BODY"){
+                        	$(".CarImg").removeClass("imgHover");
+                            $(".RoleImg").removeClass("rotateImg");
+                            $(".CarImg").css("opacity","1")
+                        }              
+                    })
                   },
                   error:function(e){
                     alert("程序出错请重试！")
