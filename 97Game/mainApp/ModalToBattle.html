@@ -23,6 +23,8 @@
       .selectRole-mainRole{height:250px;}
       .thumbnail{border:none;}
       .jumbotron{background-color:transparent}
+      #all_battleMessage span{color:#fff;}
+      body{background-color:#000;}
     </style>
   </head>
   <body class="Modal-Battle-bg">
@@ -99,7 +101,8 @@
     <div>
       <div class="jumbotron battle-message" style="margin-bottom: 0;">
         <div class="container" id="all_battleMessage">
-          
+        <p class="imgC"></p>
+        <div></div>
         </div>
       </div>
     </div>
@@ -186,16 +189,6 @@
                     url :"selectRole.php",
                     success:function(e){
                       var carId=JSON.parse(e);
-                      /*if(carId.user_chapter!=null&&chapterId>carId.user_chapter){
-                        alert("您还有未通过的关！请先完成前面的关卡");
-                        
-                      }else if(carId.user_chapter==null){
-                        if(chapterId>1){
-                          alert("请从第一关开始");
-                          
-                        }
-                      }
-                      debugger;*/
                       var allId=carId.carid.split(",");
                       if(allId!=null){
                         for(var i=0;i<allId.length;i++){
@@ -321,58 +314,20 @@
                 }
               }
             }
-            $("#ClickstartChapter").on("click",function(){
-              
-              $("#show_startchapter").modal('hide');
-              for(var i=0,k=0;i<challenger.length;i++){
-                if($.inArray(challenger[i].roleid,challgerCarId)!=-1){
-                  if(newbeChallenger[k]==null){
-                    isdefeated=false; 
-                    str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>*";
-                    ChapterVictory(challgerCarId,str);//挑战成功执行函数减体力调整排名随机获得挑战人员的碎片
-                    break;
-                  }
-                  //挑战者攻击-防御
-                  var GGF=challenger[i].roleattack-newbeChallenger[k].roledefense+Math.floor(Math.random()*10);
-                  if(GGF<0)GGF=0;
-                  //挑战者生命值
-                  var GLife=challenger[i].rolelife;
-                  //被挑战者攻击-防御
-                  var FGF=newbeChallenger[k].roleattack-challenger[i].roledefense;
-                  if(FGF<0)FGF=0;
-                  //被挑战者生命值
-                  var FLife=newbeChallenger[k].rolelife;
-                  //某方人物阵亡
-                  while(GLife>0&&FLife>0){
-                    FLife-=GGF;
-                    GLife-=FGF;
-                    if(FLife<0)FLife=0;
-                    if(GLife<0)GLife=0;
-                    str+=
-                    "<h3 style='color:green;'>己方：</h3>"+
-                    "<p style='color:#000;'><img style='width:20px;border-radius:5px;' src='../images/showAllRole/"+challenger[i].roleid+".jpg'>发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>*"+
-                    "<h3 style='color:red;'>敌方：</h3>"+
-                    "<p style='color:#000;'><img style='width:20px;border-radius:5px;' src='../images/showAllRole/"+newbeChallenger[k].roleid+".jpg'>发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>*"
-                    if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
-                      challenger[i].rolelife=GLife;
-                      newbeChallenger[k].rolelife=0;
-                      str+="<h2 style='color:red'>敌方"+newbeChallenger[k].rolename+"已阵亡</h2>*";
-                      i--;
-                      k++;
-                      break;
-                    }else if(GLife<=FGF){//如果挑战者第一个人物被攻击死
-                      newbeChallenger[k].rolelife=FLife;
-                      challenger[i].rolelife=0;
-                      str+="<h2 style='color:blue'>已方"+challenger[i].rolename+"已阵亡</h2>*";
-                      break;
-                    }
-                  }
-                }
+            
+            for(var key in challenger){
+              if($.inArray(challenger[key].roleid,arr)!=-1){
+                data1.push(challenger[key]);
               }
-              if(isdefeated){
-                str+="<h1 style='color:blue;'>挑战失败...</h1>";
-                ChapterDefeated(str);//失败执行函数减体力
-              };
+            }
+            data2=newbeChallenger;
+            battleLength1=data1.length;
+            battleLength2=data2.length;
+            $("#ClickstartChapter").on("click",function(){                
+              $("#show_startchapter").modal('hide');
+              $(".battle-message").css("display","block");
+              $(".main-container").remove();
+              startBattle.init(data1[battleIndex1],data2[battleIndex2]);
             })
           },
           error:function(){
@@ -380,56 +335,33 @@
           }
         })
       }
-      function ChapterVictory(arr,str){
-        var str=str.split("*");
-        var length=str.length;
-        var index=0;
-        var timer;
+      function ChapterVictory(arr){
         var chip=arr[Math.floor(Math.random()*(arr.length-0))];
+        debugger;
         var data={"uName":uName,"rolechip":chip,"currentC":chapterCarId}
         $.ajax({
           type:"POST",
           data:data,
           url :"ChapterVictory.php",
           success:function(e){
-            $(".main-container").animate({opacity: '-0'},1000);
             if(e!='error'){
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
               var receiveData=JSON.parse(e);
               if(receiveData.randNum==0){
-                  timer=setInterval(function(){
-                    if(index<length-1){
-                      $("#all_battleMessage").append(str[index]);
-                    }else{
-                      clearInterval(timer); 
-                      $("#all_battleMessage").append("<div style='color:#000'>未获得任何碎片</div><button class='btn btn-danger'"+
-                      "id='close_battleMessage'>关闭</button>")                     
-                    }
-                    index++;
-                  },500)
+                $("#all_battleMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
+                "id='close_battleMessage'>关闭</button>")                     
               }else if(receiveData.randNum!=0){
-                  timer=setInterval(function(){
-                    if(index<length-1){
-                      $("#all_battleMessage").append(str[index]);
-                    }else{
-                      clearInterval(timer);
-                      $("#all_battleMessage").append(
-                      "<div>"+
-                          "<h3 style='color:#000'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
+                $("#all_battleMessage").append(
+                "<div>"+
+                "<h3 style='color:#fff;'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
                           "<img src='../images/showRole/"+receiveData.carid+".png'>"+
-                      "</div>"+
-                      "<button class='btn btn-danger'"+
-                      "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
-                    }
-                    index++;
-                  },500)
+                "</div>"+
+                "<button class='btn btn-danger'"+
+                "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
               }
               $(".battle-message").on('click','#close_battleMessage',function(){
-                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
-                  $(".battle-message").css('display','none')});
-                  $('.ModeContainer').css("display",'block');
-                  $(".main-container").animate({opacity: '+1'},1000);
+                window.location.reload();
               })
             }else{
               alert("出错!!!请请重新操作")
@@ -440,37 +372,18 @@
           }
         })
       }
-      function ChapterDefeated(str){
-        var str=str.split("*");
-        var length=str.length;
-        var index=0;
-        var timer;
+      function ChapterDefeated(){
         var data={"uName":uName};
         $.ajax({
           type:"POST",
           data:data,
           url :"ChapterDefeated.php",
           success:function(e){
-            $(".main-container").animate({opacity: '-0'},1000);
             if(e=="success"){
-              $('#show_battle').modal('hide');
-              $('.battle-message').css("display","block");
-                   timer=setInterval(function(){
-                    if(index<length-1){
-                      $("#all_battleMessage").append(str[index]);
-                    }else{
-                      clearInterval(timer); 
-                      $("#all_battleMessage").append("<div style='color:#fff'>未获得任何碎片</div><button class='btn btn-danger'"+
-                      "id='close_battleMessage'>关闭</button>")                     
-                    }
-                    index++;
-                  },500)
-              
+              $("#all_battleMessage").append("<div style='color:#fff'>未获得任何碎片</div>"+
+                "<button class='btn btn-danger' id='close_battleMessage'>关闭</button>")                     
               $(".battle-message").on('click','#close_battleMessage',function(){
-                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
-                  $(".battle-message").css('display','none')});
-                  $('.ModeContainer').css("display",'block');
-                  $(".main-container").animate({opacity: '+1'},1000);
+                window.location.reload();
               })
             }else{
               alert("出错!!!请请重新操作")
@@ -599,6 +512,130 @@
       $('#P_book').click(function(){
           $("#show_book").modal();
       })
+      /****************对战的算法***************/
+      var data1=[];
+      var data2=[];
+      var battleIndex1=0;
+      var battleIndex2=0;
+      var battleLength1;
+      var battleLength2;
+      var startBattle={
+        zhan1:null,
+        zhan2:null,
+        timer:null,
+        win:false,
+        init:function(n1,n2){
+          this.zhan1=n1;
+          this.zhan2=n2;
+          //显示当前的对战的人的图片
+          var strImg='';
+          strImg+="<p><img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' /' class='img1'></p><p><img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /></p>";
+          $(".imgC").html(strImg);
+          //1秒执行一次对战
+          this.timer=setInterval(this.start1.bind(this),1000);
+        },
+        start1:function(){
+          //存放乙方攻击的内容
+          var strBattle1='<b style="color:green;font-size:18px;margin-left:10px;">乙方造成</b>';
+          //存放敌方攻击的内容
+          var strBattle2='<b style="color:red;font-size:18px;margin-left:10px;">敌方造成</b>';
+          //attack1乙方的基础攻击属性
+          var attack1=parseInt(this.zhan1['roleattack']);
+          //attack2敌方的基础攻击属性
+          var attack2=parseInt(this.zhan2['roleattack']);
+          //随机增加乙方攻击力
+          var randAttack1=Math.floor(Math.random()*50);
+          //随机增加敌方攻击力
+          var randAttack2=Math.floor(Math.random()*50);
+          //改变乙方的攻击力+随机增加的攻击力
+          attack1+=parseInt(randAttack1);
+          //改变敌方的攻击力+随机增加的攻击力
+          attack2+=parseInt(randAttack2);
+          //获取乙方生命值
+          var life1=parseInt(this.zhan1['rolelife']);
+          //获取敌方生命值
+          var life2=parseInt(this.zhan2['rolelife']);
+          //获取乙方防御力并削弱乘0.6
+          var define1=Math.floor(this.zhan1['roledefense']*0.6);
+          //获取敌方防御力并削弱乘0.6
+          var define2=Math.floor(this.zhan2['roledefense']*0.6);
+          //乙方攻击的条件
+          if(life2+define2>attack1){
+            if(randAttack1>30){
+              strBattle1+="<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
+              $(".imgC .img1").css("transform","scale(1.2)");
+              setTimeout(function(){
+                $(".imgC .img1").css("transform","scale(1)");
+              },500);
+            }else{
+              strBattle1+=":";
+            }
+            if(parseInt(attack1-define2)<=0){
+              this.zhan2['rolelife']=life2-1;
+              strBattle1+="<span>1点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
+            }else{
+              this.zhan2['rolelife']=life2-(attack1-define2);
+              strBattle1+="<span>"+parseInt(attack1-define2)+"点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
+            }
+            $("#all_battleMessage>div").append(strBattle1);
+          }else{
+            strBattle1+="<p style='color:red'>"+parseInt(attack1)+"点伤害!敌方阵亡</p>";
+            $("#all_battleMessage>div").append(strBattle1);
+            $(".imgC .img2").css("transform","scale(0)");
+            clearInterval(this.timer);
+            this.timer=null;
+            data1[battleIndex1]['rolelife']=this.zhan1['rolelife'];
+            var Index2=++battleIndex2;
+            if(Index2<battleLength2){
+              battleTeam(battleIndex1,Index2);
+            }else{
+              $("#all_battleMessage>div").append("<h2 style='color:#fff;'>恭喜！挑战胜利！</h2>");
+              ChapterVictory(challgerCarId);
+              return;
+            }
+          }
+          //敌方攻击的条件
+          if(life1+define1>attack2){
+            
+            if(randAttack2>30){
+              strBattle2+="<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
+              $(".imgC .img2").css("transform","scale(1.2)");
+              setTimeout(function(){
+                $(".imgC .img2").css("transform","scale(1)");
+              },500);
+            }else{
+              strBattle2+=":";
+            }
+            if(parseInt(attack2-define1)<=0){
+              this.zhan1['rolelife']=life1-1;
+              strBattle2+="<span>1点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
+            }else{
+              this.zhan1['rolelife']=life1-(attack2-define1);
+              strBattle2+="<span>"+parseInt(attack2-define1)+"点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
+            }       
+            $("#all_battleMessage>div").append(strBattle2);
+          }else{
+            strBattle2+="<p style='color:red'>"+parseInt(attack2)+"点伤害!乙方阵亡</p>";
+            $("#all_battleMessage>div").append(strBattle2);
+            $(".imgC .img1").css("transform","scale(0)");
+            clearInterval(this.timer);
+            this.timer=null;
+            data2[battleIndex2]['rolelife']=this.zhan2['rolelife'];
+            var Index1=++battleIndex1;
+            if(Index1<battleLength1){ 
+              battleTeam(Index1,battleIndex2);
+            }else{
+              $("#all_battleMessage>div").append("<h2 style='color:#fff;'>很遗憾。。。挑战失败</h2>");
+              ChapterDefeated();
+              return;
+            }
+          }
+        }
+      }
+      //某方阵亡继续调用这个方法
+      function battleTeam(n1,n2){
+        startBattle.init(data1[n1],data2[n2]);
+      }
     </script>
   </body>
 </html>

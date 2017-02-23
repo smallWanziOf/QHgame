@@ -32,7 +32,7 @@ $resultUpChapter = mysqli_query($conn, $sqlUpChapter);
 $sqlChip = "SELECT rolechip FROM all_user WHERE roleid='$rolechip' AND user_name='$name'";
 $resultChip = mysqli_query($conn, $sqlChip);
 $rowChip = mysqli_fetch_assoc($resultChip);
-$randNum=rand(0,2);
+$randNum=rand(1,5);
 $output['randNum']=$randNum;
 $output['carid']=$rolechip;
 $rowChip=$rowChip['rolechip']+$randNum;

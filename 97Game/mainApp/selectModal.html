@@ -119,8 +119,9 @@
         </div>
       </div>
       <!-- 经典模式的战斗信息 -->
-      <div id="battle_message" class="battle-message">
-
+      <div id="battle_message" class="battle-message" style="text-align:center;">
+        <p class="imgC"></p>
+        <div></div>
       </div>
       <!-- <img src="../images/other/selector.jpg" alt="" id="bg-image"> -->
       <div class="container selectModal-container">
@@ -195,7 +196,7 @@
                         }
                       }
                       $("#all_userTeam").html(
-                        "<h3 style='font-weight: bold;'>请选择出战人物</h3>"+str+
+                        "<h3 style='font-weight: bold;'>请选择出战人物</h3><h5>(可以选择1-3位人物且本次选择的出战人物即成为应战人物)</h5>"+str+
                         "<div style='margin:20px;'><button class='btn btn-primary' id='SelectedOver'>完成</button><div>"
                         )
                     }
@@ -228,7 +229,7 @@
         })
       })
       function SelectedLess3(){
-        if($(".RoleSelected-active").length>0){
+        if($(".RoleSelected-active").length<=3){
           var allSelected=$(".RoleSelected-active").prev("img");
           var selectedArr=[];
           for(var i=0;i<allSelected.length;i++){
@@ -256,7 +257,7 @@
             }
           })
         }else{
-          alert("选择失败！请重新选择");
+          alert("选择失败！请重新选择(只能选择三位出站人物)");
           window.location.reload();
         }
       }
@@ -267,7 +268,6 @@
             url :"showBattle.php",
             success:function(e){
               var receiveData=JSON.parse(e);
-              debugger;
               var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th></th></tr>';
               for(var i=receiveData.length,order=0;i>0;i--){
                 if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
@@ -300,79 +300,23 @@
       function ClickBattle(){
         var changeOBJ=$(this).parents("td").siblings(".changeName").html();
         var data={"uName":uName,"changeOBJ":changeOBJ};
-        var challenger={};
-        var beChallenger={};
-        var isdefeated=true;
         $.ajax({
           type:"POST",
           data:data,
           url :"startBattle.php",
           success:function(e){
-            $('.ModeContainer').css("display",'none');
+            $('.selectModal-container').css("display",'none');
             var str='<h1 style="text-align:center;color:#fff;">战斗开始</h1>*';
             var receiveData=JSON.parse(e);
+            
             challgerCarId;
-            for(var key in receiveData){
-              switch (key){
-                case "challenger" : 
-                challenger=receiveData[key];
-                break;
-                case "bechallenger" : 
-                beChallenger=receiveData[key];
-              }
-            }
-            for(var i=0,k=0;i<challenger.length;i++){
-              if($.inArray(challenger[i].roleid,challgerCarId)!=-1){
-                if(beChallenger[k]==null){
-                  isdefeated=false; 
-                  str+="<h1 style='color:red;'>挑战成功！恭喜获胜</h1>*";
-                  BattleVictory(challgerCarId,str);//挑战成功执行函数减体力调整排名随机获得挑战人员的碎片
-                  break;
-                }
-                //挑战者攻击-防御
-                var GGF=challenger[i].roleattack-beChallenger[k].roledefense;
-                if(GGF<0)GGF=0;
-                //挑战者生命值
-                var GLife=challenger[i].rolelife;
-                //被挑战者攻击-防御
-                var FGF=beChallenger[k].roleattack-challenger[i].roledefense;
-                if(FGF<0)FGF=0;
-                //被挑战者生命值
-                var FLife=beChallenger[k].rolelife;
-                //某方人物阵亡
-                while(GLife>0&&FLife>0){
-                  FLife-=GGF;
-                  GLife-=FGF;
-                  if(FLife<0)FLife=0;
-                  if(GLife<0)GLife=0;
-                  str+=
-                  "<div>"+
-                  "<span class='fontSizeC'><img src='../images/showRole/"+challenger[i].roleid+".png' class='GongJi'></span>"+
-                  "<span class='fontSizeC' style='margin-left:20%;'><img src='../images/showRole/"+beChallenger[k].roleid+".png' class='FangShou'></span>"+
-                  "<p class='fontSizeC'>己方：发动攻击造成"+GGF+"点伤害,对手剩余"+FLife+"点生命值</p>"+
-                  "<p class='fontSizeC'>敌方：发动攻击,造成"+FGF+"点伤害,你还剩"+GLife+"点生命值</p>"+
-        		  "</div>*"
-                  
-                  if(FLife<=GGF){//如果被挑战者第一个人物被攻击死
-                    challenger[i].rolelife=GLife;
-                    beChallenger[k].rolelife=0;
-                    str+="<h2 style='color:red'>敌方"+beChallenger[k].rolename+"已阵亡</h2>*";
-                    i--;
-                    k++;
-                    break;
-                  }else if(GLife<=FGF){//如果挑战者第一个人物被攻击死
-                    beChallenger[k].rolelife=FLife;
-                    challenger[i].rolelife=0;
-                    str+="<h2 style='color:green'>已方"+challenger[i].rolename+"已阵亡</h2>*";
-                    break;
-                  }
-                }
-              }
-            }
-            if(isdefeated){
-              str+="<h1 style='color:blue;'>挑战失败...</h1>*";
-              BattleDefeated(str);//失败执行函数减体力
-            };
+            data1=receiveData['challenger'];
+            data2=receiveData['bechallenger'];
+            battleLength1=data1.length;
+            battleLength2=data2.length;
+            $('#show_battle').modal('hide');
+            $('.battle-message').css("display","block");
+            startBattle.init(data1[battleIndex1],data2[battleIndex2])
           },
           error:function(){
             alert("出错!!!请请重新操作");
@@ -380,11 +324,7 @@
           }
         })
       }
-      function BattleVictory(arr,str){
-        var str=str.split("*");
-        var length=str.length;
-        var index=0;
-        var timer;
+      function BattleVictory(arr){
         var chip=arr[Math.floor(Math.random()*(arr.length-0))];
         var data={"uName":uName,"rolechip":chip}
         $.ajax({
@@ -397,41 +337,19 @@
               $('.battle-message').css("display","block");
               var receiveData=JSON.parse(e);
               if(receiveData.randNum==0){
-                  timer=setInterval(function(){
-                    if(index<length-1){
-                      $("#all_battleMessage").html(str[index]);
-                      $(".GongJi").animate({left: '+50px'},600);
-                      $(".FangShou").animate({left: '-50px'},600);
-                    }else{
-                      clearInterval(timer); 
-                      $("#all_battleMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
-                      "id='close_battleMessage'>关闭</button>")                     
-                    }
-                    index++;
-                  },1000)
+                  $("#battle_message>div").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
+                    "id='close_battleMessage'>关闭</button>")                     
               }else{
-                  timer=setInterval(function(){
-                    if(index<length-1){
-                      $("#all_battleMessage").html(str[index]);
-                      $(".GongJi").animate({left: '+50px'},600);
-                      $(".FangShou").animate({left: '-50px'},600);
-                    }else{
-                      clearInterval(timer);
-                      $("#all_battleMessage").append(
-                      "<div>"+
-                          "<h3 style='color:#fff;'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
-                          "<img src='../images/showRole/"+receiveData.carid+".png'>"+
-                      "</div>"+
-                      "<button class='btn btn-danger'"+
-                      "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
-                    }
-                    index++;
-                  },1000)
+                $("#battle_message>div").append(
+                  "<div>"+
+                  "<h3 style='color:#fff;'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
+                  "<img src='../images/showRole/"+receiveData.carid+".png'>"+
+                  "</div>"+
+                  "<button class='btn btn-danger'"+
+                  "id='close_battleMessage' style='margin-top:30px;'>关闭</button>")                  
               }
               $(".battle-message").on('click','#close_battleMessage',function(){
-                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
-                  $(".battle-message").css('display','none')});
-                  $('.ModeContainer').css("display",'block')
+                window.location.reload();
               })
             }else{
               alert("出错!!!请请重新操作");
@@ -444,11 +362,7 @@
           }
         })
       }
-      function BattleDefeated(str){
-        var str=str.split("*");
-        var length=str.length;
-        var index=0;
-        var timer;
+      function BattleDefeated(){
         var data={"uName":uName};
         $.ajax({
           type:"POST",
@@ -458,22 +372,11 @@
             if(e=="success"){
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
-              timer=setInterval(function(){
-                if(index<length-1){
-                      $("#all_battleMessage").html(str[index]);
-                      $(".GongJi").animate({left: '+50px'},600);
-                      $(".FangShou").animate({left: '-50px'},600);
-                }else{
-                  clearInterval(timer); 
-                  $("#all_battleMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
-                  "id='close_battleMessage'>关闭</button>")                     
-                }
-                index++;
-              },500)              
+              $("#battle_message>div").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
+              "id='close_battleMessage'>关闭</button>")                     
+            
               $(".battle-message").on('click','#close_battleMessage',function(){
-                $('.battle-message').fadeToggle("3000",function(){$("#all_battleMessage").html('');
-                  $(".battle-message").css('display','none')});
-                  $('.ModeContainer').css("display",'block')
+                window.location.reload();
               })
             }else{
               alert("出错!!!请请重新操作");
@@ -617,6 +520,205 @@
       $('#P_book').click(function(){
           $("#show_book").modal();
       })
+
+
+      /****************对战的算法***************/
+      var data1=[];
+      var data2=[];
+      var battleIndex1=0;
+      var battleIndex2=0;
+      var battleLength1;
+      var battleLength2;
+      var startBattle={
+        zhan1:null,//保存乙方的当前对战人物
+        zhan2:null,//保存敌方当前的对战人物
+        timer:null,//主定时器循环
+        win:false,//是否胜利
+        power1:0,//决定乙方是否可以放技能
+        power2:0,//决定敌方是否可以放技能
+        isattack1:true,//决定乙方本轮是否攻击
+        isattack2:true,//决定敌方本轮是否攻击
+        /*安迪的技能控制*/
+        stopnum1:0,//乙方停止攻击的次数
+        stopnum2:0,//敌方停止攻击的次数
+        init:function(n1,n2){
+          this.zhan1=n1;
+          this.zhan2=n2;
+          //显示当前的对战的人的图片
+          var strImg='';
+          strImg+="<p><img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' class='img1'/'><span class='imgSpan1'><b></b></span></p><p><img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /><span class='imgSpan2'><b></b></span></p>";
+          $(".imgC").html(strImg);
+          //1秒执行一次对战
+          this.timer=setInterval(this.start1.bind(this),1000);
+        },
+        start1:function(){
+          //存放乙方攻击的内容
+          var strBattle1='<b style="color:green;font-size:18px;margin-left:10px;">乙方造成</b>';
+          //存放敌方攻击的内容
+          var strBattle2='<b style="color:red;font-size:18px;margin-left:10px;">敌方造成</b>';
+          //attack1乙方的基础攻击属性
+          var attack1=parseInt(this.zhan1['roleattack']);
+          //attack2敌方的基础攻击属性
+          var attack2=parseInt(this.zhan2['roleattack']);
+          //降低暴击的几率
+          if(Math.random()*10<3){
+            //随机增加乙方攻击力
+            var randAttack1=Math.floor(Math.random()*50);
+            //随机增加敌方攻击力
+            var randAttack2=Math.floor(Math.random()*50);
+            //改变乙方的攻击力+随机增加的攻击力
+          }else{
+            var randAttack1=0;
+            var randAttack2=0;
+          }
+          attack1+=parseInt(randAttack1);
+          //改变敌方的攻击力+随机增加的攻击力
+          attack2+=parseInt(randAttack2);
+          //获取乙方生命值
+          var life1=parseInt(this.zhan1['rolelife']);
+          //获取敌方生命值
+          var life2=parseInt(this.zhan2['rolelife']);
+          //获取乙方防御力并削弱乘0.6
+          var define1=Math.floor(this.zhan1['roledefense']*0.6);
+          //获取敌方防御力并削弱乘0.6
+          var define2=Math.floor(this.zhan2['roledefense']*0.6);
+          
+          /*安迪的技能效果*/
+          //如果乙方停止攻击的次数不等于0的时候则减减这个停止的数值
+          if(this.stopnum1>0){
+            this.stopnum1--;
+            attack2=parseInt(attack2*0.45);
+          }else if(this.stopnum1==0){
+            this.isattack1=true;
+          }
+          //如果敌方停止攻击的次数不等于0的时候则减减这个停止的数值
+          if(this.stopnum2>0){
+            this.stopnum2--;
+            attack1=parseInt(attack1*0.45);
+          }else if(this.stopnum2==0){
+            this.isattack2=true;
+          }
+
+          /*如果能量达到100则根据当前的人物释放技能*/
+          if(this.power2>=100){
+            //调用敌方释放技能的方法
+            this.playR2.bind(this)();
+            $(".imgSpan2").css("boxShadow","0 0 20px green");
+          }
+          /*如果能量达到100则根据当前的人物释放技能*/
+          if(this.power1>=100){
+            //调用敌方释放技能的方法
+            this.playR1.bind(this)();
+            $(".imgSpan1").css("boxShadow","0 0 20px green");
+          }
+          //乙方攻击的条件
+          if(this.isattack1){
+            if(life2+define2>attack1){
+              //增加能量
+              this.power1+=10;
+              //设置能量的增长
+              $(".imgSpan1>b").css("width",this.power1)
+              if(randAttack1>30){
+                strBattle1+="<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
+                $(".imgC .img1").css("transform","scale(1.2)");
+                setTimeout(function(){
+                  $(".imgC .img1").css("transform","scale(1)");
+                },500);
+              }else{
+                strBattle1+=":";
+              }
+              if(parseInt(attack1-define2)<=0){
+                this.zhan2['rolelife']=life2-1;
+                strBattle1+="<span>1点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
+              }else{
+                this.zhan2['rolelife']=life2-(attack1-define2);
+                strBattle1+="<span>"+parseInt(attack1-define2)+"点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
+              }
+              $("#battle_message>div").append(strBattle1);
+            }else{
+              strBattle1+="<p style='color:red'>"+parseInt(attack1)+"点伤害!敌方阵亡</p>";
+              $("#battle_message>div").append(strBattle1);
+              $(".imgC .img2").css("transform","scale(0)");
+              clearInterval(this.timer);
+              this.timer=null;
+              data1[battleIndex1]['rolelife']=this.zhan1['rolelife'];
+              var Index2=++battleIndex2;
+              if(Index2<battleLength2){
+                battleTeam(battleIndex1,Index2);
+              }else{
+                $("#battle_message>div").append("<h2>恭喜！挑战胜利！</h2>");
+                $(".imgC .imgSpan2").remove();
+                BattleVictory(challgerCarId)
+                return;
+              }
+            }
+          }
+
+          //敌方攻击的条件
+          if(this.isattack2){
+            if(life1+define1>attack2){
+              //增加能量
+              this.power2+=5;
+              //设置能量的增长
+              $(".imgSpan2>b").css("width",this.power2);
+              if(randAttack2>30){
+                strBattle2+="<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
+                $(".imgC .img2").css("transform","scale(1.2)");
+                setTimeout(function(){
+                  $(".imgC .img2").css("transform","scale(1)");
+                },500);
+              }else{
+                strBattle2+=":";
+              }
+              if(parseInt(attack2-define1)<=0){
+                this.zhan1['rolelife']=life1-1;
+                strBattle2+="<span>1点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
+              }else{
+                this.zhan1['rolelife']=life1-(attack2-define1);
+                strBattle2+="<span>"+parseInt(attack2-define1)+"点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
+              }       
+              $("#battle_message>div").append(strBattle2);
+            }else{
+              strBattle2+="<p style='color:red'>"+parseInt(attack2)+"点伤害!乙方阵亡</p>";
+              $("#battle_message>div").append(strBattle2);
+              $(".imgC .img1").css("transform","scale(0)");
+              clearInterval(this.timer);
+              this.timer=null;
+              data2[battleIndex2]['rolelife']=this.zhan2['rolelife'];
+              var Index1=++battleIndex1;
+              if(Index1<battleLength1){ 
+                battleTeam(Index1,battleIndex2);
+              }else{
+                $("#battle_message>div").append("<h2>很遗憾。。。挑战失败</h2>");
+                $(".imgC .img1").css("transform","scale(0)");
+                $(".imgC .imgSpan1").remove();
+                BattleDefeated()
+                return;
+              }
+            }   
+          }
+
+        },
+        playR1:function(){
+          this.power1=0;
+          var me=this;
+          //$(".imgSpan1 b").click(function(){
+          var roleid=me.zhan1['roleid'];
+          switch(roleid){
+            case "1" :
+            me.isattack2=false;
+            me.stopnum2=3;
+          }
+          //})
+        },
+        playR2:function(){
+          console.log(this)
+        }
+      }
+      //某方阵亡继续调用这个方法
+      function battleTeam(n1,n2){
+        startBattle.init(data1[n1],data2[n2]);
+      }
     </script>
   </body>
 </html>

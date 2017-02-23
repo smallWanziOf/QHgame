@@ -441,7 +441,7 @@
                 var data = JSON.parse(e);
                 var str="<h1 style='color:#fff;margin:20px auto;text-align:center;'>人物介绍</h1>"
                 str+="<img src='../images/showAllRole/"+carid['carid']+".jpg' style='float:left;margin-right:10px;'>";
-                str+="<div style='color:#fff;'><h3 style='color:aqua;'>人物故事</h3>"+data.rolestory+"<h3 style='color:aqua;'>人物技能</h3>"+data.rolestory+"</div>";
+                str+="<div style='color:#fff;'><h3 style='color:aqua;'>人物故事</h3>"+data.rolestory+"<h3 style='color:aqua;'>人物技能</h3>"+data.roler+"</div>";
                 $("#lookRole_Dal").html(str);
                 $('#lookRoleDal').modal()
                 $(".modal-backdrop.in").css("opacity","0.8")

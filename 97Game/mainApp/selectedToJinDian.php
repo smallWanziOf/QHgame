@@ -23,7 +23,16 @@ for($x=0;$x<count($carId);$x++){
 	}
 }
 if($output["hasRole"]!==false){
-	echo json_encode($output);;
+	//将选择出战的人物设置为迎战人物
+	//先设置所有的pk值为0;
+	$sqlpk0 = "UPDATE all_user SET pk=0 WHERE user_name='$name'";
+	$resultpk0 = mysqli_query($conn,$sqlpk0);
+	//设置本次出站的人物pk值为1
+	for($i=0;$i<count($carId);$i++){
+		$sqlpk1 = "UPDATE all_user SET pk=1 WHERE user_name='$name' AND roleid='$carId[$i]'";
+		$resultpk1 = mysqli_query($conn,$sqlpk1);
+	}
+	echo json_encode($output);
 }else{
 	echo json_encode($output);
 }

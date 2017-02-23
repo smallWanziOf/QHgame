@@ -172,3 +172,34 @@
 	position:relative;
 }
 .GongJi,.FangShou{position:relative;}
+p.imgC{width: 1200px;}
+.imgC>p{display: inline-block;position:relative;}
+.imgC>p>img{
+	width:200px;
+	margin:0 200px;
+}
+#battle_message{color:#fff;}
+.img1,.img2{
+	margin:0 auto;
+	transition: all linear 0.3s;
+}
+.imgC .imgSpan1,.imgC .imgSpan2{
+	position:absolute;
+	display: inline-block;
+	width:100px;
+	height: 10px;
+	border-radius: 5px;
+	background-color: #fff;
+	bottom:20px;
+	left:250px;
+	overflow: hidden;
+}
+.imgC .imgSpan1 b,.imgC .imgSpan2 b{
+	display: inline-block;
+	position:absolute;
+	height:100%;
+	background-color: red;
+	left:0;
+	border-radius: 5px;
+	cursor:pointer;
+}
