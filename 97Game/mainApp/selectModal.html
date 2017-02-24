@@ -610,6 +610,36 @@
         zqc2:false,
         zqclife1:-1,
         zqclife2:-1,
+        /*草稚京的技能控制*/
+        czj1:false,
+        czj2:false,
+        czjxy1:false,
+        czjxy2:false,
+        /*红丸的技能控制*/
+        hw1:false,
+        hw2:false,
+        /*八神的技能控制*/
+        bs1:false,
+        bs2:false,
+        /*七枷社技能控制*/
+        qjs1:false,
+        qjs2:false,
+        /*山崎龙二技能控制*/
+        sqle1:false,
+        sqle:false,
+        /*比利的技能控制*/
+        bl1:false,
+        bl2:false,
+        blstopnum1:-1,
+        blstopnum2:-1,
+        /*克里斯的技能控制*/  
+        kls1:false,
+        kls2:false,
+        /*大蛇的技能控制*/
+        ds1:false,
+        ds2:false,
+        boss1:false,
+        boss2:false,
         init:function(n1,n2){
           this.zhan1=n1;
           this.zhan2=n2;
@@ -621,6 +651,21 @@
           this.timer=setInterval(this.start1.bind(this),1000);
         },
         start1:function(){
+
+          /************大蛇技能效果开始************/
+          //乙方拥有大蛇
+          if(this.zhan1['roleid']==28){
+            this.boss1=true;
+          }else{
+            this.boss1=false;
+          }
+          //敌方拥有大蛇
+          if(this.zhan2['roleid']==28){
+            this.boss2=true;
+          }else{
+            this.boss2=false;
+          }
+          /************大蛇技能效果开始************/
 
           /************椎拳崇技能效果开始************/
           //如果是乙方拥有椎拳崇保存乙方椎拳崇的人物生命值
@@ -709,6 +754,25 @@
           }
           /***********不知火舞的技能效果结束***********/
 
+          /*********比利的技能效果开始***********/
+          //如果乙方停止攻击的次数不等于0的时候则减减这个停止的数值
+          if(this.blstopnum1>0){
+            this.blstopnum1--;
+            attack2=parseInt(attack2*0.8);
+          }else if(this.blstopnum1==0){
+            this.isattack1=true;
+            this.blstopnum1=-1;
+          }
+          //如果敌方停止攻击的次数不等于0的时候则减减这个停止的数值
+          if(this.blstopnum2>0){
+            this.blstopnum2--;
+            attack1=parseInt(attack1*0.88)
+          }else if(this.blstopnum2==0){
+            this.isattack2=true;
+            this.blstopnum2=-1;
+          }
+          /***********比利的技能效果结束***********/
+
           //降低暴击的几率
           if(Math.random()*10<8){
             //随机增加乙方攻击力基础攻击的0.3倍
@@ -726,6 +790,17 @@
             //随机增加敌方攻击力基础攻击的1倍
             var randAttack2=Math.floor(Math.random()*(attack2*1));
 		      }
+
+          /************大蛇技能效果开始************/
+          //乙方发动技能
+          if(this.boss1){
+            randAttack1=Math.floor(Math.random()*(attack1-attack1*0.5)+attack1*0.5);
+          };
+          //敌方发动技能
+          if(this.boss2){
+            randAttack2=Math.floor(Math.random()*(attack2-attack2*0.5)+attack2*0.5);
+          };
+          /************大蛇技能效果开始************/
 
     		  /************坂崎良技能效果开始************/
     		  //乙方发动技能
@@ -812,7 +887,7 @@
 
           //如果能量达到100则根据当前的人物释放技能
           if(this.power1>=100){
-            if(!this.ad2&&!this.bqllowdefine1&&!this.bqyl2&&!this.cbj2&&!this.cgh2&&!this.dmwl2&&!this.dz2&&!this.jjp2&&!this.king2&&!this.klk2&&!this.lef2&&!this.lan2&&!this.mgydn2&&!this.ml2&&!this.tr2&&!this.zyz2&&!this.lbt2&&!this.slqh2&&!(this.bzhwstopnum1!=-1)&&!this.zqc2){
+            if(!this.ad2&&!this.bqllowdefine1&&!this.bqyl2&&!this.cbj2&&!this.cgh2&&!this.dmwl2&&!this.dz2&&!this.jjp2&&!this.king2&&!this.klk2&&!this.lef2&&!this.lan2&&!this.mgydn2&&!this.ml2&&!this.tr2&&!this.zyz2&&!this.lbt2&&!this.slqh2&&!(this.bzhwstopnum1!=-1)&&!this.zqc2&&!this.czj2&&!this.hw2&&!this.bs2&&!this.qjs2&&!this.sqle2&&!(this.blstopnum1!=-1)&&!this.kls2&&!this.ds2){
               //调用乙方释放技能的方法
               this.playR1.bind(this)();
               $(".imgSpan1").css("boxShadow","0 0 20px green");
@@ -825,7 +900,7 @@
           }
           //如果能量达到100则根据当前的人物释放技能
           if(this.power2>=100){
-            if(!this.ad1&&!this.bqllowdefine2&&!this.bqyl1&&!this.cbj1&&!this.cgh1&&!this.dmwl1&&!this.dz1&&!this.jjp1&&!this.king1&&!this.klk1&&!this.lef1&&!this.lan1&&!this.mgydn1&&!this.ml1&&!this.tr1&&!this.zyz1&&!this.lbt1&&!this.slqh1&&!this.bzhw1&&!(this.bzhwstopnum2!=-1)&&!this.zqc1){
+            if(!this.ad1&&!this.bqllowdefine2&&!this.bqyl1&&!this.cbj1&&!this.cgh1&&!this.dmwl1&&!this.dz1&&!this.jjp1&&!this.king1&&!this.klk1&&!this.lef1&&!this.lan1&&!this.mgydn1&&!this.ml1&&!this.tr1&&!this.zyz1&&!this.lbt1&&!this.slqh1&&!this.bzhw1&&!(this.bzhwstopnum2!=-1)&&!this.zqc1&&!this.czj1&&!this.hw1&&!this.bs1&&!this.qjs1&&!this.sqle1&&!(this.blstopnum2!=-1)&&!this.kls1&&!this.ds1){
               //调用敌方释放技能的方法
               this.playR2.bind(this)();
               $(".imgSpan2").css("boxShadow","0 0 20px green");
@@ -984,9 +1059,82 @@
             };
             /************椎拳崇技能效果结束************/
 
+            /************草稚京技能效果开始************/
+            if(this.czjxy2){debugger;this.isattack2=true;this.czjxy2=false;}
+            //乙方发动技能
+            if(this.czj1){
+              debugger;
+              attack1+=parseInt(attack1*2.5);
+              this.czj1=false;
+              if(Math.random()*10<5){
+                this.isattack2=false;
+                this.czjxy2=true;
+              }
+            };
+            /************草稚京技能效果结束************/
+
+            /************红丸技能效果开始************/
+            //乙方发动技能
+            if(this.hw1){
+              attack1=parseInt(attack1*1.5*2);
+            };
+            //敌方发动技能
+            if(this.hw2){
+              attack1=parseInt(attack1*(1-0.3));
+            };
+            /************红丸技能效果结束************/
+
+            /************八神技能效果开始************/
+            //乙方发动技能
+            if(this.bs1){
+              attack1=parseInt(attack1*3.5);
+              this.power1+=20;
+              this.power2>=20?this.power2-=20:this.power2=0;
+              this.bs1=false;
+            };
+            /************八神技能效果结束************/
+
+            /************七枷社技能效果开始************/
+            //乙方发动技能
+            if(this.qjs1){
+              attack1=parseInt(attack1*2);
+              this.zhan1["rolelife"]+=parseInt(attack1*0.3);
+            };
+            //敌方发动攻击
+            if(this.qjs2){
+              define2=parseInt(define2*(1+0.8));
+            }
+            /************七枷社技能效果结束************/
+
+            /************山崎龙二技能效果开始************/
+            //乙方发动技能
+            if(this.sqle1){
+              attack1=parseInt(this.zhan2["rolelife"]*0.35);
+              this.sqle1=false;
+            }
+            /************山崎龙二技能效果结束************/
+
+            /************克里斯技能效果开始************/
+            //乙方发动技能
+            if(this.kls1){
+              attack1=parseInt(this.zhan2["rolelife"]*0.65);
+              this.kls1=false;
+            }
+            /************克里斯技能效果结束************/
+
+            /************大蛇技能效果开始************/
+            //乙方发动技能
+            if(this.ds1){
+              if(Math.random()*10<5){
+                attack1=parseInt(this.zhan2["rolelife"]);
+              }
+              this.ds1=false;
+            }
+            /************大蛇技能效果结束************/
+
             if(life2+define2>attack1){
               //增加能量
-              this.power1+=20;
+              this.power1+=10;
               //设置能量的增长
               $(".imgSpan1>b").css("width",this.power1)
               if(randAttack1>(attack1*0.3)){
@@ -1175,6 +1323,82 @@
             };
             /************椎拳崇技能效果结束************/
 
+            /************草稚京技能效果开始************/
+            if(this.czjxy1){this.isattack1=true;this.czjxy1=false;}
+            //敌方发动技能
+            if(this.czj2){
+              attack2+=parseInt(attack2*2.5);
+              this.czj2=false;
+              if(Math.random()*10<5){
+                this.isattack1=false;
+                this.czjxy1=true;
+              }
+            };
+            /************草稚京技能效果结束************/
+
+            /************红丸技能效果开始************/
+            //敌方发动技能
+            if(this.hw2){
+              attack2=parseInt(attack2*1.5*2);
+              this.hw2=false;
+            };
+            //敌方发动技能
+            if(this.hw1){
+              attack2=parseInt(attack2*(1-0.3));
+              this.hw1=false;
+            };
+            /************红丸技能效果结束************/
+
+            /************八神技能效果开始************/
+            //乙方发动技能
+            if(this.bs2){
+              attack2=parseInt(attack2*3.5);
+              this.power2+=20;
+              this.power1>=20?this.power1-=20:this.power1=0;
+              this.bs2=false;
+            };
+            /************八神技能效果结束************/
+
+            /************七枷社技能效果开始************/
+            //敌方发动技能
+            if(this.qjs2){
+              attack2=parseInt(attack2*2);
+              this.zhan2["rolelife"]+=parseInt(attack2*0.3);;
+              this.qjs2=false;
+            };
+            //敌方发动攻击
+            if(this.qjs1){
+              define1=parseInt(define1*(1+0.8));
+              this.qjs1=false;
+            }
+            /************七枷社技能效果结束************/
+
+            /************山崎龙二技能效果开始************/
+            //敌方发动技能
+            if(this.sql21){
+              attack2=parseInt(this.zhan1["rolelife"]*0.35);
+              this.sqle2=false;
+            }
+            /************山崎龙二技能效果结束************/
+
+            /************克里斯技能效果开始************/
+            //乙方发动技能
+            if(this.kls2){
+              attack2=parseInt(this.zhan1["rolelife"]*0.65);
+              this.kls2=false;
+            }
+            /************克里斯技能效果结束************/
+
+            /************大蛇技能效果开始************/
+            //乙方发动技能
+            if(this.ds2){
+              if(Math.random()*10<5){
+                attack2=parseInt(this.zhan1["rolelife"]);
+              }
+              this.ds2=false;
+            }
+            /************大蛇技能效果结束************/
+
             if(life1+define1>attack2){
               //增加能量
               this.power2+=20;
@@ -1225,7 +1449,6 @@
           var roleid=me.zhan1['roleid'];
           switch(roleid){
             case "1" :
-            debugger;
             me.isattack2=false;
             me.stopnum2=3;
             me.ad1=true;
@@ -1315,6 +1538,41 @@
             me.zqc1=true;
             $("#battle_message>div").append(str);
             break;
+            case "21" :
+            me.czj1=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "22" :
+            me.hw1=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "23" :
+            me.bs1=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "24" :
+            me.qjs1=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "25" :
+            me.sqle1=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "26" :
+            me.bl1=true;
+            me.isattack2=false;
+            me.blstopnum2=5;
+            $("#battle_message>div").append(str);
+            break;
+            case "27" :
+            me.kls1=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "28" :
+            me.ds1=true;
+            $("#battle_message>div").append(str);
+            break;
+            default : window.location.reload();
           }
         },
         playR2:function(){
@@ -1413,6 +1671,41 @@
             me.zqc2=true;
             $("#battle_message>div").append(str);
             break;
+            case "21" :
+            me.czj2=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "22" :
+            me.hw2=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "23" :
+            me.bs2=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "24" :
+            me.qjs2=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "25" :
+            me.sqle2=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "26" :
+            me.bl2=true;
+            me.isattack1=false;
+            me.blstopnum1=5;
+            $("#battle_message>div").append(str);
+            break;
+            case "27" :
+            me.kls2=true;
+            $("#battle_message>div").append(str);
+            break;
+            case "28" :
+            me.ds2=true;
+            $("#battle_message>div").append(str);
+            break;
+            default : window.location.reload();
           }
         }
       }
