@@ -78,6 +78,7 @@
 .selectModal-body{
 	background-color: #000;
 	padding-right:0px !important;
+	background-image: url();
 }
 .selectModal-container{
 	text-align: center;
@@ -172,34 +173,85 @@
 	position:relative;
 }
 .GongJi,.FangShou{position:relative;}
-p.imgC{width: 1200px;}
-.imgC>p{display: inline-block;position:relative;}
-.imgC>p>img{
+div.imgC{width: 1200px;}
+.imgC>div.showVsImg>p{display: inline-block;position:relative;}
+.imgC>div.showVsImg>p>.img1{
 	width:200px;
-	margin:0 200px;
+	margin-left: 17px;
+}
+.imgC>div.showVsImg{
+	background: url("./images/bg/vs2.jpg") no-repeat;
+	background-position-x: center;
+}
+.imgC>div.showVsImg>p>.img2{
+	width:200px;
+	margin-left: 765px;
+}
+div.powerMessage,div.lifeMessage{overflow: hidden;}
+div.lifeMessage .friendly-life,.enemy-life{
+	width:502px;
+	height:30px;
+	margin:20px;
+	border:1px solid #fff;
+	position:relative;
+	overflow: hidden;
+}
+div.powerMessage .friendly-power,.enemy-power{
+	width:300px;
+	height:15px;
+	border:1px solid blue;
+	position:relative;
+	overflow: hidden;
+}
+div.lifeMessage .friendly-life{
+	float: left;
+}
+div.lifeMessage .enemy-life{
+	float: right;
+	transform: rotateY(180deg);
+}
+div.powerMessage .friendly-power{
+	float: left;
+	margin-left: 20px;
+}
+div.powerMessage .enemy-power{
+	float: right;
+	margin-right: 20px;
+	transform: rotateY(180deg);
+}
+.friendly-power>b,.enemy-power>b{
+	position:absolute;
+	top:0; 
+	display: inline-block;
+	height:13px;
+	background-color:blue;
+	transition: all linear 0.1s;
+}
+.friendly-life>b,.enemy-life>b{
+	position:absolute;
+	top:0; 
+	display: inline-block;
+	height:28px;
+	background-color:red;
+	width:500px;
+	transition: all linear 0.1s;
+}
+.vsisvs{
+	font-size: 20px;
+	color:gold;
+	position:relative;
+	left:48px;
+	top:20px;
 }
 #battle_message{color:#fff;}
 .img1,.img2{
 	margin:0 auto;
 	transition: all linear 0.3s;
+	border-radius: 10px;
 }
-.imgC .imgSpan1,.imgC .imgSpan2{
-	position:absolute;
-	display: inline-block;
-	width:100px;
-	height: 10px;
-	border-radius: 5px;
-	background-color: #fff;
-	bottom:20px;
-	left:250px;
-	overflow: hidden;
-}
-.imgC .imgSpan1 b,.imgC .imgSpan2 b{
-	display: inline-block;
-	position:absolute;
-	height:100%;
-	background-color: red;
-	left:0;
-	border-radius: 5px;
-	cursor:pointer;
+div.allVsMessage{
+	width:1200px;
+	font-size: 12px;
+	height:200px;
+	overflow-y: auto;
 }

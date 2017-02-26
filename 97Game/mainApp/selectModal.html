@@ -94,13 +94,13 @@
       </span>
     </div>
 
-    <div  style="text-align:center;">
-      <div class="jumbotron battle-message">
-        <div class="container" id="all_battleMessage">
-          
-        </div>
-      </div>
+<!--     <div  style="text-align:center;">
+  <div class="jumbotron battle-message">
+    <div class="container" id="all_battleMessage">
+      
     </div>
+  </div>
+</div> -->
     <div class="container ModeContainer">
       <!-- 我的队伍 -->
       <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="show_userTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -119,9 +119,20 @@
         </div>
       </div>
       <!-- 经典模式的战斗信息 -->
-      <div id="battle_message" class="battle-message" style="text-align:center;">
-        <p class="imgC"></p>
-        <div></div>
+      <div id="battle_message" class="battle-message">
+        <div class="imgC">
+          <div class="lifeMessage">
+            <p class="friendly-life"><b></b></p>
+            <!-- <span class="vsisvs">VS</span> -->
+            <p class="enemy-life"><b></b></p>
+          </div>
+          <div class="powerMessage">
+            <p class="friendly-power imgSpan1"><b></b></p>
+            <p class="enemy-power imgSpan2"><b></b></p>
+          </div>
+          <div class="showVsImg""></div>
+        </div>
+        <div class="allVsMessage"></div>
       </div>
       <!-- <img src="../images/other/selector.jpg" alt="" id="bg-image"> -->
       <div class="container selectModal-container">
@@ -337,10 +348,10 @@
               $('.battle-message').css("display","block");
               var receiveData=JSON.parse(e);
               if(receiveData.randNum==0){
-                  $("#battle_message>div").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
+                  $("#battle_message>div.allVsMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
                     "id='close_battleMessage'>关闭</button>")                     
               }else{
-                $("#battle_message>div").append(
+                $("#battle_message>div.allVsMessage").append(
                   "<div>"+
                   "<h3 style='color:#fff;'>恭喜获得"+receiveData.randNum+"个碎片可用于合成人物，提高人物的属性噢！</h3>"+
                   "<img src='../images/showRole/"+receiveData.carid+".png'>"+
@@ -372,7 +383,7 @@
             if(e=="success"){
               $('#show_battle').modal('hide');
               $('.battle-message').css("display","block");
-              $("#battle_message>div").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
+              $("#battle_message>div.allVsMessage").append("<div style='color:#fff;'>未获得任何碎片</div><button class='btn btn-danger'"+
               "id='close_battleMessage'>关闭</button>")                     
             
               $(".battle-message").on('click','#close_battleMessage',function(){
@@ -640,18 +651,36 @@
         ds2:false,
         boss1:false,
         boss2:false,
+        /*血量的控制*/
+        lifecontral1:0,
+        lifecontral2:0,
+        lifereduce1:0,
+        lifereduce2:0,
+        lifecurrent1:0,
+        lifecurrent2:0,
+        lifeconsume1:0,
+        lifeconsume2:0,
+        lifewidth1:0,
+        lifewidth2:0,
         init:function(n1,n2){
           this.zhan1=n1;
           this.zhan2=n2;
           //显示当前的对战的人的图片
           var strImg='';
-          strImg+="<p><img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' class='img1'/'><span class='imgSpan1'><b></b></span></p><p><img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /><span class='imgSpan2'><b></b></span></p>";
-          $(".imgC").html(strImg);
+          strImg+="<p><img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' class='img1'/'></p><p><img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /></p>";
+          $(".imgC>.showVsImg").html(strImg);
           //1秒执行一次对战
           this.timer=setInterval(this.start1.bind(this),1000);
         },
         start1:function(){
-
+          //对乙方血量的控制获取每次的同比调整系数
+          this.lifewidth1=parseInt($(".friendly-life>b").width());
+          this.lifecontral1=parseFloat((this.zhan1['rolelife']/this.lifewidth1).toFixed(3));
+          this.lifecurrent1=this.zhan1['rolelife'];
+          //对敌方血量的控制获取每次的同比调整系数
+          this.lifewidth2=parseInt($(".enemy-life>b").width());
+          this.lifecontral2=parseFloat((this.zhan2['rolelife']/this.lifewidth2).toFixed(3));
+          this.lifecurrent2=this.zhan2['rolelife'];
           /************大蛇技能效果开始************/
           //乙方拥有大蛇
           if(this.zhan1['roleid']==28){
@@ -697,7 +726,6 @@
           /************拉尔夫技能效果开始************/
           //乙方发动技能
           if(this.lefstopnum2>0&&this.lef1){
-            debugger;
             this.lefstopnum2--;
             attack1=parseInt(attack1*0.55);
           }else if(this.lefstopnum2==0){
@@ -886,26 +914,30 @@
           /*********陈国汉的技能效果结束*********/
 
           //如果能量达到100则根据当前的人物释放技能
-          if(this.power1>=100){
+          if(this.power1>=300){
             if(!this.ad2&&!this.bqllowdefine1&&!this.bqyl2&&!this.cbj2&&!this.cgh2&&!this.dmwl2&&!this.dz2&&!this.jjp2&&!this.king2&&!this.klk2&&!this.lef2&&!this.lan2&&!this.mgydn2&&!this.ml2&&!this.tr2&&!this.zyz2&&!this.lbt2&&!this.slqh2&&!(this.bzhwstopnum1!=-1)&&!this.zqc2&&!this.czj2&&!this.hw2&&!this.bs2&&!this.qjs2&&!this.sqle2&&!(this.blstopnum1!=-1)&&!this.kls2&&!this.ds2){
               //调用乙方释放技能的方法
               this.playR1.bind(this)();
               $(".imgSpan1").css("boxShadow","0 0 20px green");
+              $(".imgSpan1").css("border-color","red");
               var anDiTimer1=setTimeout(function(){
                 $(".imgSpan1").css("boxShadow","0 0 0 transparent");
+                $(".imgSpan1").css("border-color","blue");
                 clearTimeout(anDiTimer1);
               },1000);
               return;
             }
           }
           //如果能量达到100则根据当前的人物释放技能
-          if(this.power2>=100){
+          if(this.power2>=300){
             if(!this.ad1&&!this.bqllowdefine2&&!this.bqyl1&&!this.cbj1&&!this.cgh1&&!this.dmwl1&&!this.dz1&&!this.jjp1&&!this.king1&&!this.klk1&&!this.lef1&&!this.lan1&&!this.mgydn1&&!this.ml1&&!this.tr1&&!this.zyz1&&!this.lbt1&&!this.slqh1&&!this.bzhw1&&!(this.bzhwstopnum2!=-1)&&!this.zqc1&&!this.czj1&&!this.hw1&&!this.bs1&&!this.qjs1&&!this.sqle1&&!(this.blstopnum2!=-1)&&!this.kls1&&!this.ds1){
               //调用敌方释放技能的方法
               this.playR2.bind(this)();
               $(".imgSpan2").css("boxShadow","0 0 20px green");
+              $(".imgSpan2").css("border-color","red");
               var anDiTimer2=setTimeout(function(){
                 $(".imgSpan2").css("boxShadow","0 0 0 transparent");
+                $(".imgSpan2").css("border-color","blue");
                 clearTimeout(anDiTimer2);
               },1000);
               return;
@@ -960,7 +992,6 @@
             }
             //敌方发动技能
             if(this.jjp2){
-              debugger;
               define2=parseInt(define2*(1+0.5));
             }
             /************金家潘技能效果结束************/
@@ -1030,7 +1061,6 @@
             /************罗伯特技能效果开始************/
             //乙方发动技能
             if(this.lbt1){
-              debugger;
               attack1+=parseInt(attack1);
               this.power2>=20?this.power2-=20:this.power2=0;
               this.lbt1=false;
@@ -1060,10 +1090,9 @@
             /************椎拳崇技能效果结束************/
 
             /************草稚京技能效果开始************/
-            if(this.czjxy2){debugger;this.isattack2=true;this.czjxy2=false;}
+            if(this.czjxy2){this.isattack2=true;this.czjxy2=false;}
             //乙方发动技能
             if(this.czj1){
-              debugger;
               attack1+=parseInt(attack1*2.5);
               this.czj1=false;
               if(Math.random()*10<5){
@@ -1134,14 +1163,16 @@
 
             if(life2+define2>attack1){
               //增加能量
-              this.power1+=10;
+              this.power1+=20;
               //设置能量的增长
               $(".imgSpan1>b").css("width",this.power1)
               if(randAttack1>(attack1*0.3)){
                 strBattle1+= "<b style='color:yellow;font-size:30px;margin-left:10px;'>暴击:</b>";
                 $(".imgC .img1").css("transform","scale(1.2)");
-                setTimeout(function(){
+                var borderTimer=setTimeout(function(){
                   $(".imgC .img1").css("transform","scale(1)");
+                  clearTimeout(borderTimer);
+                  borderTimer=null;
                 },500);
               }else{
                 strBattle1+=":";
@@ -1153,20 +1184,33 @@
                 this.zhan2['rolelife']=this.zhan2['rolelife']-(attack1-define2);
                 strBattle1+="<span>"+parseInt(attack1-define2)+"点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
               }
-              $("#battle_message>div").append(strBattle1);
+              $("#battle_message>div.allVsMessage").append(strBattle1);
+              //计算本轮敌方消耗的生命值
+              this.lifeconsume2=parseInt(this.lifecurrent2-this.zhan2['rolelife']);
+              $(".enemy-life>b").css("width",this.lifewidth2-parseInt(this.lifeconsume2/this.lifecontral2)+"px");
             }else{
-              strBattle1+="<p style='color:red'>"+parseInt(attack1)+"点伤害!敌方阵亡</p>";
-              $("#battle_message>div").append(strBattle1);
-              $(".imgC .img2").css("transform","scale(0)");
+              strBattle1+="<p style='color:red;font-size20px;'>"+parseInt(attack1)+"点伤害!敌方阵亡</p>";
+              $("#battle_message>div.allVsMessage").append(strBattle1);
+              //敌方的血量为0
+              $(".enemy-life>b").css("width","0px");
+              //$(".imgC .img2").css("transform","scale(0)");
               clearInterval(this.timer);
               this.timer=null;
               data1[battleIndex1]['rolelife']=this.zhan1['rolelife'];
               var Index2=++battleIndex2;
               if(Index2<battleLength2){
-                battleTeam(battleIndex1,Index2);
+                //var deathTimer=setTimeout(function(){
+                  $(".enemy-life>b").css("width","500px");
+                  //clearTimeout(deathTimer);
+                  battleTeam(battleIndex1,Index2);
+                  return;
+                //},3000)
+                //初始化敌方的血量为500
               }else{
-                $("#battle_message>div").append("<h2>恭喜！挑战胜利！</h2>");
-                $(".imgC .imgSpan2").remove();
+                $("#battle_message>div.allVsMessage").append("<h2>恭喜！挑战胜利！</h2>");
+                //$(".imgC .imgSpan2").remove();
+                clearInterval(this.timer);
+                this.timer=null;
                 BattleVictory(challgerCarId)
                 return;
               }
@@ -1420,22 +1464,36 @@
                 this.zhan1['rolelife']=this.zhan1['rolelife']-(attack2-define1);
                 strBattle2+="<span>"+parseInt(attack2-define1)+"点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
               }       
-              $("#battle_message>div").append(strBattle2);
+              $("#battle_message>div.allVsMessage").append(strBattle2);
+              //计算本轮乙方消耗的生命值
+              this.lifeconsume1=parseInt(this.lifecurrent1-this.zhan1['rolelife']);
+              $(".friendly-life>b").css("width",this.lifewidth1-parseInt(this.lifeconsume1/this.lifecontral1)+"px");
             }else{
               strBattle2+="<p style='color:red'>"+parseInt(attack2)+"点伤害!乙方阵亡</p>";
-              $("#battle_message>div").append(strBattle2);
-              $(".imgC .img1").css("transform","scale(0)");
+              $("#battle_message>div.allVsMessage").append(strBattle2);
+              //$(".imgC .img1").css("transform","scale(0)");
+              //清空血量条
+              $(".friendly-life>b").css("width","0px");
               clearInterval(this.timer);
               this.timer=null;
               data2[battleIndex2]['rolelife']=this.zhan2['rolelife'];
               var Index1=++battleIndex1;
               if(Index1<battleLength1){ 
-                battleTeam(Index1,battleIndex2);
+                //var deathTimer=setTimeout(function(){
+                  $(".friendly-life>b").css("width","500px");
+                  //clearTimeout(deathTimer);
+                  //deathTimer=null;
+                  battleTeam(Index1,battleIndex2);
+                  return;
+                //},3000)
+                //初始化乙方的人物血量500
               }else{
-                $("#battle_message>div").append("<h2>很遗憾。。。挑战失败</h2>");
-                $(".imgC .img1").css("transform","scale(0)");
-                $(".imgC .imgSpan1").remove();
-                BattleDefeated()
+                $("#battle_message>div.allVsMessage").append("<h2>很遗憾。。。挑战失败</h2>");
+                //$(".imgC .img1").css("transform","scale(0)");
+                //$(".imgC .imgSpan1").remove();
+                clearInterval(this.timer);
+                this.timer=null;
+                BattleDefeated();
                 return;
               }
             }   
@@ -1452,125 +1510,125 @@
             me.isattack2=false;
             me.stopnum2=3;
             me.ad1=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "2" :
       			me.bqllowdefine2=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "3" :
       			me.bqyl1=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "4" :
       			me.cbj1=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "5" :
       			me.cgh1=true;
       			me.isattack1=false;
       			me.cghstopnum1=1;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
             case "6" :
             me.dmwl1=true;
             me.isattack2=false;
             me.dmwlstopnum2=1;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "7" :
             me.dz1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "8" :
             me.jjp1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "9" :
             me.king1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "10" :
             me.klk1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "11" :
             me.lef1=true;
             me.isattack2=false;
             me.lefstopnum2=3;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "12" :
             me.lan1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "13" :
             me.mgydn1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "14" :
             me.ml1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "15" :
             me.tr1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "16" :
             me.zyz1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "17" :
             me.lbt1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "18" :
             me.slqh1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "19" :
             me.bzhw1=false;
             me.isattack2=false;
             me.bzhwstopnum2=3;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "20" :
             me.zqc1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "21" :
             me.czj1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "22" :
             me.hw1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "23" :
             me.bs1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "24" :
             me.qjs1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "25" :
             me.sqle1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "26" :
             me.bl1=true;
             me.isattack2=false;
             me.blstopnum2=5;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "27" :
             me.kls1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "28" :
             me.ds1=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             default : window.location.reload();
           }
@@ -1585,125 +1643,125 @@
             me.isattack1=false;
             me.stopnum1=3;
             me.ad2=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "2" :
       			me.bqllowdefine1=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "3" :
       			me.bqyl2=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "4" :
       			me.cbj2=true;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
       			case "5" :
       			me.cgh2=true;
       			me.isattack2=false;
       			me.cghstopnum2=1;
-      			$("#battle_message>div").append(str);
+      			$("#battle_message>div.allVsMessage").append(str);
       			break;
             case "6" :
             me.dmwl2=true;
             me.isattack1=false;
             me.dmwlstopnum1=1;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "7" :
             me.dz2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "8" :
             me.jjp2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "9" :
             me.king2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "10" :
             me.klk2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "11" :
             me.lef2=true;
             me.isattack1=false;
             me.lefstopnum1=3;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "12" :
             me.lan2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "13" :
             me.mgydn2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "14" :
             me.ml2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "15" :
             me.tr2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "16" :
             me.zyz2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "17" :
             me.lbt2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "18" :
             me.slqh2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "19" :
             me.bzhw2=false;
             me.isattack1=false;
             me.bzhwstopnum1=3;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "20" :
             me.zqc2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "21" :
             me.czj2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "22" :
             me.hw2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "23" :
             me.bs2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "24" :
             me.qjs2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "25" :
             me.sqle2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "26" :
             me.bl2=true;
             me.isattack1=false;
             me.blstopnum1=5;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage.allVsMessage").append(str);
             break;
             case "27" :
             me.kls2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             case "28" :
             me.ds2=true;
-            $("#battle_message>div").append(str);
+            $("#battle_message>div.allVsMessage").append(str);
             break;
             default : window.location.reload();
           }
