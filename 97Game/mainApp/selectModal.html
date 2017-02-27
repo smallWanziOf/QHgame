@@ -338,18 +338,18 @@
             url :"showBattle.php",
             success:function(e){
               var receiveData=JSON.parse(e);
-              var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th>挑战</th><th>阵容</th></tr>';
+              var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th>挑战</th></tr>';
               for(var i=receiveData.length,order=0;i>0;i--){
                 if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
                       "<td>"+(++order)+"</td><td>"+receiveData[i-1].user_name+"</td><td>"+receiveData[i-1].user_combat+
-                      "</td><td></td><td></td>"+
+                      "</td><td></td>"+
                        "</tr>"
                 }else if(receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
                       "<td>"+(++order)+"</td><td class='changeName'>"+receiveData[i-1].user_name+"</td>"+
                       "<td>"+receiveData[i-1].user_combat+
-                      "</td><td><a class='btn btn-primary'>发起挑战</a></td><td><a class='btn btn-primary'>查看阵容</a></td>"+
+                      "</td><td><a class='btn btn-primary'>发起挑战</a></td>"+
                        "</tr>"
                 }else{
                   continue;
