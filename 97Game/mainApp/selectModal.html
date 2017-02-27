@@ -52,28 +52,12 @@
         </div>
       </div>
     </div>
-
-    <!-- 游戏帮助 -->
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" id="show_book" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <!-- 调整出战整容 -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="change_vsTeam" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="text-align: center;">
-          <div class="row" id="sql_book" style="text-align: center;">
-            <div class='col-sm-12 col-md-12' style='margin-top:20px'>
-              <h3>拳皇97 合卡游戏玩法介绍</h3>
-              <div style='text-align: left;padding-left: 100px;' class='query_help'>
-                <p><1>首次登陆游戏可以获得888金币和100体力值，您可以用来购买对应价格的人物</p>       
-                <p><2>游戏目前只支持三种方式获得碎片</p>
-                <p style='margin-left: 20px;'><2.1>进入战斗选择“经典模式”可以进行与玩家对战获得出站人物的碎片</p>       
-                <p style='margin-left: 20px;'><2.2>进入战斗选择“战斗模式”可以进行与玩家对战获得出站人物的碎片</p>       
-                <p style='margin-left: 20px;'><2.3>可以选择进入抽奖页面进行抽奖或得人物碎片</p>       
-                <p><3>拥有人物碎片后可以进行强化！来提高当前人物的属性</p>       
-                <p><4>如果发现主页面商城中的人物角色太少不防试试“神秘商店”这里有你想要的</p>       
-                <p><5>如果想要查看当前的人物属性或者其他的信息可以点击左边的导航进行查询</p>       
-                <p><6>“战斗模式”中不仅可以得到相应的人物碎片还可以获得一定数量的金币</p>       
-                <p><7>游戏中目前“修炼模式”还未开启，敬请期待下次的版本更新</p>       
-                <p><8>祝大家玩得愉快！欢迎大家提出宝贵的意见和建议！微信：1305226892 </p>       
-              </div>
-            </div>
+        <div class="modal-content"  style="text-align: center;">
+          <div class="row" id="all_vsTeam">
+            调整出战整容
           </div>
         </div>
       </div>
@@ -90,7 +74,7 @@
 
       <span class="glyphicon glyphicon-refresh" id="P_refresh" data-toggle="tooltip" data-placement="right" title="刷新页面">
       </span>
-      <span class="glyphicon glyphicon-book" id="P_book" data-toggle="tooltip" data-placement="right" title="查看帮助">
+      <span class="glyphicon glyphicon-home" id="P_index" data-toggle="tooltip" data-placement="right" title="返回主页">
       </span>
     </div>
 
@@ -123,14 +107,18 @@
         <div class="imgC">
           <div class="lifeMessage">
             <p class="friendly-life"><b></b></p>
-            <!-- <span class="vsisvs">VS</span> -->
+            <span class="vsisvs"></span>
             <p class="enemy-life"><b></b></p>
           </div>
           <div class="powerMessage">
             <p class="friendly-power imgSpan1"><b></b></p>
             <p class="enemy-power imgSpan2"><b></b></p>
           </div>
-          <div class="showVsImg""></div>
+          <div class="showVsImg"">
+            <p class="strImg1"></p>
+            <p class="clickgameover"></p>
+            <p class="strImg2"></p>
+          </div>
         </div>
         <div class="allVsMessage"></div>
       </div>
@@ -150,6 +138,7 @@
       var uName=hexToDec(user_location.substring(user_location.indexOf("_")+1));
       var data={"uName":uName};
       var challgerCarId=[];
+      var changeVsTeamnum=[];
       $(document).ready(function(){
         $.ajax({
           type:"POST",
@@ -171,6 +160,24 @@
       $("#bg-image").css("height",innerHeight+"px")
       $("#bg-image").css("width",innerWidth+"px")
 
+      //点击进入不同模式的动画
+      $("#jinDian_Modal").hover(function(){
+        $(this).addClass("hoverModal");
+      },function(){
+        $(this).removeClass("hoverModal");
+      })
+
+      $("#zhanDou_Modal").hover(function(){
+        $(this).addClass("hoverModal");
+      },function(){
+        $(this).removeClass("hoverModal");
+      })
+
+      $("#xiuLian_Modal").hover(function(){
+        $(this).addClass("hoverModal");
+      },function(){
+        $(this).removeClass("hoverModal");
+      })
       //点击进入经典模式
       $("#jinDian_Modal").on("click",function(){
         $.ajax({
@@ -256,7 +263,8 @@
               if(receiveData.hasRole){
                 challgerCarId=selectedArr;
                 $('#show_userTeam').modal('hide');
-                BattleTeam();
+                changeVsTeam();
+                //BattleTeam();
               }else{
                 alert("操作失败！请重新选择");
                 window.location.reload();
@@ -272,6 +280,57 @@
           window.location.reload();
         }
       }
+      function changeVsTeam(){
+        try{
+          $('#change_vsTeam').modal();
+          challgerCarId;
+          var str="<h3>拖拽人物调整出战顺序</h3><div class='changeVsImg' id='vsContainer'>";
+          for(var i=0,arrorstr='',imgi=1;i<challgerCarId.length;i++){
+            var arrnum=imgi++;
+            str+="<img src='../images/showRole/"+challgerCarId[i]+".png' id='vs"+challgerCarId[i]+"'>"
+            arrorstr+="<span class='vs_"+arrnum+"'><img src='../images/other/arror.png' />"+arrnum+"st</span>";
+          }
+          str+="</div><div class='changeVsContainer'>"+arrorstr+"</div><div><button class='btn btn-primary' id='changeOver'>确认</button></div></div>";
+          $("#all_vsTeam").html(str);
+          var timer=setTimeout(function(){
+            $(".changeVsContainer img").addClass("rotateArror");
+            clearTimeout(timer);
+            timer=null;
+          },500);
+          var imgList = document.querySelectorAll('.changeVsImg>img');
+          for(var i=0; i<imgList.length; i++){
+            //为每张图片都绑定一个dragstart事件
+            var img = imgList[i];
+            img.ondragstart = function(event){
+              //在源对象的事件中保存数据
+              event.dataTransfer.setData('text/html', this.id);
+            }
+          }
+          //目标对象
+          vsContainer.ondragover =function(event){
+            event.preventDefault();//阻止dragover的默认行为——只能触发dragleave
+          }
+          vsContainer.ondrop = function(event){
+            //在目标对象的事件中读取数据
+            var id = event.dataTransfer.getData('text/html');
+            var img = document.getElementById(id);
+            this.appendChild(img);
+          }
+          $("#changeOver").click(function(){
+            var getSetLength=$(".changeVsImg img");
+            for(var i=0;i<getSetLength.length;i++){
+              arr=parseInt(getSetLength[i].id.slice(2));
+              changeVsTeamnum.push(arr);
+            }
+            BattleTeam();
+            $('#change_vsTeam').modal('hide');
+          })
+        }
+        catch(err){
+          alert("由于你的浏览器版本过低无法调整出战整容！系统已经默认帮您排序");
+          BattleTeam();
+        }
+      }
       function BattleTeam(){
         $.ajax({
             type:"POST",
@@ -279,18 +338,18 @@
             url :"showBattle.php",
             success:function(e){
               var receiveData=JSON.parse(e);
-              var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th></th></tr>';
+              var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th>挑战</th><th>阵容</th></tr>';
               for(var i=receiveData.length,order=0;i>0;i--){
                 if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
                       "<td>"+(++order)+"</td><td>"+receiveData[i-1].user_name+"</td><td>"+receiveData[i-1].user_combat+
-                      "</td><td></td>"+
+                      "</td><td></td><td></td>"+
                        "</tr>"
                 }else if(receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
                       "<td>"+(++order)+"</td><td class='changeName'>"+receiveData[i-1].user_name+"</td>"+
                       "<td>"+receiveData[i-1].user_combat+
-                      "</td><td><a class='btn btn-primary'>发起挑战</a></td>"+
+                      "</td><td><a class='btn btn-primary'>发起挑战</a></td><td><a class='btn btn-primary'>查看阵容</a></td>"+
                        "</tr>"
                 }else{
                   continue;
@@ -317,11 +376,18 @@
           url :"startBattle.php",
           success:function(e){
             $('.selectModal-container').css("display",'none');
-            var str='<h1 style="text-align:center;color:#fff;">战斗开始</h1>*';
             var receiveData=JSON.parse(e);
-            
             challgerCarId;
-            data1=receiveData['challenger'];
+            var newChanger=[];
+            var changeChallenger=receiveData['challenger']
+            for(var i=0;i<changeVsTeamnum.length;i++){
+              for(var j=0;j<changeChallenger.length;j++){
+                if(changeChallenger[j].roleid==changeVsTeamnum[i]){
+                  newChanger.push(changeChallenger[j]);
+                }
+              }
+            }
+            data1=newChanger;
             data2=receiveData['bechallenger'];
             battleLength1=data1.length;
             battleLength2=data2.length;
@@ -361,7 +427,7 @@
               }
               $(".battle-message").on('click','#close_battleMessage',function(){
                 window.location.reload();
-              })
+              });
             }else{
               alert("出错!!!请请重新操作");
               window.location.reload();
@@ -388,7 +454,7 @@
             
               $(".battle-message").on('click','#close_battleMessage',function(){
                 window.location.reload();
-              })
+              });
             }else{
               alert("出错!!!请请重新操作");
               window.location.reload();
@@ -417,7 +483,7 @@
       $('#P_team').tooltip();
       $('#P_left').tooltip();
       $('#P_refresh').tooltip();
-      $('#P_book').tooltip();
+      $('#P_index').tooltip();
 
       //点击导航展示详细的信息
       $("#P_message").click(function(){//个人信息
@@ -526,6 +592,10 @@
 
       $('#P_refresh').click(function(){//刷新页面
         window.location.reload();
+      })
+
+      $('#P_index').click(function(){//返回登录页
+        window.location.href=dev_location;
       })
 
       $('#P_book').click(function(){
@@ -662,17 +732,44 @@
         lifeconsume2:0,
         lifewidth1:0,
         lifewidth2:0,
+        /*对速度的控制*/
+        speedv:1000,
+        /*能量增长个控制*/
+        addpower1:50,
+        addpower2:50,
+        /*控制能否直接跳过比赛*/
+        gametime:0,
+        /*是否退出比赛*/
+        outtime:100,
+        outgame:false,
         init:function(n1,n2){
           this.zhan1=n1;
           this.zhan2=n2;
-          //显示当前的对战的人的图片
-          var strImg='';
-          strImg+="<p><img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' class='img1'/'></p><p><img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /></p>";
-          $(".imgC>.showVsImg").html(strImg);
+          //显示当前的对战的人的图片<button class='btn btn-primary' id='OverGame'>查看结果</button>
+          var strImg1='',strImg2='';
+          strImg1="<img src='../images/showAllRole/"+this.zhan1['roleid']+".jpg' class='img1'/'><b class='img1value'></b>";
+          strImg2="<img src='../images/showAllRole/"+this.zhan2['roleid']+".jpg' class='img2' /><b class='img2value'></b>";
+          $(".imgC>.showVsImg .strImg1").html(strImg1);
+          $(".imgC>.showVsImg .strImg2").html(strImg2);
           //1秒执行一次对战
-          this.timer=setInterval(this.start1.bind(this),1000);
+          this.timer=setInterval(this.start1.bind(this),this.speedv);
         },
         start1:function(){
+          //超过比赛回合直接失败
+          if(this.outtime--<=0){
+            $("#battle_message>div.allVsMessage").append("<h2>很遗憾。。。挑战失败</h2>");
+            $(".imgC>div.showVsImg").addClass("showDImg");
+            $(".clickgameover").html("<button class='btn btn-primary OverGame'>关闭</button>");
+            $(".clickgameover").on('click',".OverGame",function(){
+              window.location.reload();
+            });
+            BattleDefeated();
+            clearInterval(this.timer);
+            this.timer=null;
+            return;
+          }else{
+            $(".vsisvs").html(this.outtime);
+          }
           //对乙方血量的控制获取每次的同比调整系数
           this.lifewidth1=parseInt($(".friendly-life>b").width());
           this.lifecontral1=parseFloat((this.zhan1['rolelife']/this.lifewidth1).toFixed(3));
@@ -1162,8 +1259,13 @@
             /************大蛇技能效果结束************/
 
             if(life2+define2>attack1){
+              //图片相互碰撞 $(".block").animate({left: '+50px'}, "slow");
+              $(".img1").css("left","50px");
+              var timerCss=setTimeout(function(){
+                $(".img1").css("left","0px");
+              },300);
               //增加能量
-              this.power1+=20;
+              this.power1+=this.addpower1;
               //设置能量的增长
               $(".imgSpan1>b").css("width",this.power1)
               if(randAttack1>(attack1*0.3)){
@@ -1174,15 +1276,20 @@
                   clearTimeout(borderTimer);
                   borderTimer=null;
                 },500);
+                //改变伤害的数值
+                $(".img2value").css("color","gold");
+                $(".img2value").css("font-size","30px");
               }else{
                 strBattle1+=":";
               }
               if(parseInt(attack1-define2)<=0){
                 this.zhan2['rolelife']=this.zhan2['rolelife']-1;
                 strBattle1+="<span>1点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
+                $(".img2value").html('-1');
               }else{
                 this.zhan2['rolelife']=this.zhan2['rolelife']-(attack1-define2);
                 strBattle1+="<span>"+parseInt(attack1-define2)+"点伤害!敌方剩余"+this.zhan2['rolelife']+"点生命值</span>";
+                $(".img2value").html(-(parseInt(attack1-define2)));
               }
               $("#battle_message>div.allVsMessage").append(strBattle1);
               //计算本轮敌方消耗的生命值
@@ -1190,6 +1297,7 @@
               $(".enemy-life>b").css("width",this.lifewidth2-parseInt(this.lifeconsume2/this.lifecontral2)+"px");
             }else{
               strBattle1+="<p style='color:red;font-size20px;'>"+parseInt(attack1)+"点伤害!敌方阵亡</p>";
+              $(".img2value").html(parseInt(attack1));
               $("#battle_message>div.allVsMessage").append(strBattle1);
               //敌方的血量为0
               $(".enemy-life>b").css("width","0px");
@@ -1199,22 +1307,32 @@
               data1[battleIndex1]['rolelife']=this.zhan1['rolelife'];
               var Index2=++battleIndex2;
               if(Index2<battleLength2){
-                //var deathTimer=setTimeout(function(){
-                  $(".enemy-life>b").css("width","500px");
-                  //clearTimeout(deathTimer);
-                  battleTeam(battleIndex1,Index2);
-                  return;
-                //},3000)
-                //初始化敌方的血量为500
+                $(".enemy-life>b").css("width","500px");
+                battleTeam(battleIndex1,Index2);
+                return;
               }else{
                 $("#battle_message>div.allVsMessage").append("<h2>恭喜！挑战胜利！</h2>");
-                //$(".imgC .imgSpan2").remove();
+                $(".img1value").html('');
                 clearInterval(this.timer);
                 this.timer=null;
-                BattleVictory(challgerCarId)
+                $(".imgC>div.showVsImg").addClass("showVImg");
+                $(".clickgameover").html("<button class='btn btn-primary OverGame'>关闭</button>");
+                $(".clickgameover").on('click',".OverGame",function(){
+                  window.location.reload();
+                })
+                BattleVictory(challgerCarId);
                 return;
               }
             }
+            $(".img2value").css("opacity","1");
+            $(".img2value").addClass("topValue");
+            var topTimer=setTimeout(function(){
+              $(".img2value").removeClass("topValue");
+              $(".img2value").css("opacity","0");
+              //改变伤害的数值
+              $(".img2value").css("color","red");
+              $(".img2value").css("font-size","20px");
+            }, 500);
           }
 
           //敌方攻击的条件
@@ -1407,7 +1525,7 @@
             //敌方发动技能
             if(this.qjs2){
               attack2=parseInt(attack2*2);
-              this.zhan2["rolelife"]+=parseInt(attack2*0.3);;
+              this.zhan2["rolelife"]+=parseInt(attack2*0.3);
               this.qjs2=false;
             };
             //敌方发动攻击
@@ -1444,8 +1562,13 @@
             /************大蛇技能效果结束************/
 
             if(life1+define1>attack2){
+              //图片相互碰撞 $(".block").animate({left: '+50px'}, "slow");
+              $(".img2").css("right","50px");
+              var timerCss=setTimeout(function(){
+                $(".img2").css("right","0px");
+              },300);
               //增加能量
-              this.power2+=20;
+              this.power2+=this.addpower2;
               //设置能量的增长
               $(".imgSpan2>b").css("width",this.power2);
               if(randAttack2>(attack2*0.3)){
@@ -1454,15 +1577,20 @@
                 setTimeout(function(){
                   $(".imgC .img2").css("transform","scale(1)");
                 },500);
+                //改变伤害的数值
+                $(".img1value").css("color","gold");
+                $(".img1value").css("font-size","30px");
               }else{
                 strBattle2+=":";
               }
               if(parseInt(attack2-define1)<=0){
                 this.zhan1['rolelife']=this.zhan1['rolelife']-1;
                 strBattle2+="<span>1点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
+                $(".img1value").html('-1');
               }else{
                 this.zhan1['rolelife']=this.zhan1['rolelife']-(attack2-define1);
                 strBattle2+="<span>"+parseInt(attack2-define1)+"点伤害!乙方剩余"+this.zhan1['rolelife']+"点生命值</span>";
+                $(".img1value").html(-(parseInt(attack2-define1)));
               }       
               $("#battle_message>div.allVsMessage").append(strBattle2);
               //计算本轮乙方消耗的生命值
@@ -1470,6 +1598,7 @@
               $(".friendly-life>b").css("width",this.lifewidth1-parseInt(this.lifeconsume1/this.lifecontral1)+"px");
             }else{
               strBattle2+="<p style='color:red'>"+parseInt(attack2)+"点伤害!乙方阵亡</p>";
+              $(".img1value").html(parseInt(attack2));
               $("#battle_message>div.allVsMessage").append(strBattle2);
               //$(".imgC .img1").css("transform","scale(0)");
               //清空血量条
@@ -1479,26 +1608,33 @@
               data2[battleIndex2]['rolelife']=this.zhan2['rolelife'];
               var Index1=++battleIndex1;
               if(Index1<battleLength1){ 
-                //var deathTimer=setTimeout(function(){
-                  $(".friendly-life>b").css("width","500px");
-                  //clearTimeout(deathTimer);
-                  //deathTimer=null;
-                  battleTeam(Index1,battleIndex2);
-                  return;
-                //},3000)
-                //初始化乙方的人物血量500
+                $(".friendly-life>b").css("width","500px");
+                battleTeam(Index1,battleIndex2);
+                return;
               }else{
                 $("#battle_message>div.allVsMessage").append("<h2>很遗憾。。。挑战失败</h2>");
-                //$(".imgC .img1").css("transform","scale(0)");
-                //$(".imgC .imgSpan1").remove();
+                $(".img2value").html('');
                 clearInterval(this.timer);
                 this.timer=null;
+                $(".imgC>div.showVsImg").addClass("showDImg");
+                $(".clickgameover").html("<button class='btn btn-primary OverGame'>关闭</button>");
+                $(".clickgameover").on('click',".OverGame",function(){
+                  window.location.reload();
+                })
                 BattleDefeated();
                 return;
               }
-            }   
+            } 
+            $(".img1value").addClass("topValue");
+            $(".img1value").css("opacity","1");
+            var topTimer=setTimeout(function(){
+              $(".img1value").removeClass("topValue");
+              $(".img1value").css("opacity","0");
+              //改变伤害的数值
+              $(".img1value").css("color","red");
+              $(".img1value").css("font-size","20px");
+            },500);  
           }
-
         },
         playR1:function(){
 		      var str="<h2>--乙方发动技能--</h2>";

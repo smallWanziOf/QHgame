@@ -92,3 +92,10 @@
           alert("注册格式有误！请重新填写")
         } 
       })
+      //enter确认登录
+      $("#inputPassword,#inputName").on("keydown",function(event){
+        switch(event.keyCode) {
+          case 13 : 
+          $("#bg_login").trigger("click");
+        }
+      })

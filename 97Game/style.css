@@ -85,15 +85,25 @@
 }
 .selectModal-container>img{
 	margin:70px 0;
+	border-radius: 10px;
 }
-.selectModal-container>img:hover{
+.selectModal-container>img{
 	cursor: pointer;
+	transform:scale(1);
+	-ms-transform:scale(1); 	/* IE 9 */
+	-moz-transform:scale(1);	/* Firefox */
+	-webkit-transform:scale(1); /* Safari 和 Chrome */
+	-o-transform:scale(1);	/* Opera */
+	transition: all linear 0.3s;	
+}
+.selectModal-container>img.hoverModal{
 	transform:scale(1.2);
 	-ms-transform:scale(1.2); 	/* IE 9 */
 	-moz-transform:scale(1.2);	/* Firefox */
 	-webkit-transform:scale(1.2); /* Safari 和 Chrome */
 	-o-transform:scale(1.2);	/* Opera */
-	transition: all linear 0.3s;	
+	transition: all linear 0.3s;
+	box-shadow: 0 0 80px red;
 }
 .RoleSelected{
 	position:absolute;
@@ -175,18 +185,31 @@
 .GongJi,.FangShou{position:relative;}
 div.imgC{width: 1200px;}
 .imgC>div.showVsImg>p{display: inline-block;position:relative;}
-.imgC>div.showVsImg>p>.img1{
+.imgC>div.showVsImg>p .img1{
 	width:200px;
 	margin-left: 17px;
 }
 .imgC>div.showVsImg{
 	background: url("./images/bg/vs2.jpg") no-repeat;
 	background-position-x: center;
+	background-position-y: center;
 }
-.imgC>div.showVsImg>p>.img2{
+.imgC>div.showDImg{
+	background: url("./images/other/defeated.png") no-repeat;
+	background-position-x: center;
+	background-position-y: center;
+}
+.imgC>div.showVImg{
+	background: url("./images/other/victory.png") no-repeat;
+	background-position-x: center;
+	background-position-y: center;
+}
+.imgC>div.showVsImg>p .img2{
 	width:200px;
-	margin-left: 765px;
 }
+.battleImg .img2{margin-left: 760px;}
+.clickgameover{width:760px;text-align: center;}
+.clickgameover button{position:relative;top:150px;}
 div.powerMessage,div.lifeMessage{overflow: hidden;}
 div.lifeMessage .friendly-life,.enemy-life{
 	width:502px;
@@ -245,13 +268,60 @@ div.powerMessage .enemy-power{
 }
 #battle_message{color:#fff;}
 .img1,.img2{
+	position:relative;
 	margin:0 auto;
 	transition: all linear 0.3s;
 	border-radius: 10px;
 }
+.img1{left:0;}
+.img2{right:0;}
+.showVsImg .img1value{
+	position:absolute;
+	left:100px;
+	top:100px;
+	color:red;
+	font-size: 20px;
+	opacity:1;
+	transition: all linear 0.3s;
+}
+.showVsImg .img2value{
+	position:absolute;
+	right:100px;
+	top:100px;
+	color:red;
+	font-size: 20px;
+	opacity:1;
+	transition: all ease 0.3s;
+}
+.showVsImg .topValue{top:50px;}
 div.allVsMessage{
 	width:1200px;
 	font-size: 12px;
 	height:200px;
 	overflow-y: auto;
 }
+.changeVsImg,.changeVsContainer{width:800px;margin:10px auto;}
+.changeVsImg img{margin:10px;cursor:pointer;}
+.changeVsContainer{height:50px;}
+.changeVsContainer>span{
+	display: inline-block;
+	width:150px;
+	text-align: center;
+	margin:10px;
+}
+.changeVsContainer>span>img{
+	transform:rotateY(0deg);
+	-ms-transform:rotateY(0deg); 	/* IE 9 */
+	-moz-transform:rotateY(0deg); 	/* Firefox */
+	-webkit-transform:rotateY(0deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(0deg);
+	transition:all linear 200s;
+}
+.changeVsContainer>span .rotateArror{
+	transform:rotateY(36000deg);
+	-ms-transform:rotateY(36000deg); 	/* IE 9 */
+	-moz-transform:rotateY(36000deg); 	/* Firefox */
+	-webkit-transform:rotateY(36000deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(36000deg);
+}
+#changeOver{margin:20px;}
