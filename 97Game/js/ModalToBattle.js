@@ -243,7 +243,7 @@
       
       /*左侧导航的功能*/
       //hover左边导航进行提示的信息
-      $('#P_message').tooltip();
+/*      $('#P_message').tooltip();
       $('#P_team').tooltip();
       $('#P_chip').tooltip();
       $('#P_gem').tooltip();
@@ -252,7 +252,7 @@
       $('#P_refresh').tooltip();
       $('#P_return').tooltip();
       $('#P_book').tooltip();
-      $('#P_donate').tooltip();
+      $('#P_donate').tooltip();*/
 
       //点击导航展示详细的信息
       $("#P_message").click(function(){//个人信息

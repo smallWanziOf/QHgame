@@ -66,14 +66,14 @@
     z-index:10;
     background: rgba(0,0,0,0.8);
 }
-.selectRole-mainRole>span{
+.selectRole-mainRole>div{width:1200px;margin:0 auto;}
+.selectRole-mainRole>div>span{
 	position:relative;
 	font-size: 30px;
-	margin:20px 50px;
+	margin:20px 20px;
 	color:mintcream;
-
 }
-.selectRole-mainRole>span>b{
+.selectRole-mainRole>div>span>b{
 	position: absolute;
     bottom: -18px;
     font-size: 12px;
