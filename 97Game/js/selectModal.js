@@ -2,6 +2,7 @@
       var data={"uName":uName};
       var challgerCarId=[];
       var changeVsTeamnum=[];
+      var objname='';
       $("#bg-image").css("height",innerHeight+"px")
       $("#bg-image").css("width",innerWidth+"px")
       //点击进入不同模式的动画
@@ -178,21 +179,22 @@
       function BattleTeam(){
         $.ajax({
             type:"POST",
-            data:'',
+            data:data,
             url :"phpSql/showBattle.php",
             success:function(e){
               var receiveData=JSON.parse(e);
+              debugger;
               var str='<tr><th>排名</th><th>玩家</th><th>战力</th><th>挑战</th></tr>';
-              for(var i=receiveData.length,order=0;i>0;i--){
-                if(receiveData[i-1].user_name==uName&&receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
+              for(var i=0,order=0;i<receiveData.length;i++){
+                if(receiveData[i].user_name==uName&&receiveData[i].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
-                      "<td>"+(++order)+"</td><td>"+receiveData[i-1].user_name+"</td><td>"+receiveData[i-1].user_combat+
+                      "<td>"+(++order)+"</td><td>"+receiveData[i].user_name+"</td><td>"+receiveData[i].user_combat+
                       "</td><td></td>"+
                        "</tr>"
-                }else if(receiveData[i-1].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
+                }else if(receiveData[i].carid!=null/*&&receiveData[i-1].carid.length>=5*/){
                   str+="<tr>"+
-                      "<td>"+(++order)+"</td><td class='changeName'>"+receiveData[i-1].user_name+"</td>"+
-                      "<td>"+receiveData[i-1].user_combat+
+                      "<td>"+(++order)+"</td><td class='changeName'>"+receiveData[i].user_name+"</td>"+
+                      "<td>"+receiveData[i].user_combat+
                       "</td><td><a class='btn btn-primary'>发起挑战</a></td>"+
                        "</tr>"
                 }else{
@@ -214,6 +216,7 @@
       function ClickBattle(){
         var changeOBJ=$(this).parents("td").siblings(".changeName").html();
         var data={"uName":uName,"changeOBJ":changeOBJ};
+        objname=changeOBJ;
         $.ajax({
           type:"POST",
           data:data,
@@ -247,7 +250,7 @@
       }
       function BattleVictory(arr){
         var chip=arr[Math.floor(Math.random()*(arr.length-0))];
-        var data={"uName":uName,"rolechip":chip}
+        var data={"uName":uName,"rolechip":chip,"objname":objname}
         $.ajax({
           type:"POST",
           data:data,
@@ -1419,6 +1422,7 @@
                   $("#main_Container").load(dev_location+"mainApp/selectModal.html");
                 })
                 BattleVictory(challgerCarId);
+                debugger;
                 return;
               }
             }

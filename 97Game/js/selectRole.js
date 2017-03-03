@@ -416,7 +416,7 @@
                                 "<div>"+
                                   "<img src='images/showRole/"+roleId+".png'/>"+
                                   "<div class='caption' style='text-align:center;'>"+
-                                    "<p>当前人物碎片不足</p>"
+                                    "<p>当前人物碎片不足</p>"+
                                   "</div>"+
                                 "</div>"+
                               "</div>"

@@ -18,7 +18,15 @@
 		$resultSql = mysqli_query($conn, $sql);
 		$sqlinster = "INSERT INTO user_sign(user_name) VALUES ('$name')";
 		$resultinster = mysqli_query($conn, $sqlinster);
-		if($resultSql&&$resultinster){
+		//查询当前的主键值
+		$keysql = "SELECT user_id FROM qhgame_login WHERE user_name='$name'";
+		$resultkey = mysqli_query($conn, $keysql);
+		$rowkey = mysqli_fetch_assoc($resultkey);
+		$id= $rowkey["user_id"];
+		//设置order
+		$ordersql = "UPDATE qhgame_login SET user_order=$id WHERE user_name='$name'";
+		$orderresult = mysqli_query($conn,$ordersql);
+		if($resultSql&&$resultinster&&$orderresult){
 			echo "success";
 		}else{
 			echo "error";
